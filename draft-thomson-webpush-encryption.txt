@@ -298,6 +298,10 @@ Internet-Draft             Web Push Encryption                March 2015
    [RFC4086]  Eastlake, D., Schiller, J., and S. Crocker, "Randomness
               Requirements for Security", BCP 106, RFC 4086, June 2005.
 
+   [X.692]    ANSI, "Public Key Cryptography For The Financial Services
+              Industry: The Elliptic Curve Digital Signature Algorithm
+              (ECDSA)", ANSI X9.62 , 1998.
+
 8.2.  Informative References
 
    [API]      Sullivan, B., Fullea, E., and M. van Ouwerkerk, "Web Push
@@ -311,10 +315,6 @@ Internet-Draft             Web Push Encryption                March 2015
    [RFC7230]  Fielding, R. and J. Reschke, "Hypertext Transfer Protocol
               (HTTP/1.1): Message Syntax and Routing", RFC 7230, June
               2014.
-
-   [X.692]    ANSI, "Public Key Cryptography For The Financial Services
-              Industry: The Elliptic Curve Digital Signature Algorithm
-              (ECDSA)", ANSI X9.62 , 1998.
 
 Author's Address
 
