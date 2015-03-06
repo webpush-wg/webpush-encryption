@@ -42,17 +42,17 @@ normative:
       - org: National Institute of Standards and Technology (NIST)
     date: July 2013
     seriesinfo: NIST PUB 186-4
-
-informative:
-  RFC2818:
-  RFC4648:
-  RFC7230:
   X.692:
      title: "Public Key Cryptography For The Financial Services Industry: The Elliptic Curve Digital Signature Algorithm (ECDSA)"
      author:
        - org: ANSI
      date: 1998
      seriesinfo: ANSI X9.62
+
+informative:
+  RFC2818:
+  RFC4648:
+  RFC7230:
   API:
      title: "Web Push API"
      author:
