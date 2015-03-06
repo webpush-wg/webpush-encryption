@@ -163,8 +163,10 @@ index.html: $(draft).html
 	cp $< $@
 
 ghpages: index.html $(draft).txt
-	@git show -s gh-pages > /dev/null 2>&1 || \
+ifneq (true,$(TRAVIS))
+	@git show-ref refs/heads/gh-pages > /dev/null 2>&1 || \
 	  ! echo 'Error: No gh-pages branch, run `make setup-ghpages` to initialize it.'
+endif
 ifneq (,$(or $(IS_LOCAL),$(IS_MASTER)))
 	mkdir $(GHPAGES_TMP)
 	cp -f $^ $(GHPAGES_TMP)
@@ -194,13 +196,14 @@ endif
 .PHONY: setup-ghpages
 setup-ghpages:
 # Check if the gh-pages branch already exists locally
-	@if git show -s gh-pages >/dev/null 2>&1; then \
+	@if git show-ref refs/heads/gh-pages >/dev/null 2>&1; then \
 	  ! echo "Error: gh-pages branch already exists"; \
-        else true; fi
+	else true; fi
 # Check if the gh-pages branch already exists on origin
-	@git show -s origin/gh-pages >/dev/null 2>&1 && \
-	  (echo 'Warning: gh-pages already present on the origin'; \
-	   git branch gh-pages origin/gh-pages; false)
+	@if git show-ref origin/gh-pages >/dev/null 2>&1; then \
+	  echo 'Warning: gh-pages already present on the origin'; \
+	  git branch gh-pages origin/gh-pages; false; \
+	else true; fi
 	@echo "Initializing gh-pages branch"
 	git checkout --orphan gh-pages
 	git rm -rf .
