@@ -1,5 +1,8 @@
 # Web Push Encryption
 
+Describes how you can push messages without the Push Service tampering with them
+or snooping on you.
+
 * [Editor's copy](https://unicorn-wg.github.io/push-encryption/)
 
 
