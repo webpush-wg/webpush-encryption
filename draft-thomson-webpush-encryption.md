@@ -21,7 +21,7 @@ normative:
   I-D.thomson-webpush-http2:
   I-D.nottingham-http-encryption-encoding:
   RFC2119:
-  RFC4492:
+  RFC4086:
   DH:
     title: "New Directions in Cryptography"
     author:
@@ -29,6 +29,13 @@ normative:
       - ins: M. Hellman
     date: 1977-06
     seriesinfo: IEEE Transactions on Information Theory, V.IT-22 n.6
+  ECDH:
+    title: "Elliptic Curve Cryptography"
+    author:
+      - org: SECG
+    date: 2000
+    seriesinfo: SEC 1
+    target: "http://www.secg.org/"
   FIPS186:
     title: "Digital Signature Standard (DSS)"
     author:
@@ -37,6 +44,8 @@ normative:
     seriesinfo: NIST PUB 186-4
 
 informative:
+  RFC2818:
+  RFC4648:
   RFC7230:
   X.692:
      title: "Public Key Cryptography For The Financial Services Industry: The Elliptic Curve Digital Signature Algorithm (ECDSA)"
@@ -100,67 +109,104 @@ encryption scheme by applications that use push messaging.  An agent that only
 delivers messages that are properly encrypted strongly encourages the end-to-end
 protection of messages.
 
-For a web browser that implements the Web Push API [API], the browser can
-enforce the use of encryption to the browser.
+A web browser that implements the Web Push API [API] can enforce the use of
+encryption by forwarding only those messages that were properly encrypted.
+
+
+## Notational Conventions
+
+The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this document.
+It's not shouting, when they are capitalized, they have the special meaning
+described in [RFC2119].
 
 
 # Key Generation and Agreement
 
 For each new subscription that the User Agent generates for an application, it
-also generates an asymmetric key pair for use in Diffie-Hellman [DH] or
-elliptic-curve Diffie-Hellman [ECDH].  The public key for this key pair can then
-be distributed by the application to the Application Server along with the URI
-of the subscription.
+also generates an asymmetric key pair for use in Diffie-Hellman (DH) [DH] or
+elliptic-curve Diffie-Hellman (ECDH) [ECDH].  The public key for this key pair
+can then be distributed by the application to the Application Server along with
+the URI of the subscription.  The private key MUST remain secret.
 
 This key pair is used with the Diffie-Hellman key exchange as described in
 Section 4.2 of [I-D.nottingham-http-encryption-encoding].
 
-The means by which an application distributes the key identifier and public key
-SHOULD be secured for the reasons described in [I-D.thomson-webpush-http2]; the
-public key does not need additional protection.
-
 A User Agent MUST generate and provide a public key for the scheme described in
 {{mti}}.
 
-Each public key MUST be accompanied by a key identifier that can be used in the
+The public key MUST be accompanied by a key identifier that can be used in the
 "keyid" parameter to identify which key is in use.  Key identifiers need only be
 unique within the context of a subscription.
 
 
 ## Diffie-Hellman Group Information
 
-As defined in [I-D.nottingham-http-encryption-encoding], use of Diffie-Hellman
-for key agreement requires that the receiver share information about the group
-and the format for the "dh" parameter with each potential sender.
+As described in [I-D.nottingham-http-encryption-encoding], use of Diffie-Hellman
+for key agreement requires that the receiver provide clear information about
+it's chosen group and the format for the "dh" parameter with each potential
+sender.
 
-BIG FAT TBD HERE.
+This document only describes a single ECDH group and point format, described in
+{{mti}}.  A specification that defines alternative groups or formats MUST
+provide a means of indicating precisely which group and format is in use for
+every public key that is provided.
 
-### OPTION A
 
-If we are to offer choice here, and we probably need to, we will need to provide
-a way to identify a specific usage profile, likely with a registry of
-identifiers, so that this can be done in an interoperable fashion.
+## Key Distribution
 
-### OPTION B
+The application using the subscription distributes the key identifier and public
+key along with other subscription information, such as the subscription URI and
+expiration time.
 
-Personally, I'd prefer to just restrict this to {{mti}} and use the parameter
-name in the API to steer toward alternative schemes.  I.e., expose the P-256
-share as "p256dh" and let new schemes expose their shares under different names.
+The communication medium by which an application distributes the key identifier
+and public key MUST be confidentiality protected for the reasons described in
+[I-D.thomson-webpush-http2].  Most applications that use push messaging have a
+pre-existing relationship with an Application Server.  Any existing
+communication mechanism that is authenticated and provides confidentiality and
+integrity, such as HTTPS [RFC2818], is sufficient.
 
 
 # Message Encryption
 
+An Application Server that has the key identifier, public key, group and format
+information can encrypt a message for the User Agent.
+
+The Application Server generates a new DH or ECDH key pair in the same group as
+the value generated by the User Agent.
+
+From the newly generated key pair, the Application Server performs a DH or ECDH
+computation with the public key provided by the User Agent to find the shared
+secret.  The Application Server then generates 16 bytes of salt that is unique
+to the message.  A random [RFC4086] salt is acceptable.  These values are used
+to calculate the content encryption key as defined in Section 3.2 of
+[I-D.nottingham-http-encryption-encoding].
+
+The Application Server then encrypts the payload.  Header fields are populated
+with URL-safe base-64 encoded [RFC4648] values:
+
+* the "keyid" from the User Agent is added to both the Encryption-Key and
+  Encryption header fields;
+
+* the salt is added to the "salt" parameter of the Encryption header field; and
+
+* the public key for its DH or ECDH key pair is placed in the "dh" parameter of
+  the Encryption-Key header field.
+
+
+# Message Decryption
 
 A User Agent decrypts messages are decrypted as described in
-[I-D.nottingham-http-encryption-encoding].  The "keyid" parameter identifies the
-specific key pair.
+[I-D.nottingham-http-encryption-encoding].  The value of the "keyid" parameter
+is used to identify the correct key pair, if there is more than one possible
+value for the corresponding subscription.
 
 
-# Mandatory Elliptic Curve and Point Format {#mti}
+# Mandatory Group and Public Key Format {#mti}
 
 User Agents that enforce encryption MUST expose an elliptic curve Diffie-Hellman
-share on the P-256 curve [FIPS180].  For this key pair, the format for the "dh"
-is an uncompressed point in the form described in [X.692].
+share on the P-256 curve [FIPS186].  Public keys, such as are encoded into the
+"dh" parameter, MUST be in the form of an uncompressed point as described in
+[X.692].
 
 
 # IANA Considerations
