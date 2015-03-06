@@ -9,4 +9,4 @@ install:
 script: make ghpages
 env:
   global:
-  - secure: QWDQua2thAf5ZXhUjk1z0Px888+spfI7OrGA/Ty99B3XQN1Gm7ax7lNWftO5WT3nEEVPlA/rRgP9ZGSXrM7BMbKB0DlZjgwIey3gt8vlE+qUvqzULFPbFF1e5knPwL6IO1LtgzO5J8CUmhUCzGbPU0t9nbcO67ZeqimmZ5qeYiA=
+    secure: HJSze6hYa4w8mMVU2iLotVasxEybQ9t7htfuCURdM2rYEwQgac9veWIDxEiQ132mgbC7wOmFdDClQxyQqDLR1XTP095YZRh5enCrm/w9ebA5C5jFODht06M2vx+MRh58X1bCFkgW2U9uN4V3pP/d5AZvuRiOyk0Ay32LgoHKxTg=
