@@ -18,8 +18,8 @@ author:
 
 
 normative:
-  I-D.thomson-webpush-http2:
-  I-D.nottingham-http-encryption-encoding:
+  I-D.thomson-webpush-protocol:
+  I-D.thomson-http-encryption:
   RFC2119:
   RFC4086:
   DH:
@@ -74,9 +74,9 @@ Server to a User Agent.
 
 # Introduction
 
-The Web Push protocol [I-D.thomson-webpush-http2] is an intermediated protocol
-by necessity.  Messages from an Application Server are delivered to a User Agent
-via a Push Service.
+The Web Push protocol [I-D.thomson-webpush-protocol] is an intermediated
+protocol by necessity.  Messages from an Application Server are delivered to a
+User Agent via a Push Service.
 
 ~~~
  +-------+           +--------------+       +-------------+
@@ -100,7 +100,7 @@ against inspection or modification by a Push Service.
 
 Web Push messages are the payload of an HTTP message [RFC7230].  These messages
 are encrypted using an encrypted content encoding
-[I-D.nottingham-http-encryption-encoding].  This document describes how this
+[I-D.thomson-http-encryption].  This document describes how this
 content encoding is applied and describes a recommended key management scheme.
 
 For efficiency reasons, multiple users of Web Push often share a central agent
@@ -129,7 +129,7 @@ can then be distributed by the application to the Application Server along with
 the URI of the subscription.  The private key MUST remain secret.
 
 This key pair is used with the Diffie-Hellman key exchange as described in
-Section 4.2 of [I-D.nottingham-http-encryption-encoding].
+Section 4.2 of [I-D.thomson-http-encryption].
 
 A User Agent MUST generate and provide a public key for the scheme described in
 {{mti}}.
@@ -141,7 +141,7 @@ unique within the context of a subscription.
 
 ## Diffie-Hellman Group Information
 
-As described in [I-D.nottingham-http-encryption-encoding], use of Diffie-Hellman
+As described in [I-D.thomson-http-encryption], use of Diffie-Hellman
 for key agreement requires that the receiver provide clear information about
 it's chosen group and the format for the "dh" parameter with each potential
 sender.
@@ -160,8 +160,8 @@ expiration time.
 
 The communication medium by which an application distributes the key identifier
 and public key MUST be confidentiality protected for the reasons described in
-[I-D.thomson-webpush-http2].  Most applications that use push messaging have a
-pre-existing relationship with an Application Server.  Any existing
+[I-D.thomson-webpush-protocol].  Most applications that use push messaging have
+a pre-existing relationship with an Application Server.  Any existing
 communication mechanism that is authenticated and provides confidentiality and
 integrity, such as HTTPS [RFC2818], is sufficient.
 
@@ -179,7 +179,7 @@ computation with the public key provided by the User Agent to find the shared
 secret.  The Application Server then generates 16 bytes of salt that is unique
 to the message.  A random [RFC4086] salt is acceptable.  These values are used
 to calculate the content encryption key as defined in Section 3.2 of
-[I-D.nottingham-http-encryption-encoding].
+[I-D.thomson-http-encryption].
 
 The Application Server then encrypts the payload.  Header fields are populated
 with URL-safe base-64 encoded [RFC4648] values:
@@ -196,7 +196,7 @@ with URL-safe base-64 encoded [RFC4648] values:
 # Message Decryption
 
 A User Agent decrypts messages are decrypted as described in
-[I-D.nottingham-http-encryption-encoding].  The value of the "keyid" parameter
+[I-D.thomson-http-encryption].  The value of the "keyid" parameter
 is used to identify the correct key pair, if there is more than one possible
 value for the corresponding subscription.
 
@@ -216,7 +216,7 @@ This document has no IANA actions.
 
 # Security Considerations
 
-The security considerations of [I-D.nottingham-http-encryption-encoding]
+The security considerations of [I-D.thomson-http-encryption]
 describe the limitations of the content encoding.  In particular, any HTTP
 header fields are not protected by the content encoding scheme.  A User Agent
 MUST consider HTTP header fields to have come from the Push Service.  An
