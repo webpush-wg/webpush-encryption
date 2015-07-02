@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                           March 6, 2015
-Expires: September 7, 2015
+Intended status: Standards Track                            July 2, 2015
+Expires: January 3, 2016
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 7, 2015.
+   This Internet-Draft will expire on January 3, 2016.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Thomson                 Expires September 7, 2015               [Page 1]
+Thomson                  Expires January 3, 2016                [Page 1]
 
-Internet-Draft             Web Push Encryption                March 2015
+Internet-Draft             Web Push Encryption                 July 2015
 
 
 Table of Contents
@@ -66,20 +66,20 @@ Table of Contents
      2.1.  Diffie-Hellman Group Information  . . . . . . . . . . . .   3
      2.2.  Key Distribution  . . . . . . . . . . . . . . . . . . . .   4
    3.  Message Encryption  . . . . . . . . . . . . . . . . . . . . .   4
-   4.  Message Decryption  . . . . . . . . . . . . . . . . . . . . .   4
+   4.  Message Decryption  . . . . . . . . . . . . . . . . . . . . .   5
    5.  Mandatory Group and Public Key Format . . . . . . . . . . . .   5
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
      8.2.  Informative References  . . . . . . . . . . . . . . . . .   6
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   6
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
 
 1.  Introduction
 
-   The Web Push protocol [I-D.thomson-webpush-http2] is an intermediated
-   protocol by necessity.  Messages from an Application Server are
-   delivered to a User Agent via a Push Service.
+   The Web Push protocol [I-D.thomson-webpush-protocol] is an
+   intermediated protocol by necessity.  Messages from an Application
+   Server are delivered to a User Agent via a Push Service.
 
     +-------+           +--------------+       +-------------+
     |  UA   |           | Push Service |       | Application |
@@ -101,17 +101,17 @@ Table of Contents
 
    Web Push messages are the payload of an HTTP message [RFC7230].
    These messages are encrypted using an encrypted content encoding
-   [I-D.nottingham-http-encryption-encoding].  This document describes
-   how this content encoding is applied and describes a recommended key
+   [I-D.thomson-http-encryption].  This document describes how this
+   content encoding is applied and describes a recommended key
    management scheme.
 
 
 
 
 
-Thomson                 Expires September 7, 2015               [Page 2]
+Thomson                  Expires January 3, 2016                [Page 2]
 
-Internet-Draft             Web Push Encryption                March 2015
+Internet-Draft             Web Push Encryption                 July 2015
 
 
    For efficiency reasons, multiple users of Web Push often share a
@@ -141,8 +141,7 @@ Internet-Draft             Web Push Encryption                March 2015
    subscription.  The private key MUST remain secret.
 
    This key pair is used with the Diffie-Hellman key exchange as
-   described in Section 4.2 of
-   [I-D.nottingham-http-encryption-encoding].
+   described in Section 4.2 of [I-D.thomson-http-encryption].
 
    A User Agent MUST generate and provide a public key for the scheme
    described in Section 5.
@@ -153,9 +152,9 @@ Internet-Draft             Web Push Encryption                March 2015
 
 2.1.  Diffie-Hellman Group Information
 
-   As described in [I-D.nottingham-http-encryption-encoding], use of
-   Diffie-Hellman for key agreement requires that the receiver provide
-   clear information about it's chosen group and the format for the "dh"
+   As described in [I-D.thomson-http-encryption], use of Diffie-Hellman
+   for key agreement requires that the receiver provide clear
+   information about it's chosen group and the format for the "dh"
    parameter with each potential sender.
 
    This document only describes a single ECDH group and point format,
@@ -165,9 +164,10 @@ Internet-Draft             Web Push Encryption                March 2015
 
 
 
-Thomson                 Expires September 7, 2015               [Page 3]
+
+Thomson                  Expires January 3, 2016                [Page 3]
 
-Internet-Draft             Web Push Encryption                March 2015
+Internet-Draft             Web Push Encryption                 July 2015
 
 
 2.2.  Key Distribution
@@ -178,11 +178,11 @@ Internet-Draft             Web Push Encryption                March 2015
 
    The communication medium by which an application distributes the key
    identifier and public key MUST be confidentiality protected for the
-   reasons described in [I-D.thomson-webpush-http2].  Most applications
-   that use push messaging have a pre-existing relationship with an
-   Application Server.  Any existing communication mechanism that is
-   authenticated and provides confidentiality and integrity, such as
-   HTTPS [RFC2818], is sufficient.
+   reasons described in [I-D.thomson-webpush-protocol].  Most
+   applications that use push messaging have a pre-existing relationship
+   with an Application Server.  Any existing communication mechanism
+   that is authenticated and provides confidentiality and integrity,
+   such as HTTPS [RFC2818], is sufficient.
 
 3.  Message Encryption
 
@@ -195,10 +195,10 @@ Internet-Draft             Web Push Encryption                March 2015
    From the newly generated key pair, the Application Server performs a
    DH or ECDH computation with the public key provided by the User Agent
    to find the shared secret.  The Application Server then generates 16
-   bytes of salt that is unique to the message.  A random [RFC4086] salt
-   is acceptable.  These values are used to calculate the content
+   octets of salt that is unique to the message.  A random [RFC4086]
+   salt is acceptable.  These values are used to calculate the content
    encryption key as defined in Section 3.2 of
-   [I-D.nottingham-http-encryption-encoding].
+   [I-D.thomson-http-encryption].
 
    The Application Server then encrypts the payload.  Header fields are
    populated with URL-safe base-64 encoded [RFC4648] values:
@@ -212,19 +212,38 @@ Internet-Draft             Web Push Encryption                March 2015
    o  the public key for its DH or ECDH key pair is placed in the "dh"
       parameter of the Encryption-Key header field.
 
+   An application server MUST encrypt a push message with a single
+   record.  This allows for a minimal receiver implementation that
+   handles a single record.  If the message is 4096 octets long, or
+   longer, this means that the "rs" parameter MUST be set to a value
+   that is longer than the encrypted push message length.
+
+
+
+
+Thomson                  Expires January 3, 2016                [Page 4]
+
+Internet-Draft             Web Push Encryption                 July 2015
+
+
+   Note that a push service is not required to support more than 4096
+   octets of payload body, which equates to 4080 octets of cleartext, so
+   the "rs" parameter can be omitted for messages that fit within these
+   constraints.
+
 4.  Message Decryption
 
    A User Agent decrypts messages are decrypted as described in
-   [I-D.nottingham-http-encryption-encoding].  The value of the "keyid"
-   parameter is used to identify the correct key pair, if there is more
-   than one possible value for the corresponding subscription.
+   [I-D.thomson-http-encryption].  The value of the "keyid" parameter is
+   used to identify the correct key pair, if there is more than one
+   possible value for the corresponding subscription.
 
-
-
-Thomson                 Expires September 7, 2015               [Page 4]
-
-Internet-Draft             Web Push Encryption                March 2015
-
+   A receiver is not required to support multiple records.  Such a
+   receiver MUST check that the record size is large enough to contain
+   the entire payload body in a single record.  The "rs" parameter MUST
+   NOT be exactly equal to the length of the payload body minus the
+   length of the authentication tag (16 octets); that length indicates
+   that the message has been truncated.
 
 5.  Mandatory Group and Public Key Format
 
@@ -239,14 +258,13 @@ Internet-Draft             Web Push Encryption                March 2015
 
 7.  Security Considerations
 
-   The security considerations of
-   [I-D.nottingham-http-encryption-encoding] describe the limitations of
-   the content encoding.  In particular, any HTTP header fields are not
-   protected by the content encoding scheme.  A User Agent MUST consider
-   HTTP header fields to have come from the Push Service.  An
-   application on the User Agent that uses information from header
-   fields to alter their processing of a push message is exposed to a
-   risk of attack by the Push Service.
+   The security considerations of [I-D.thomson-http-encryption] describe
+   the limitations of the content encoding.  In particular, any HTTP
+   header fields are not protected by the content encoding scheme.  A
+   User Agent MUST consider HTTP header fields to have come from the
+   Push Service.  An application on the User Agent that uses information
+   from header fields to alter their processing of a push message is
+   exposed to a risk of attack by the Push Service.
 
    The timing and length of communication cannot be hidden from the Push
    Service.  While an outside observer might see individual messages
@@ -255,6 +273,14 @@ Internet-Draft             Web Push Encryption                March 2015
    subscription they are talking about.  Additionally, the length of
    messages could be revealed unless the padding provided by the content
    encoding scheme is used to obscure length.
+
+
+
+
+Thomson                  Expires January 3, 2016                [Page 5]
+
+Internet-Draft             Web Push Encryption                 July 2015
+
 
 8.  References
 
@@ -271,26 +297,14 @@ Internet-Draft             Web Push Encryption                March 2015
               "Digital Signature Standard (DSS)", NIST PUB 186-4 , July
               2013.
 
+   [I-D.thomson-http-encryption]
+              Thomson, M., "Encrypted Content-Encoding for HTTP", draft-
+              thomson-http-encryption-00 (work in progress), May 2015.
 
-
-
-
-
-
-Thomson                 Expires September 7, 2015               [Page 5]
-
-Internet-Draft             Web Push Encryption                March 2015
-
-
-   [I-D.nottingham-http-encryption-encoding]
-              Nottingham, M. and M. Thomson, "Encrypted Content-Encoding
-              for HTTP", draft-nottingham-http-encryption-encoding-00
-              (work in progress), March 2015.
-
-   [I-D.thomson-webpush-http2]
-              Thomson, M., "Generic Event Delivery Using HTTP Push",
-              draft-thomson-webpush-http2-02 (work in progress),
-              December 2014.
+   [I-D.thomson-webpush-protocol]
+              Thomson, M., Damaggio, E., and B. Raymor, "Generic Event
+              Delivery Using HTTP Push", draft-thomson-webpush-
+              protocol-00 (work in progress), April 2015.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -316,6 +330,14 @@ Internet-Draft             Web Push Encryption                March 2015
               (HTTP/1.1): Message Syntax and Routing", RFC 7230, June
               2014.
 
+
+
+
+Thomson                  Expires January 3, 2016                [Page 6]
+
+Internet-Draft             Web Push Encryption                 July 2015
+
+
 Author's Address
 
    Martin Thomson
@@ -333,4 +355,38 @@ Author's Address
 
 
 
-Thomson                 Expires September 7, 2015               [Page 6]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomson                  Expires January 3, 2016                [Page 7]
