@@ -199,7 +199,7 @@ MUST be set to a value that is longer than the encrypted push message length.
 
 Note that a push service is not required to support more than 4096 octets of
 payload body, which equates to 4080 octets of cleartext, so the `rs` parameter
-can be omitted for messages that fit within these constraints.
+can be omitted for messages that fit within this limit.
 
 
 # Message Decryption
