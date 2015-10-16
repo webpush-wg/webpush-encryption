@@ -3,7 +3,8 @@
 Describes how you can push messages without the Push Service tampering with them
 or snooping on you.
 
-* [Editor's copy](https://unicorn-wg.github.io/webpush-encryption/)
+* [Editor's copy](https://webpush-wg.github.io/webpush-encryption/)
+* [Working group copy](https://tools.ietf.org/html/draft-ietf-webpush-encryption)
 
 
 ## Contributing
