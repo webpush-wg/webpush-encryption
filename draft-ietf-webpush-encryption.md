@@ -1,7 +1,7 @@
 ---
 title: Message Encryption for Web Push
 abbrev: Web Push Encryption
-docname: draft-thomson-webpush-encryption-latest
+docname: draft-ietf-webpush-encryption-latest
 date: 2015
 category: std
 ipr: trust200902
