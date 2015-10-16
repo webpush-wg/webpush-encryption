@@ -199,8 +199,8 @@ payload body, which equates to 4080 octets of cleartext, so the `rs` parameter
 can be omitted for messages that fit within this limit.
 
 An application server MUST NOT use other content encodings for push messages.
-Content encodings that compress could result in leaking of push message
-contents.  This means that the Content-Encoding header field has exactly one
+In particular, content encodings that compress could result in leaking of push
+message contents.  The Content-Encoding header field therefore has exactly one
 value, which is `aesgcm128`.
 
 An application server MUST include exactly one entry in each of the Encryption
