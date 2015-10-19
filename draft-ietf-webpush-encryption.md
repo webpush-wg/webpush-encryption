@@ -201,7 +201,7 @@ can be omitted for messages that fit within this limit.
 An application server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
 message contents.  The Content-Encoding header field therefore has exactly one
-value, which is `aesgcm128`.
+value, which is `aesgcm128`.  Multiple `aesgcm128` values are not permitted.
 
 An application server MUST include exactly one entry in each of the Encryption
 and Encryption-Key header fields.  This allows the `keyid` parameter to be
