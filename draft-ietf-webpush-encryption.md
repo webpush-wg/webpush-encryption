@@ -184,12 +184,9 @@ to calculate the content encryption key as defined in Section 3.2 of
 The Application Server then encrypts the payload.  Header fields are populated
 with URL-safe base-64 encoded [RFC4648] values:
 
-* the "keyid" from the User Agent is added to both the Encryption-Key and
-  Encryption header fields;
+* the salt is added to the `salt` parameter of the Encryption header field; and
 
-* the salt is added to the "salt" parameter of the Encryption header field; and
-
-* the public key for its DH or ECDH key pair is placed in the "dh" parameter of
+* the public key for its DH or ECDH key pair is placed in the `dh` parameter of
   the Encryption-Key header field.
 
 An application server MUST encrypt a push message with a single record.  This
@@ -200,6 +197,18 @@ MUST be set to a value that is longer than the encrypted push message length.
 Note that a push service is not required to support more than 4096 octets of
 payload body, which equates to 4080 octets of cleartext, so the `rs` parameter
 can be omitted for messages that fit within this limit.
+
+An application server MUST NOT use other content encodings for push messages.
+In particular, content encodings that compress could result in leaking of push
+message contents.  The Content-Encoding header field therefore has exactly one
+value, which is `aesgcm128`.
+
+An application server MUST include exactly one entry in each of the Encryption
+and Encryption-Key header fields.  This allows the `keyid` parameter to be
+omitted from both header fields.
+
+An application server MUST NOT include a `key` parameter in the Encryption
+header field.
 
 
 # Message Decryption
