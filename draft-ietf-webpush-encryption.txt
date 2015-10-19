@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                        October 16, 2015
-Expires: April 18, 2016
+Intended status: Standards Track                        October 19, 2015
+Expires: April 21, 2016
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 18, 2016.
+   This Internet-Draft will expire on April 21, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson                  Expires April 18, 2016                 [Page 1]
+Thomson                  Expires April 21, 2016                 [Page 1]
 
 Internet-Draft             Web Push Encryption              October 2015
 
@@ -72,7 +72,7 @@ Table of Contents
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .   6
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .   6
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .   7
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
 
 1.  Introduction
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson                  Expires April 18, 2016                 [Page 2]
+Thomson                  Expires April 21, 2016                 [Page 2]
 
 Internet-Draft             Web Push Encryption              October 2015
 
@@ -165,7 +165,7 @@ Internet-Draft             Web Push Encryption              October 2015
 
 
 
-Thomson                  Expires April 18, 2016                 [Page 3]
+Thomson                  Expires April 21, 2016                 [Page 3]
 
 Internet-Draft             Web Push Encryption              October 2015
 
@@ -203,9 +203,6 @@ Internet-Draft             Web Push Encryption              October 2015
    The Application Server then encrypts the payload.  Header fields are
    populated with URL-safe base-64 encoded [RFC4648] values:
 
-   o  the "keyid" from the User Agent is added to both the Encryption-
-      Key and Encryption header fields;
-
    o  the salt is added to the "salt" parameter of the Encryption header
       field; and
 
@@ -218,18 +215,31 @@ Internet-Draft             Web Push Encryption              October 2015
    longer, this means that the "rs" parameter MUST be set to a value
    that is longer than the encrypted push message length.
 
+   Note that a push service is not required to support more than 4096
+   octets of payload body, which equates to 4080 octets of cleartext, so
 
 
 
-Thomson                  Expires April 18, 2016                 [Page 4]
+
+Thomson                  Expires April 21, 2016                 [Page 4]
 
 Internet-Draft             Web Push Encryption              October 2015
 
 
-   Note that a push service is not required to support more than 4096
-   octets of payload body, which equates to 4080 octets of cleartext, so
    the "rs" parameter can be omitted for messages that fit within this
    limit.
+
+   An application server MUST NOT use other content encodings for push
+   messages.  In particular, content encodings that compress could
+   result in leaking of push message contents.  The Content-Encoding
+   header field therefore has exactly one value, which is "aesgcm128".
+
+   An application server MUST include exactly one entry in each of the
+   Encryption and Encryption-Key header fields.  This allows the "keyid"
+   parameter to be omitted from both header fields.
+
+   An application server MUST NOT include a "key" parameter in the
+   Encryption header field.
 
 4.  Message Decryption
 
@@ -263,6 +273,15 @@ Internet-Draft             Web Push Encryption              October 2015
    header fields are not protected by the content encoding scheme.  A
    User Agent MUST consider HTTP header fields to have come from the
    Push Service.  An application on the User Agent that uses information
+
+
+
+
+Thomson                  Expires April 21, 2016                 [Page 5]
+
+Internet-Draft             Web Push Encryption              October 2015
+
+
    from header fields to alter their processing of a push message is
    exposed to a risk of attack by the Push Service.
 
@@ -273,14 +292,6 @@ Internet-Draft             Web Push Encryption              October 2015
    subscription they are talking about.  Additionally, the length of
    messages could be revealed unless the padding provided by the content
    encoding scheme is used to obscure length.
-
-
-
-
-Thomson                  Expires April 18, 2016                 [Page 5]
-
-Internet-Draft             Web Push Encryption              October 2015
-
 
 8.  References
 
@@ -320,6 +331,13 @@ Internet-Draft             Web Push Encryption              October 2015
               Industry: The Elliptic Curve Digital Signature Algorithm
               (ECDSA)", ANSI X9.62 , 1998.
 
+
+
+Thomson                  Expires April 21, 2016                 [Page 6]
+
+Internet-Draft             Web Push Encryption              October 2015
+
+
 8.2.  Informative References
 
    [API]      Sullivan, B., Fullea, E., and M. van Ouwerkerk, "Web Push
@@ -328,15 +346,6 @@ Internet-Draft             Web Push Encryption              October 2015
    [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818, DOI 10.17487/
               RFC2818, May 2000,
               <http://www.rfc-editor.org/info/rfc2818>.
-
-
-
-
-
-Thomson                  Expires April 18, 2016                 [Page 6]
-
-Internet-Draft             Web Push Encryption              October 2015
-
 
    [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
@@ -380,13 +389,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-Thomson                  Expires April 18, 2016                 [Page 7]
+Thomson                  Expires April 21, 2016                 [Page 7]
