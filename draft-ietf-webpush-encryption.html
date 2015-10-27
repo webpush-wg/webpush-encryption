@@ -473,7 +473,7 @@ ul.toc a:first-child {
 
   <meta name="dct.creator" content="Thomson, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-webpush-encryption-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2015-10-19" />
+  <meta name="dct.issued" scheme="ISO8601" content="2015-10-27" />
   <meta name="dct.abstract" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
   <meta name="description" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
 
@@ -495,10 +495,10 @@ ul.toc a:first-child {
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">October 19, 2015</td>
+  <td class="right">October 27, 2015</td>
 </tr>
 <tr>
-  <td class="left">Expires: April 21, 2016</td>
+  <td class="left">Expires: April 29, 2016</td>
   <td class="right"></td>
 </tr>
 
@@ -519,7 +519,7 @@ ul.toc a:first-child {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 21, 2016.</p>
+<p>This Internet-Draft will expire on April 29, 2016.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -579,7 +579,7 @@ ul.toc a:first-child {
 <p id="rfc.section.2.p.3">A User Agent MUST generate and provide a public key for the scheme described in <a href="#mti">Section 5</a>.</p>
 <p id="rfc.section.2.p.4">The public key MUST be accompanied by a key identifier that can be used in the &#8220;keyid&#8221; parameter to identify which key is in use.  Key identifiers need only be unique within the context of a subscription.</p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#diffie-hellman-group-information" id="diffie-hellman-group-information">Diffie-Hellman Group Information</a></h1>
-<p id="rfc.section.2.1.p.1">As described in <a href="#I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</a>, use of Diffie-Hellman for key agreement requires that the receiver provide clear information about it&#8217;s chosen group and the format for the &#8220;dh&#8221; parameter with each potential sender.</p>
+<p id="rfc.section.2.1.p.1">As described in <a href="#I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</a>, use of Diffie-Hellman for key agreement requires that the receiver provide clear information about its chosen group and the format for the &#8220;dh&#8221; parameter with each potential sender.</p>
 <p id="rfc.section.2.1.p.2">This document only describes a single ECDH group and point format, described in <a href="#mti">Section 5</a>.  A specification that defines alternative groups or formats MUST provide a means of indicating precisely which group and format is in use for every public key that is provided.</p>
 <h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#key-distribution" id="key-distribution">Key Distribution</a></h1>
 <p id="rfc.section.2.2.p.1">The application using the subscription distributes the key identifier and public key along with other subscription information, such as the subscription URI and expiration time.</p>
