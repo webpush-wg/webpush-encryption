@@ -143,7 +143,7 @@ unique within the context of a subscription.
 
 As described in [I-D.thomson-http-encryption], use of Diffie-Hellman
 for key agreement requires that the receiver provide clear information about
-it's chosen group and the format for the "dh" parameter with each potential
+its chosen group and the format for the "dh" parameter with each potential
 sender.
 
 This document only describes a single ECDH group and point format, described in
