@@ -227,10 +227,15 @@ length indicates that the message has been truncated.
 
 # Mandatory Group and Public Key Format {#mti}
 
-User Agents that enforce encryption MUST expose an elliptic curve Diffie-Hellman
-share on the P-256 curve [FIPS186].  Public keys, such as are encoded into the
-"dh" parameter, MUST be in the form of an uncompressed point as described in
-[X.692].
+User Agents MUST expose an elliptic curve Diffie-Hellman share on the P-256
+curve [FIPS186].
+
+Public keys, such as are encoded into the "dh" parameter, MUST be in the form of
+an uncompressed point as described in [X.692] (that is, a 65 octet sequence that
+starts with a 0x04 octet).
+
+The label for this curve is the string "P-256" encoded in ASCII (that is, the
+octet sequence 0x50, 0x2d, 0x32, 0x35, 0x36).
 
 
 # IANA Considerations
