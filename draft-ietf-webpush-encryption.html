@@ -457,7 +457,10 @@ ul.toc a:first-child {
 <link href="#rfc.section.2" rel="Chapter" title="2 Key Generation and Agreement"/>
 <link href="#rfc.section.2.1" rel="Chapter" title="2.1 Diffie-Hellman Group Information"/>
 <link href="#rfc.section.2.2" rel="Chapter" title="2.2 Key Distribution"/>
+<link href="#rfc.section.2.3" rel="Chapter" title="2.3 Push Message Authentication"/>
 <link href="#rfc.section.3" rel="Chapter" title="3 Message Encryption"/>
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Key Derivation"/>
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Push Message Content Encryption"/>
 <link href="#rfc.section.4" rel="Chapter" title="4 Message Decryption"/>
 <link href="#rfc.section.5" rel="Chapter" title="5 Mandatory Group and Public Key Format"/>
 <link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations"/>
@@ -468,12 +471,12 @@ ul.toc a:first-child {
 <link href="#rfc.authors" rel="Chapter"/>
 
 
-  <meta name="generator" content="xml2rfc version 2.5.0 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Thomson, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-webpush-encryption-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2015-10-27" />
+  <meta name="dct.issued" scheme="ISO8601" content="2015-12-5" />
   <meta name="dct.abstract" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
   <meta name="description" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
 
@@ -495,10 +498,10 @@ ul.toc a:first-child {
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">October 27, 2015</td>
+  <td class="right">December 5, 2015</td>
 </tr>
 <tr>
-  <td class="left">Expires: April 29, 2016</td>
+  <td class="left">Expires: June 7, 2016</td>
   <td class="right"></td>
 </tr>
 
@@ -519,7 +522,7 @@ ul.toc a:first-child {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 29, 2016.</p>
+<p>This Internet-Draft will expire on June 7, 2016.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -536,8 +539,11 @@ ul.toc a:first-child {
 </ul><li>2.   <a href="#rfc.section.2">Key Generation and Agreement</a></li>
 <ul><li>2.1.   <a href="#rfc.section.2.1">Diffie-Hellman Group Information</a></li>
 <li>2.2.   <a href="#rfc.section.2.2">Key Distribution</a></li>
+<li>2.3.   <a href="#rfc.section.2.3">Push Message Authentication</a></li>
 </ul><li>3.   <a href="#rfc.section.3">Message Encryption</a></li>
-<li>4.   <a href="#rfc.section.4">Message Decryption</a></li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Key Derivation</a></li>
+<li>3.2.   <a href="#rfc.section.3.2">Push Message Content Encryption</a></li>
+</ul><li>4.   <a href="#rfc.section.4">Message Decryption</a></li>
 <li>5.   <a href="#rfc.section.5">Mandatory Group and Public Key Format</a></li>
 <li>6.   <a href="#rfc.section.6">IANA Considerations</a></li>
 <li>7.   <a href="#rfc.section.7">Security Considerations</a></li>
@@ -567,7 +573,7 @@ ul.toc a:first-child {
      |&lt;---------------------|                      |
      |                      |                      |
 </pre>
-<p id="rfc.section.1.p.2">This document describes how messages sent using this protocol can be secured against inspection or modification by a Push Service.</p>
+<p id="rfc.section.1.p.2">This document describes how messages sent using this protocol can be secured against inspection, modification and falsification by a Push Service.</p>
 <p id="rfc.section.1.p.3">Web Push messages are the payload of an HTTP message <a href="#RFC7230">[RFC7230]</a>.  These messages are encrypted using an encrypted content encoding <a href="#I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</a>.  This document describes how this content encoding is applied and describes a recommended key management scheme.</p>
 <p id="rfc.section.1.p.4">For efficiency reasons, multiple users of Web Push often share a central agent that aggregates push functionality.  This agent can enforce the use of this encryption scheme by applications that use push messaging.  An agent that only delivers messages that are properly encrypted strongly encourages the end-to-end protection of messages.</p>
 <p id="rfc.section.1.p.5">A web browser that implements the Web Push API <a href="#API">[API]</a> can enforce the use of encryption by forwarding only those messages that were properly encrypted.</p>
@@ -584,27 +590,37 @@ ul.toc a:first-child {
 <h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#key-distribution" id="key-distribution">Key Distribution</a></h1>
 <p id="rfc.section.2.2.p.1">The application using the subscription distributes the key identifier and public key along with other subscription information, such as the subscription URI and expiration time.</p>
 <p id="rfc.section.2.2.p.2">The communication medium by which an application distributes the key identifier and public key MUST be confidentiality protected for the reasons described in <a href="#I-D.thomson-webpush-protocol">[I-D.thomson-webpush-protocol]</a>.  Most applications that use push messaging have a pre-existing relationship with an Application Server.  Any existing communication mechanism that is authenticated and provides confidentiality and integrity, such as HTTPS <a href="#RFC2818">[RFC2818]</a>, is sufficient.</p>
-<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#message-encryption" id="message-encryption">Message Encryption</a></h1>
-<p id="rfc.section.3.p.1">An Application Server that has the key identifier, public key, group and format information can encrypt a message for the User Agent.</p>
-<p id="rfc.section.3.p.2">The Application Server generates a new DH or ECDH key pair in the same group as the value generated by the User Agent.</p>
-<p id="rfc.section.3.p.3">From the newly generated key pair, the Application Server performs a DH or ECDH computation with the public key provided by the User Agent to find the shared secret.  The Application Server then generates 16 octets of salt that is unique to the message.  A random <a href="#RFC4086">[RFC4086]</a> salt is acceptable.  These values are used to calculate the content encryption key as defined in Section 3.2 of <a href="#I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</a>.</p>
-<p id="rfc.section.3.p.4">The Application Server then encrypts the payload.  Header fields are populated with URL-safe base-64 encoded <a href="#RFC4648">[RFC4648]</a> values:</p>
+<h1 id="rfc.section.2.3"><a href="#rfc.section.2.3">2.3.</a> <a href="#auth" id="auth">Push Message Authentication</a></h1>
+<p id="rfc.section.2.3.p.1">To ensure that push messages are correctly authenticated, a symmetric authentication secret is added to the information generated by a User Agent.  The authentication secret is mixed into the key derivation process described in <a href="#I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</a>.</p>
+<p id="rfc.section.2.3.p.2">The authentication secret ensures that exposure or leakage of the DH public key - which, as a public key, is not necessarily treated as a secret - does not enable an adversary to generate valid push messages.</p>
+<p id="rfc.section.2.3.p.3">A User Agent MUST generate and provide a hard to guess sequence of octets that is used for authentication of push messages.  This SHOULD be generated by a cryptographically strong random number generator <a href="#RFC4086">[RFC4086]</a> and be at least 16 octets long.</p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#encryption" id="encryption">Message Encryption</a></h1>
+<p id="rfc.section.3.p.1">An Application Server that has the public key, group and format information plus the authentication secret can encrypt a message for the User Agent.</p>
+<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#derivation" id="derivation">Key Derivation</a></h1>
+<p id="rfc.section.3.1.p.1">The Application Server generates a new DH or ECDH key pair in the same group as the value generated by the User Agent.</p>
+<p id="rfc.section.3.1.p.2">From the newly generated key pair, the Application Server performs a DH or ECDH computation with the public key provided by the User Agent to find the input keying material for key derivation.  The Application Server then generates 16 octets of salt that is unique to the message.  A random <a href="#RFC4086">[RFC4086]</a> salt is acceptable.</p>
+<p id="rfc.section.3.1.p.3">Web push uses the authentication secret defined in Section 4.3 of <a href="#I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</a>.  This authentication secret (see <a href="#auth">Section 2.3</a>) is generated by the user agent and shared with the application server.</p>
+<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#c-e" id="c-e">Push Message Content Encryption</a></h1>
+<p id="rfc.section.3.2.p.1">The Application Server then encrypts the payload.  Header fields are populated with URL-safe base-64 encoded <a href="#RFC4648">[RFC4648]</a> values:</p>
 <p/>
 
 <ul>
   <li>the salt is added to the <samp>salt</samp> parameter of the Encryption header field; and</li>
-  <li>the public key for its DH or ECDH key pair is placed in the <samp>dh</samp> parameter of the Encryption-Key header field.</li>
+  <li>the public key for its DH or ECDH key pair is placed in the <samp>dh</samp> parameter of the Crypto-Key header field.</li>
 </ul>
-<p id="rfc.section.3.p.6">An application server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  If the message is 4096 octets long, or longer, this means that the <samp>rs</samp> parameter MUST be set to a value that is longer than the encrypted push message length.</p>
-<p id="rfc.section.3.p.7">Note that a push service is not required to support more than 4096 octets of payload body, which equates to 4080 octets of cleartext, so the <samp>rs</samp> parameter can be omitted for messages that fit within this limit.</p>
-<p id="rfc.section.3.p.8">An application server MUST NOT use other content encodings for push messages.  In particular, content encodings that compress could result in leaking of push message contents.  The Content-Encoding header field therefore has exactly one value, which is <samp>aesgcm128</samp>.  Multiple <samp>aesgcm128</samp> values are not permitted.</p>
-<p id="rfc.section.3.p.9">An application server MUST include exactly one entry in each of the Encryption and Encryption-Key header fields.  This allows the <samp>keyid</samp> parameter to be omitted from both header fields.</p>
-<p id="rfc.section.3.p.10">An application server MUST NOT include a <samp>key</samp> parameter in the Encryption header field.</p>
+<p id="rfc.section.3.2.p.3">An application server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  If the message is 4096 octets or longer, the <samp>rs</samp> parameter MUST be set to a value that is longer than the encrypted push message length.</p>
+<p id="rfc.section.3.2.p.4">Note that a push service is not required to support more than 4096 octets of payload body, which equates to 4080 octets of cleartext, so the <samp>rs</samp> parameter can be omitted for messages that fit within this limit.</p>
+<p id="rfc.section.3.2.p.5">An application server MUST NOT use other content encodings for push messages.  In particular, content encodings that compress could result in leaking of push message contents.  The Content-Encoding header field therefore has exactly one value, which is <samp>aesgcm128</samp>.  Multiple <samp>aesgcm128</samp> values are not permitted.</p>
+<p id="rfc.section.3.2.p.6">An application server MUST include exactly one entry in each of the Encryption and Crypto-Key header fields.  This allows the <samp>keyid</samp> parameter to be omitted from both header fields.</p>
+<p id="rfc.section.3.2.p.7">An application server MUST NOT include an <samp>aesgcm128</samp> parameter in the Encryption header field.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#message-decryption" id="message-decryption">Message Decryption</a></h1>
-<p id="rfc.section.4.p.1">A User Agent decrypts messages are decrypted as described in <a href="#I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</a>.  The value of the &#8220;keyid&#8221; parameter is used to identify the correct key pair, if there is more than one possible value for the corresponding subscription.</p>
-<p id="rfc.section.4.p.2">A receiver is not required to support multiple records.  Such a receiver MUST check that the record size is large enough to contain the entire payload body in a single record.  The <samp>rs</samp> parameter MUST NOT be exactly equal to the length of the payload body minus the length of the authentication tag (16 octets); that length indicates that the message has been truncated.</p>
+<p id="rfc.section.4.p.1">A User Agent decrypts messages are decrypted as described in <a href="#I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</a>.  The authentication secret described in <a href="#derivation">Section 3.1</a> is used in key derivation.</p>
+<p id="rfc.section.4.p.2">Note that the value of the &#8220;keyid&#8221; parameter is used to identify the correct share, if there are multiple values for the Crypto-Key header field.</p>
+<p id="rfc.section.4.p.3">A receiver is not required to support multiple records.  Such a receiver MUST check that the record size is large enough to contain the entire payload body in a single record.  The <samp>rs</samp> parameter MUST NOT be exactly equal to the length of the payload body minus the length of the authentication tag (16 octets); that length indicates that the message has been truncated.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#mti" id="mti">Mandatory Group and Public Key Format</a></h1>
-<p id="rfc.section.5.p.1">User Agents that enforce encryption MUST expose an elliptic curve Diffie-Hellman share on the P-256 curve <a href="#FIPS186">[FIPS186]</a>.  Public keys, such as are encoded into the &#8220;dh&#8221; parameter, MUST be in the form of an uncompressed point as described in <a href="#X.692">[X.692]</a>.</p>
+<p id="rfc.section.5.p.1">User Agents MUST expose an elliptic curve Diffie-Hellman share on the P-256 curve <a href="#FIPS186">[FIPS186]</a>.</p>
+<p id="rfc.section.5.p.2">Public keys, such as are encoded into the &#8220;dh&#8221; parameter, MUST be in the form of an uncompressed point as described in <a href="#X.692">[X.692]</a> (that is, a 65 octet sequence that starts with a 0x04 octet).</p>
+<p id="rfc.section.5.p.3">The label for this curve is the string &#8220;P-256&#8221; encoded in ASCII (that is, the octet sequence 0x50, 0x2d, 0x32, 0x35, 0x36).</p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
 <p id="rfc.section.6.p.1">This document has no IANA actions.</p>
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
@@ -636,7 +652,7 @@ ul.toc a:first-child {
       <td class="reference">
         <b id="I-D.thomson-http-encryption">[I-D.thomson-http-encryption]</b>
       </td>
-      <td class="top"><a>Thomson, M.</a>, "<a href="http://tools.ietf.org/html/draft-thomson-http-encryption-01">Encrypted Content-Encoding for HTTP</a>", Internet-Draft draft-thomson-http-encryption-01, July 2015.</td>
+      <td class="top"><a>Thomson, M.</a>, "<a href="http://tools.ietf.org/html/draft-thomson-http-encryption-02">Encrypted Content-Encoding for HTTP</a>", Internet-Draft draft-thomson-http-encryption-02, October 2015.</td>
     </tr>
     <tr>
       <td class="reference">
