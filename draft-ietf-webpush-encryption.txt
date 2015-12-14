@@ -379,8 +379,8 @@ Internet-Draft             Web Push Encryption             December 2015
 
 8.2.  Informative References
 
-   [API]      Sullivan, B., Fullea, E., and M. van Ouwerkerk, "Web Push
-              API", 2015, <https://w3c.github.io/push-api/>.
+   [API]      van Ouwerkerk, M. and M. Thomson, "Web Push API", 2015,
+              <https://w3c.github.io/push-api/>.
 
    [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
               DOI 10.17487/RFC2818, May 2000,
