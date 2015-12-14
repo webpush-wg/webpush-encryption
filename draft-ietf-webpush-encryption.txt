@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                        December 5, 2015
-Expires: June 7, 2016
+Intended status: Standards Track                       December 14, 2015
+Expires: June 16, 2016
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 7, 2016.
+   This Internet-Draft will expire on June 16, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson                   Expires June 7, 2016                  [Page 1]
+Thomson                   Expires June 16, 2016                 [Page 1]
 
 Internet-Draft             Web Push Encryption             December 2015
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson                   Expires June 7, 2016                  [Page 2]
+Thomson                   Expires June 16, 2016                 [Page 2]
 
 Internet-Draft             Web Push Encryption             December 2015
 
@@ -165,7 +165,7 @@ Internet-Draft             Web Push Encryption             December 2015
 
 
 
-Thomson                   Expires June 7, 2016                  [Page 3]
+Thomson                   Expires June 16, 2016                 [Page 3]
 
 Internet-Draft             Web Push Encryption             December 2015
 
@@ -221,7 +221,7 @@ Internet-Draft             Web Push Encryption             December 2015
 
 
 
-Thomson                   Expires June 7, 2016                  [Page 4]
+Thomson                   Expires June 16, 2016                 [Page 4]
 
 Internet-Draft             Web Push Encryption             December 2015
 
@@ -277,7 +277,7 @@ Internet-Draft             Web Push Encryption             December 2015
 
 
 
-Thomson                   Expires June 7, 2016                  [Page 5]
+Thomson                   Expires June 16, 2016                 [Page 5]
 
 Internet-Draft             Web Push Encryption             December 2015
 
@@ -333,7 +333,7 @@ Internet-Draft             Web Push Encryption             December 2015
 
 
 
-Thomson                   Expires June 7, 2016                  [Page 6]
+Thomson                   Expires June 16, 2016                 [Page 6]
 
 Internet-Draft             Web Push Encryption             December 2015
 
@@ -389,7 +389,7 @@ Internet-Draft             Web Push Encryption             December 2015
 
 
 
-Thomson                   Expires June 7, 2016                  [Page 7]
+Thomson                   Expires June 16, 2016                 [Page 7]
 
 Internet-Draft             Web Push Encryption             December 2015
 
@@ -445,4 +445,4 @@ Author's Address
 
 
 
-Thomson                   Expires June 7, 2016                  [Page 8]
+Thomson                   Expires June 16, 2016                 [Page 8]
