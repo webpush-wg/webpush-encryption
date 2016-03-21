@@ -2,7 +2,7 @@
 title: Message Encryption for Web Push
 abbrev: Web Push Encryption
 docname: draft-ietf-webpush-encryption-latest
-date: 2015
+date: 2016
 category: std
 ipr: trust200902
 
@@ -22,7 +22,6 @@ normative:
   I-D.ietf-httpbis-encryption-encoding:
   RFC2119:
   RFC4086:
-  RFC7515:
   DH:
     title: "New Directions in Cryptography"
     author:
@@ -52,7 +51,7 @@ normative:
 
 informative:
   RFC2818:
-  RFC4648:
+  RFC7515:
   RFC7230:
   API:
      title: "Web Push API"
