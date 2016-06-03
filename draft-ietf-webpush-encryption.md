@@ -219,7 +219,7 @@ the message is 4096 octets or longer, the `rs` parameter MUST be set to a value
 that is longer than the encrypted push message length.
 
 Note that a push service is not required to support more than 4096 octets of
-payload body, which equates to 4080 octets of cleartext, so the `rs` parameter
+payload body, which equates to 4077 octets of cleartext, so the `rs` parameter
 can be omitted for messages that fit within this limit.
 
 An application server MUST NOT use other content encodings for push messages.
