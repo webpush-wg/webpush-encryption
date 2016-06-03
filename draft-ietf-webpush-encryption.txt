@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                          March 21, 2016
-Expires: September 22, 2016
+Intended status: Standards Track                            June 3, 2016
+Expires: December 5, 2016
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 22, 2016.
+   This Internet-Draft will expire on December 5, 2016.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Thomson                Expires September 22, 2016               [Page 1]
+Thomson                 Expires December 5, 2016                [Page 1]
 
-Internet-Draft             Web Push Encryption                March 2016
+Internet-Draft             Web Push Encryption                 June 2016
 
 
 Table of Contents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thomson                Expires September 22, 2016               [Page 2]
+Thomson                 Expires December 5, 2016                [Page 2]
 
-Internet-Draft             Web Push Encryption                March 2016
+Internet-Draft             Web Push Encryption                 June 2016
 
 
    this content encoding is applied and describes a recommended key
@@ -165,9 +165,9 @@ Internet-Draft             Web Push Encryption                March 2016
 
 
 
-Thomson                Expires September 22, 2016               [Page 3]
+Thomson                 Expires December 5, 2016                [Page 3]
 
-Internet-Draft             Web Push Encryption                March 2016
+Internet-Draft             Web Push Encryption                 June 2016
 
 
    groups or formats MUST provide a means of indicating precisely which
@@ -221,9 +221,9 @@ Internet-Draft             Web Push Encryption                March 2016
 
 
 
-Thomson                Expires September 22, 2016               [Page 4]
+Thomson                 Expires December 5, 2016                [Page 4]
 
-Internet-Draft             Web Push Encryption                March 2016
+Internet-Draft             Web Push Encryption                 June 2016
 
 
    Application Server then generates 16 octets of salt that is unique to
@@ -252,7 +252,7 @@ Internet-Draft             Web Push Encryption                March 2016
    encrypted push message length.
 
    Note that a push service is not required to support more than 4096
-   octets of payload body, which equates to 4080 octets of cleartext, so
+   octets of payload body, which equates to 4077 octets of cleartext, so
    the "rs" parameter can be omitted for messages that fit within this
    limit.
 
@@ -277,9 +277,9 @@ Internet-Draft             Web Push Encryption                March 2016
 
 
 
-Thomson                Expires September 22, 2016               [Page 5]
+Thomson                 Expires December 5, 2016                [Page 5]
 
-Internet-Draft             Web Push Encryption                March 2016
+Internet-Draft             Web Push Encryption                 June 2016
 
 
    Note that the value of the "keyid" parameter is used to identify the
@@ -333,9 +333,9 @@ Internet-Draft             Web Push Encryption                March 2016
 
 
 
-Thomson                Expires September 22, 2016               [Page 6]
+Thomson                 Expires December 5, 2016                [Page 6]
 
-Internet-Draft             Web Push Encryption                March 2016
+Internet-Draft             Web Push Encryption                 June 2016
 
 
 8.  References
@@ -360,8 +360,8 @@ Internet-Draft             Web Push Encryption                March 2016
 
    [I-D.ietf-webpush-protocol]
               Thomson, M., Damaggio, E., and B. Raymor, "Generic Event
-              Delivery Using HTTP Push", draft-ietf-webpush-protocol-03
-              (work in progress), February 2016.
+              Delivery Using HTTP Push", draft-ietf-webpush-protocol-05
+              (work in progress), May 2016.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -389,9 +389,9 @@ Internet-Draft             Web Push Encryption                March 2016
 
 
 
-Thomson                Expires September 22, 2016               [Page 7]
+Thomson                 Expires December 5, 2016                [Page 7]
 
-Internet-Draft             Web Push Encryption                March 2016
+Internet-Draft             Web Push Encryption                 June 2016
 
 
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
@@ -445,4 +445,4 @@ Author's Address
 
 
 
-Thomson                Expires September 22, 2016               [Page 8]
+Thomson                 Expires December 5, 2016                [Page 8]
