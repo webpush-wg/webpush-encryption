@@ -476,7 +476,7 @@ ul.toc a:first-child {
 
   <meta name="dct.creator" content="Thomson, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-webpush-encryption-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2016-6-3" />
+  <meta name="dct.issued" scheme="ISO8601" content="2016-6-28" />
   <meta name="dct.abstract" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
   <meta name="description" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
 
@@ -498,10 +498,10 @@ ul.toc a:first-child {
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">June 3, 2016</td>
+  <td class="right">June 28, 2016</td>
 </tr>
 <tr>
-  <td class="left">Expires: December 5, 2016</td>
+  <td class="left">Expires: December 30, 2016</td>
   <td class="right"></td>
 </tr>
 
@@ -522,7 +522,7 @@ ul.toc a:first-child {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on December 5, 2016.</p>
+<p>This Internet-Draft will expire on December 30, 2016.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -611,7 +611,7 @@ ul.toc a:first-child {
 <p id="rfc.section.3.2.p.3">An application server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  If the message is 4096 octets or longer, the <samp>rs</samp> parameter MUST be set to a value that is longer than the encrypted push message length.</p>
 <p id="rfc.section.3.2.p.4">Note that a push service is not required to support more than 4096 octets of payload body, which equates to 4077 octets of cleartext, so the <samp>rs</samp> parameter can be omitted for messages that fit within this limit.</p>
 <p id="rfc.section.3.2.p.5">An application server MUST NOT use other content encodings for push messages.  In particular, content encodings that compress could result in leaking of push message contents.  The Content-Encoding header field therefore has exactly one value, which is <samp>aesgcm128</samp>.  Multiple <samp>aesgcm128</samp> values are not permitted.</p>
-<p id="rfc.section.3.2.p.6">An application server MUST include exactly one entry in each of the Encryption and Crypto-Key header fields.  This allows the <samp>keyid</samp> parameter to be omitted from both header fields.</p>
+<p id="rfc.section.3.2.p.6">An application server MUST include exactly one entry in the Encryption field, and at most one entry having a <samp>dh</samp> parameter in the Crypto-Key field. This allows the <samp>keyid</samp> parameter to be omitted from both header fields.</p>
 <p id="rfc.section.3.2.p.7">An application server MUST NOT include an <samp>aesgcm128</samp> parameter in the Encryption header field.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#message-decryption" id="message-decryption">Message Decryption</a></h1>
 <p id="rfc.section.4.p.1">A User Agent decrypts messages are decrypted as described in <a href="#I-D.ietf-httpbis-encryption-encoding">[I-D.ietf-httpbis-encryption-encoding]</a>.  The authentication secret described in <a href="#derivation">Section 3.1</a> is used in key derivation.</p>
@@ -658,7 +658,7 @@ ul.toc a:first-child {
       <td class="reference">
         <b id="I-D.ietf-webpush-protocol">[I-D.ietf-webpush-protocol]</b>
       </td>
-      <td class="top"><a>Thomson, M.</a>, <a>Damaggio, E.</a> and <a>B. Raymor</a>, "<a href="http://tools.ietf.org/html/draft-ietf-webpush-protocol-05">Generic Event Delivery Using HTTP Push</a>", Internet-Draft draft-ietf-webpush-protocol-05, May 2016.</td>
+      <td class="top"><a>Thomson, M.</a>, <a>Damaggio, E.</a> and <a>B. Raymor</a>, "<a href="http://tools.ietf.org/html/draft-ietf-webpush-protocol-06">Generic Event Delivery Using HTTP Push</a>", Internet-Draft draft-ietf-webpush-protocol-06, June 2016.</td>
     </tr>
     <tr>
       <td class="reference">

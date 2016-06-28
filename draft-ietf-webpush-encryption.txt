@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                            June 3, 2016
-Expires: December 5, 2016
+Intended status: Standards Track                           June 28, 2016
+Expires: December 30, 2016
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 5, 2016.
+   This Internet-Draft will expire on December 30, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson                 Expires December 5, 2016                [Page 1]
+Thomson                 Expires December 30, 2016               [Page 1]
 
 Internet-Draft             Web Push Encryption                 June 2016
 
@@ -69,7 +69,7 @@ Table of Contents
    3.  Message Encryption  . . . . . . . . . . . . . . . . . . . . .   4
      3.1.  Key Derivation  . . . . . . . . . . . . . . . . . . . . .   4
      3.2.  Push Message Content Encryption . . . . . . . . . . . . .   5
-   4.  Message Decryption  . . . . . . . . . . . . . . . . . . . . .   5
+   4.  Message Decryption  . . . . . . . . . . . . . . . . . . . . .   6
    5.  Mandatory Group and Public Key Format . . . . . . . . . . . .   6
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson                 Expires December 5, 2016                [Page 2]
+Thomson                 Expires December 30, 2016               [Page 2]
 
 Internet-Draft             Web Push Encryption                 June 2016
 
@@ -165,7 +165,7 @@ Internet-Draft             Web Push Encryption                 June 2016
 
 
 
-Thomson                 Expires December 5, 2016                [Page 3]
+Thomson                 Expires December 30, 2016               [Page 3]
 
 Internet-Draft             Web Push Encryption                 June 2016
 
@@ -221,7 +221,7 @@ Internet-Draft             Web Push Encryption                 June 2016
 
 
 
-Thomson                 Expires December 5, 2016                [Page 4]
+Thomson                 Expires December 30, 2016               [Page 4]
 
 Internet-Draft             Web Push Encryption                 June 2016
 
@@ -262,25 +262,31 @@ Internet-Draft             Web Push Encryption                 June 2016
    header field therefore has exactly one value, which is "aesgcm128".
    Multiple "aesgcm128" values are not permitted.
 
-   An application server MUST include exactly one entry in each of the
-   Encryption and Crypto-Key header fields.  This allows the "keyid"
-   parameter to be omitted from both header fields.
+   An application server MUST include exactly one entry in the
+   Encryption field, and at most one entry having a "dh" parameter in
+   the Crypto-Key field.  This allows the "keyid" parameter to be
+   omitted from both header fields.
 
    An application server MUST NOT include an "aesgcm128" parameter in
    the Encryption header field.
+
+
+
+
+
+
+
+
+Thomson                 Expires December 30, 2016               [Page 5]
+
+Internet-Draft             Web Push Encryption                 June 2016
+
 
 4.  Message Decryption
 
    A User Agent decrypts messages are decrypted as described in
    [I-D.ietf-httpbis-encryption-encoding].  The authentication secret
    described in Section 3.1 is used in key derivation.
-
-
-
-Thomson                 Expires December 5, 2016                [Page 5]
-
-Internet-Draft             Web Push Encryption                 June 2016
-
 
    Note that the value of the "keyid" parameter is used to identify the
    correct share, if there are multiple values for the Crypto-Key header
@@ -324,19 +330,16 @@ Internet-Draft             Web Push Encryption                 June 2016
    intermixed with each other, the Push Service will see what
    Application Server is talking to which User Agent, and the
    subscription that is used.  Additionally, the length of messages
-   could be revealed unless the padding provided by the content encoding
-   scheme is used to obscure length.
 
 
 
-
-
-
-
-Thomson                 Expires December 5, 2016                [Page 6]
+Thomson                 Expires December 30, 2016               [Page 6]
 
 Internet-Draft             Web Push Encryption                 June 2016
 
+
+   could be revealed unless the padding provided by the content encoding
+   scheme is used to obscure length.
 
 8.  References
 
@@ -360,8 +363,8 @@ Internet-Draft             Web Push Encryption                 June 2016
 
    [I-D.ietf-webpush-protocol]
               Thomson, M., Damaggio, E., and B. Raymor, "Generic Event
-              Delivery Using HTTP Push", draft-ietf-webpush-protocol-05
-              (work in progress), May 2016.
+              Delivery Using HTTP Push", draft-ietf-webpush-protocol-06
+              (work in progress), June 2016.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -382,17 +385,18 @@ Internet-Draft             Web Push Encryption                 June 2016
    [API]      van Ouwerkerk, M. and M. Thomson, "Web Push API", 2015,
               <https://w3c.github.io/push-api/>.
 
-   [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
-              DOI 10.17487/RFC2818, May 2000,
-              <http://www.rfc-editor.org/info/rfc2818>.
 
 
 
 
-Thomson                 Expires December 5, 2016                [Page 7]
+Thomson                 Expires December 30, 2016               [Page 7]
 
 Internet-Draft             Web Push Encryption                 June 2016
 
+
+   [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
+              DOI 10.17487/RFC2818, May 2000,
+              <http://www.rfc-editor.org/info/rfc2818>.
 
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Message Syntax and Routing",
@@ -441,8 +445,4 @@ Author's Address
 
 
 
-
-
-
-
-Thomson                 Expires December 5, 2016                [Page 8]
+Thomson                 Expires December 30, 2016               [Page 8]
