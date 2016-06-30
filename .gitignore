@@ -9,3 +9,4 @@
 venv/
 issues.json
 draft-ietf-webpush-encryption.xml
+lib
