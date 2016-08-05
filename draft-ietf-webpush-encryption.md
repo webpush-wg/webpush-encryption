@@ -43,7 +43,7 @@ normative:
       name: NIST
       ins: National Institute of Standards and Technology, U.S. Department of Commerce
     date: 2012-03
-    target: http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
+    target: http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
 
 informative:
   API:
@@ -114,18 +114,20 @@ described in {{!RFC2119}}.
 
 # Push Message Encryption Overview {#overview}
 
-Encrypting a push message uses elliptic-curve Diffie-Hellman (ECDH) {{ECDH}} to
-establish a shared secret (see {{dh}}) and a symmetric secret for authentication
-(see {{auth}}).
+Encrypting a push message uses elliptic-curve Diffie-Hellman (ECDH) {{ECDH}} on
+the P-256 curve {{FIPS186}} to establish a shared secret (see {{dh}}) and a
+symmetric secret for authentication (see {{auth}}).
 
 A User Agent generates an ECDH key pair and authentication secret that it
-associates with each subscription it creates.  These are sent to the Application
-Server with other details of the push subscription.
+associates with each subscription it creates.  The ECDH public key and the
+authentication secret are sent to the Application Server with other details of
+the push subscription.
 
 When sending a message, an Application Server generates an ECDH key pair and a
 random salt.  The ECDH public key is encoded into the `dh` parameter of the
 Crypto-Key header field; the salt is encoded into the `salt` parameter of the
-Encryption header field.
+Encryption header field.  The ECDH key pair can be discarded after encrypting
+the message.
 
 The content of the push message is encrypted or decrypted using a content
 encryption key and nonce that is derived using all of these inputs and the
@@ -175,7 +177,7 @@ use of the encrypted content coding are described in {{restrict}}.
 
 ## Diffie-Hellman Key Agreement {#dh}
 
-For each new subscription that the User Agent generates for an application, it
+For each new subscription that the User Agent generates for an Application, it
 also generates a P-256 {{FIPS186}} key pair for use in elliptic-curve
 Diffie-Hellman (ECDH) {{ECDH}}.
 
@@ -188,7 +190,7 @@ defined in {{X9.62}} (that is, a 65 octet sequence that starts with a 0x04
 octet) is encoded using base64url {{!RFC7515}} to produce the `dh` parameter
 value.
 
-An application combines its ECDH private key with the public key provided by the
+An Application combines its ECDH private key with the public key provided by the
 User Agent using the process described in {{ECDH}}; on receipt of the push
 message, a User Agent combines its private key with the public key provided by
 the Application Server in the `dh` parameter in the same way.  These operations
@@ -279,9 +281,8 @@ into separate discrete steps using HMAC with SHA-256:
 ~~~
 
 Note that this omits the exclusive OR of the final nonce with the record
-sequence number, since implementations of this specification are not required to
-support multiple records (see {{restrict}}) and the sequence number of the first
-record is zero.
+sequence number, since push messages contain only a single record (see
+{{restrict}}) and the sequence number of the first record is zero.
 
 
 # Restrictions on Use of "aesgcm" Content Coding {#restrict}
@@ -308,11 +309,12 @@ allows the `keyid` parameter to be omitted from both header fields.
 An Application Server MUST NOT include an `aesgcm` parameter in the Encryption
 header field.
 
-A User Agent is not required to support multiple records.  Such a User Agent
-MUST check that the record size is large enough to contain the entire payload
-body in a single record.  The `rs` parameter MUST NOT be exactly equal to the
-length of the payload body minus the length of the authentication tag (16
-octets); that length indicates that the message has been truncated.
+A User Agent is not required to support multiple records.  A User Agent MAY
+ignore the `rs` parameter.  If a record size is size is present, but unchecked,
+decryption will fail with high probability for all valid cases.  Decryption will
+also succeed if the push message contains a single record from a longer
+truncated message.  Given that an Application Server is prohibited from
+generating such a message, this is not considered a serious risk.
 
 
 # Push Message Encryption Example {#example}
@@ -336,7 +338,7 @@ This example shows the ASCII encoded string, "I am the walrus". The content body
 is shown here encoded in URL-safe base64url for presentation reasons only.  Line
 wrapping of the "dh" parameter is added for presentation purposes.
 
-Since there is no ambiguity about which keys are using used, the "keyid"
+Since there is no ambiguity about which keys are being used, the "keyid"
 parameter is omitted from both the Encryption and Crypto-Key header fields.  The
 keys shown below use uncompressed points {{X9.62}} encoded using base64url.
 
