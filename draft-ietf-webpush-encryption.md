@@ -284,7 +284,7 @@ coding header.
 
 A push service is not required to support more than 4096 octets of payload body
 (see Section 7.2 of {{!I-D.ietf-webpush-protocol}}), which equates to at most
-4057 octets of cleartext.
+4057 octets of plaintext.
 
 An Application Server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
@@ -292,8 +292,8 @@ message contents.  The Content-Encoding header field therefore has exactly one
 value, which is `aes128gcm`.  Multiple `aes128gcm` values are not permitted.
 
 An Application Server MUST include exactly one `aes128gcm` content coding, and
-at most one entry in the Crypto-Key field. This allows the `keyid` parameter to
-be omitted.
+at most one entry having a `dh` parameter in the Crypto-Key field. This allows
+the `keyid` parameter to be omitted.
 
 An Application Server MUST NOT include an `aes128gcm` parameter in the
 Crypto-Key header field.
