@@ -290,7 +290,7 @@ A push service is not required to support more than 4096 octets of payload body
 An Application Server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
 message contents.  The Content-Encoding header field therefore has exactly one
-value, which is `aesgcm`.  Multiple `aesgcm` values are not permitted.
+value, which is `aes128gcm`.  Multiple `aes128gcm` values are not permitted.
 
 An Application Server MUST include exactly one `aes128gcm` content coding, and
 at most one entry in the Crypto-Key field. This allows the `keyid` parameter to
@@ -318,11 +318,11 @@ Host: push.example.net
 TTL: 10
 Content-Length: 33
 Content-Encoding: aes128gcm
-Crypto-Key: dh=BADr41FaMKP_D0FDF4wthQbG4W1qOX9MaLzZZzy4mOBB
-               9EK-_gCFr0WkjG1BkjqjDn59g3mmV4TWtxMnpDxJfYo
+Crypto-Key: dh=BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
+               Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
-BS2Gfwnpoi9GZjQCBniKzwAA-e4AF8C56fc0wet1Qj9gf6F0brqSdCa1vSXKUvdz
-MSlqOb0DfrBVYhWG9c-hsONBbANO9Ded2dBiarNrWw8
+DGv6ra1nlYgDCS1FRnbzlwAAxowAIg1VvoJvrVBFhclGlx4G2FuProCVzJY04Lg5
+vUP2LeswtWoBGHGoYXUzAwuxQGRGxoNbh8BROK3gmJ0
 ~~~
 
 This example shows the ASCII encoded string, "When I grow up, I want to be a
@@ -335,13 +335,13 @@ parameter is omitted from both the Encryption and Crypto-Key header fields.  The
 keys shown below use uncompressed points {{X9.62}} encoded using base64url.
 
 ~~~ example
-   Authentication Secret: nlb0Mnc06HyaGCf1E_n3rg
+   Authentication Secret: BTBZMqHH6r4Tts7J_aSIgg
    Receiver:
-      private key: RsCAVCSusEuwvPufbw_WQaSlnq3zLWoZaC4uE4dAOaw
-      public key: BHLI5Xlzes05oRzZ_QSDypBMvB2EUrC1eHls3CF_XI0c
-                  Mg50BAAJRxI4BgK40rrgV16wPlDxFOKTU_dDh2bqzng
+      private key: q1dXpw3UpT5VOmu_cf_v6ih07Aems3njxI-JWgLcM94
+      public key: BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx
+                  aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4
    Sender:
-      private key: Z4K-ZwQu9CDQ8WrC0gT41WX0zqSMAG62RMeOqRJhG98
+      private key: yfWPiYE-n46HLnH0KqZOF1fJJU3MYrct3AELtAQ-oRw
       public key: <the value of the "dh" parameter>
 ~~~
 
@@ -356,7 +356,7 @@ This document defines the "dh" parameter for the Crypto-Key header field in the
 
 * Parameter Name: dh
 * Purpose: The "dh" parameter contains a Diffie-Hellman share which is used to
-  derive the input keying material used in "aesgcm" content coding.
+  derive the input keying material used in `aes128gcm` content coding.
 * Reference: this document.
 
 
@@ -390,29 +390,29 @@ Plaintext:
 
 Application Server public key (as_public):
 
-: BADr41FaMKP_D0FDF4wthQbG4W1qOX9MaLzZZzy4mOBB
-  9EK-_gCFr0WkjG1BkjqjDn59g3mmV4TWtxMnpDxJfYo
+: BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
+  Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
 Application Server private key (as_private):
 
-: Z4K-ZwQu9CDQ8WrC0gT41WX0zqSMAG62RMeOqRJhG98
+: yfWPiYE-n46HLnH0KqZOF1fJJU3MYrct3AELtAQ-oRw
 
 User Agent public key (ua_public):
 
-: BHLI5Xlzes05oRzZ_QSDypBMvB2EUrC1eHls3CF_XI0c
-  Mg50BAAJRxI4BgK40rrgV16wPlDxFOKTU_dDh2bqzng
+: BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx
+  aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4
 
 User Agent private key (ua_private):
 
-: RsCAVCSusEuwvPufbw_WQaSlnq3zLWoZaC4uE4dAOaw
+: q1dXpw3UpT5VOmu_cf_v6ih07Aems3njxI-JWgLcM94
 
 Salt:
 
-: BS2Gfwnpoi9GZjQCBniKzw
+: DGv6ra1nlYgDCS1FRnbzlw
 
 Authentication secret (auth_secret):
 
-: nlb0Mnc06HyaGCf1E_n3rg
+: BTBZMqHH6r4Tts7J_aSIgg
 
 Note that knowledge of just one of the private keys is necessary.  The
 Application Server randomly generates the salt value, whereas salt is input to
@@ -422,27 +422,27 @@ This produces the following intermediate values:
 
 Shared ECDH secret (ecdh_secret):
 
-: 1rzf0xSw61p-wOozGHRpBSXHBd0RxG8BpB8PzTELhYg
+: kyrL1jIIOHEzg3sM2ZWRHDRB62YACZhhSlknJ672kSs
 
 Pseudo-random key for key combining (PRK_key):
 
-: rjm-1UXw78Jupk4wrBqWFegNyX1di-kLV4BZ-tE-zRk
+: Snr3JMxaHVDXHWJn5wdC52WjpCtd2EIEGBykDcZW32k
 
 Info for key combining (key_info):
 
-: V2ViUHVzaDogaW5mbwAEAOvjUVowo_8PQUMXjC2FBsbh
-  bWo5f0xovNlnPLiY4EH0Qr7-AIWvRaSMbUGSOqMOfn2D
-  eaZXhNa3EyekPEl9igRyyOV5c3rNOaEc2f0Eg8qQTLwd
-  hFKwtXh5bNwhf1yNHDIOdAQACUcSOAYCuNK64FdesD5Q
-  8RTik1P3Q4dm6s54
+: V2ViUHVzaDogaW5mbwAE_jP0qw3qcZFNtVgj9ztUlI9
+  BMG2SBzLbuaWaUyhkgiAOWXp7e8JguhwieZhYCZLpOX
+  MALzASooro8Gu7eOXsDwQlcbK-zf3jYFUarx7Q9M02b
+  BHOvlVfiby3sYalMzkXMWjs4uvgGFl70wR5uG48j47O
+  1XfKWRh-kkaZDbaCAIsO
 
 Input keying material for content encryption key derivation (IKM):
 
-: 3l0YqACQ13zATvfb8m02rauoN2kcmLFrXknsuV7uvP4
+: dTQXtQpktdp6UQb29SUBcO5igFtC9WsXlhlNr2jRkkY
 
 PRK for content encryption (PRK):
 
-: 9NVQMCHcNxE6dNRmNLxOKrhkLyK5zpY8hfuccYPPmyQ
+: BEhmz5JYdOXMsFJf_WDU8fJlOURaExoUoFuaGU86Fuc
 
 Info for content encryption key derivation (cek_info):
 
@@ -450,7 +450,7 @@ Info for content encryption key derivation (cek_info):
 
 Content encryption key (CEK):
 
-: yQ1wClLLhFnnvAWjampaaw
+: wgJKGPLNgnI3CKy09z19Qw
 
 Info for content encryption nonce derivation (nonce_info):
 
@@ -458,16 +458,16 @@ Info for content encryption nonce derivation (nonce_info):
 
 Nonce (NONCE):
 
-: KeygB96a_0cwvcRk
+: w5SniqvyjVui9OoV
 
 The salt and a record size of 4096 produce a 21 octet header of
-BS2Gfwnpoi9GZjQCBniKzwAA-e4A.
+DGv6ra1nlYgDCS1FRnbzlwAAxowA.
 
 The push message plaintext is padded to produce
 AABXaGVuIEkgZ3JvdyB1cCwgSSB3YW50IHRvIGJl IGEgd2F0ZXJtZWxvbg.  The plaintext is
 then encrypted with AES-GCM, which emits ciphertext of
-F8C56fc0wet1Qj9gf6F0brqSdCa1vSXKUvdzMSlq
-Ob0DfrBVYhWG9c-hsONBbANO9Ded2dBiarNrWw8.
+Ig1VvoJvrVBFhclGlx4G2FuProCVzJY04Lg5vUP2
+LeswtWoBGHGoYXUzAwuxQGRGxoNbh8BROK3gmJ0.
 
 The header and cipher text are concatenated and produce the result shown in the
 example.
