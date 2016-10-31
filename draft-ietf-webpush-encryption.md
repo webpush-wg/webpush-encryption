@@ -280,8 +280,7 @@ header to a size that is greater than the length of the plaintext, plus any
 padding (which is at least 2 octets).
 
 A push message MUST include a zero length `keyid` parameter in the content
-coding header.  This allows implementations to ignore the first 21 octets of a
-push message.
+coding header.
 
 A push service is not required to support more than 4096 octets of payload body
 (see Section 7.2 of {{!I-D.ietf-webpush-protocol}}), which equates to at most
