@@ -285,7 +285,7 @@ push message.
 
 A push service is not required to support more than 4096 octets of payload body
 (see Section 7.2 of {{!I-D.ietf-webpush-protocol}}), which equates to at most
-4059 octets of cleartext.
+4057 octets of cleartext.
 
 An Application Server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
