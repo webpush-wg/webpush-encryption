@@ -468,10 +468,10 @@ key_info = "WebPush: info" || 0x00 || ua_public || as_public
 <p id="rfc.section.3.4.p.2">Note that this omits the exclusive OR of the final nonce with the record sequence number, since push messages contain only a single record (see <a href="#restrict">Section 4</a>) and the sequence number of the first record is zero.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#restrict" id="restrict">Restrictions on Use of &#8220;aes128gcm&#8221; Content Coding</a></h1>
 <p id="rfc.section.4.p.1">An Application Server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  An application server MUST set the <samp>rs</samp> parameter in the <samp>aes128gcm</samp> content coding header to a size that is greater than the length of the plaintext, plus any padding (which is at least 2 octets).</p>
-<p id="rfc.section.4.p.2">A push message MUST include a zero length <samp>keyid</samp> parameter in the content coding header.  This allows implementations to ignore the first 21 octets of a push message.</p>
-<p id="rfc.section.4.p.3">A push service is not required to support more than 4096 octets of payload body (see Section 7.2 of <a href="#I-D.ietf-webpush-protocol">[I-D.ietf-webpush-protocol]</a>), which equates to at most 4059 octets of cleartext.</p>
-<p id="rfc.section.4.p.4">An Application Server MUST NOT use other content encodings for push messages.  In particular, content encodings that compress could result in leaking of push message contents.  The Content-Encoding header field therefore has exactly one value, which is <samp>aesgcm</samp>.  Multiple <samp>aesgcm</samp> values are not permitted.</p>
-<p id="rfc.section.4.p.5">An Application Server MUST include exactly one <samp>aes128gcm</samp> content coding, and at most one entry in the Crypto-Key field. This allows the <samp>keyid</samp> parameter to be omitted.</p>
+<p id="rfc.section.4.p.2">A push message MUST include a zero length <samp>keyid</samp> parameter in the content coding header.</p>
+<p id="rfc.section.4.p.3">A push service is not required to support more than 4096 octets of payload body (see Section 7.2 of <a href="#I-D.ietf-webpush-protocol">[I-D.ietf-webpush-protocol]</a>), which equates to at most 4057 octets of plaintext.</p>
+<p id="rfc.section.4.p.4">An Application Server MUST NOT use other content encodings for push messages.  In particular, content encodings that compress could result in leaking of push message contents.  The Content-Encoding header field therefore has exactly one value, which is <samp>aes128gcm</samp>.  Multiple <samp>aes128gcm</samp> values are not permitted.</p>
+<p id="rfc.section.4.p.5">An Application Server MUST include exactly one <samp>aes128gcm</samp> content coding, and at most one entry having a <samp>dh</samp> parameter in the Crypto-Key field. This allows the <samp>keyid</samp> parameter to be omitted.</p>
 <p id="rfc.section.4.p.6">An Application Server MUST NOT include an <samp>aes128gcm</samp> parameter in the Crypto-Key header field.</p>
 <p id="rfc.section.4.p.7">A User Agent is not required to support multiple records.  A User Agent MAY ignore the <samp>rs</samp> field and assume that the <samp>keyid</samp> field is empty.  If a record size is unchecked, decryption will fail with high probability for all valid cases.  However, decryption will also succeed if the push message contains a single record from a longer truncated message.  Given that an Application Server is prohibited from generating such a message, this is not considered a serious risk.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#example" id="example">Push Message Encryption Example</a></h1>
@@ -482,22 +482,22 @@ Host: push.example.net
 TTL: 10
 Content-Length: 33
 Content-Encoding: aes128gcm
-Crypto-Key: dh=BADr41FaMKP_D0FDF4wthQbG4W1qOX9MaLzZZzy4mOBB
-               9EK-_gCFr0WkjG1BkjqjDn59g3mmV4TWtxMnpDxJfYo
+Crypto-Key: dh=BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
+               Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
-BS2Gfwnpoi9GZjQCBniKzwAA-e4AF8C56fc0wet1Qj9gf6F0brqSdCa1vSXKUvdz
-MSlqOb0DfrBVYhWG9c-hsONBbANO9Ded2dBiarNrWw8
+DGv6ra1nlYgDCS1FRnbzlwAAxowAIg1VvoJvrVBFhclGlx4G2FuProCVzJY04Lg5
+vUP2LeswtWoBGHGoYXUzAwuxQGRGxoNbh8BROK3gmJ0
 </pre>
 <p id="rfc.section.5.p.2">This example shows the ASCII encoded string, &#8220;When I grow up, I want to be a watermelon&#8221;. The content body is shown here with line wrapping and URL-safe base64url encoding to meet presentation constraints.  Similarly, the &#8220;dh&#8221; parameter wrapped to meet line length constraints.</p>
 <p id="rfc.section.5.p.3">Since there is no ambiguity about which keys are being used, the &#8220;keyid&#8221; parameter is omitted from both the Encryption and Crypto-Key header fields.  The keys shown below use uncompressed points <a href="#X9.62">[X9.62]</a> encoded using base64url.</p>
 <pre>
-   Authentication Secret: nlb0Mnc06HyaGCf1E_n3rg
+   Authentication Secret: BTBZMqHH6r4Tts7J_aSIgg
    Receiver:
-      private key: RsCAVCSusEuwvPufbw_WQaSlnq3zLWoZaC4uE4dAOaw
-      public key: BHLI5Xlzes05oRzZ_QSDypBMvB2EUrC1eHls3CF_XI0c
-                  Mg50BAAJRxI4BgK40rrgV16wPlDxFOKTU_dDh2bqzng
+      private key: q1dXpw3UpT5VOmu_cf_v6ih07Aems3njxI-JWgLcM94
+      public key: BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx
+                  aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4
    Sender:
-      private key: Z4K-ZwQu9CDQ8WrC0gT41WX0zqSMAG62RMeOqRJhG98
+      private key: yfWPiYE-n46HLnH0KqZOF1fJJU3MYrct3AELtAQ-oRw
       public key: &lt;the value of the "dh" parameter&gt;
 </pre>
 <p id="rfc.section.5.p.4">Intermediate values for this example are included in <a href="#ex-intermediate">Appendix A</a>.</p>
@@ -507,7 +507,7 @@ MSlqOb0DfrBVYhWG9c-hsONBbANO9Ded2dBiarNrWw8
 
 <ul>
   <li>Parameter Name: dh</li>
-  <li>Purpose: The &#8220;dh&#8221; parameter contains a Diffie-Hellman share which is used to derive the input keying material used in &#8220;aesgcm&#8221; content coding.</li>
+  <li>Purpose: The &#8220;dh&#8221; parameter contains a Diffie-Hellman share which is used to derive the input keying material used in <samp>aes128gcm</samp> content coding.</li>
   <li>Reference: this document.</li>
 </ul>
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
@@ -610,17 +610,17 @@ MSlqOb0DfrBVYhWG9c-hsONBbANO9Ded2dBiarNrWw8
   <dt>Plaintext:</dt>
   <dd style="margin-left: 8">V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0byBiZSBhIHdhdGVybWVsb24</dd>
   <dt>Application Server public key (as_public):</dt>
-  <dd style="margin-left: 8">BADr41FaMKP_D0FDF4wthQbG4W1qOX9MaLzZZzy4mOBB 9EK-_gCFr0WkjG1BkjqjDn59g3mmV4TWtxMnpDxJfYo</dd>
+  <dd style="margin-left: 8">BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8</dd>
   <dt>Application Server private key (as_private):</dt>
-  <dd style="margin-left: 8">Z4K-ZwQu9CDQ8WrC0gT41WX0zqSMAG62RMeOqRJhG98</dd>
+  <dd style="margin-left: 8">yfWPiYE-n46HLnH0KqZOF1fJJU3MYrct3AELtAQ-oRw</dd>
   <dt>User Agent public key (ua_public):</dt>
-  <dd style="margin-left: 8">BHLI5Xlzes05oRzZ_QSDypBMvB2EUrC1eHls3CF_XI0c Mg50BAAJRxI4BgK40rrgV16wPlDxFOKTU_dDh2bqzng</dd>
+  <dd style="margin-left: 8">BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4</dd>
   <dt>User Agent private key (ua_private):</dt>
-  <dd style="margin-left: 8">RsCAVCSusEuwvPufbw_WQaSlnq3zLWoZaC4uE4dAOaw</dd>
+  <dd style="margin-left: 8">q1dXpw3UpT5VOmu_cf_v6ih07Aems3njxI-JWgLcM94</dd>
   <dt>Salt:</dt>
-  <dd style="margin-left: 8">BS2Gfwnpoi9GZjQCBniKzw</dd>
+  <dd style="margin-left: 8">DGv6ra1nlYgDCS1FRnbzlw</dd>
   <dt>Authentication secret (auth_secret):</dt>
-  <dd style="margin-left: 8">nlb0Mnc06HyaGCf1E_n3rg</dd>
+  <dd style="margin-left: 8">BTBZMqHH6r4Tts7J_aSIgg</dd>
 </dl>
 <p id="rfc.section.A.p.3">Note that knowledge of just one of the private keys is necessary.  The Application Server randomly generates the salt value, whereas salt is input to the receiver.</p>
 <p id="rfc.section.A.p.4">This produces the following intermediate values:</p>
@@ -628,26 +628,26 @@ MSlqOb0DfrBVYhWG9c-hsONBbANO9Ded2dBiarNrWw8
 
 <dl>
   <dt>Shared ECDH secret (ecdh_secret):</dt>
-  <dd style="margin-left: 8">1rzf0xSw61p-wOozGHRpBSXHBd0RxG8BpB8PzTELhYg</dd>
+  <dd style="margin-left: 8">kyrL1jIIOHEzg3sM2ZWRHDRB62YACZhhSlknJ672kSs</dd>
   <dt>Pseudo-random key for key combining (PRK_key):</dt>
-  <dd style="margin-left: 8">rjm-1UXw78Jupk4wrBqWFegNyX1di-kLV4BZ-tE-zRk</dd>
+  <dd style="margin-left: 8">Snr3JMxaHVDXHWJn5wdC52WjpCtd2EIEGBykDcZW32k</dd>
   <dt>Info for key combining (key_info):</dt>
-  <dd style="margin-left: 8">V2ViUHVzaDogaW5mbwAEAOvjUVowo_8PQUMXjC2FBsbh bWo5f0xovNlnPLiY4EH0Qr7-AIWvRaSMbUGSOqMOfn2D eaZXhNa3EyekPEl9igRyyOV5c3rNOaEc2f0Eg8qQTLwd hFKwtXh5bNwhf1yNHDIOdAQACUcSOAYCuNK64FdesD5Q 8RTik1P3Q4dm6s54</dd>
+  <dd style="margin-left: 8">V2ViUHVzaDogaW5mbwAE_jP0qw3qcZFNtVgj9ztUlI9 BMG2SBzLbuaWaUyhkgiAOWXp7e8JguhwieZhYCZLpOX MALzASooro8Gu7eOXsDwQlcbK-zf3jYFUarx7Q9M02b BHOvlVfiby3sYalMzkXMWjs4uvgGFl70wR5uG48j47O 1XfKWRh-kkaZDbaCAIsO</dd>
   <dt>Input keying material for content encryption key derivation (IKM):</dt>
-  <dd style="margin-left: 8">3l0YqACQ13zATvfb8m02rauoN2kcmLFrXknsuV7uvP4</dd>
+  <dd style="margin-left: 8">dTQXtQpktdp6UQb29SUBcO5igFtC9WsXlhlNr2jRkkY</dd>
   <dt>PRK for content encryption (PRK):</dt>
-  <dd style="margin-left: 8">9NVQMCHcNxE6dNRmNLxOKrhkLyK5zpY8hfuccYPPmyQ</dd>
+  <dd style="margin-left: 8">BEhmz5JYdOXMsFJf_WDU8fJlOURaExoUoFuaGU86Fuc</dd>
   <dt>Info for content encryption key derivation (cek_info):</dt>
   <dd style="margin-left: 8">Q29udGVudC1FbmNvZGluZzogYWVzZ2NtMTI4AA</dd>
   <dt>Content encryption key (CEK):</dt>
-  <dd style="margin-left: 8">yQ1wClLLhFnnvAWjampaaw</dd>
+  <dd style="margin-left: 8">wgJKGPLNgnI3CKy09z19Qw</dd>
   <dt>Info for content encryption nonce derivation (nonce_info):</dt>
   <dd style="margin-left: 8">Q29udGVudC1FbmNvZGluZzogbm9uY2UA</dd>
   <dt>Nonce (NONCE):</dt>
-  <dd style="margin-left: 8">KeygB96a_0cwvcRk</dd>
+  <dd style="margin-left: 8">w5SniqvyjVui9OoV</dd>
 </dl>
-<p id="rfc.section.A.p.6">The salt and a record size of 4096 produce a 21 octet header of BS2Gfwnpoi9GZjQCBniKzwAA-e4A.</p>
-<p id="rfc.section.A.p.7">The push message plaintext is padded to produce AABXaGVuIEkgZ3JvdyB1cCwgSSB3YW50IHRvIGJl IGEgd2F0ZXJtZWxvbg.  The plaintext is then encrypted with AES-GCM, which emits ciphertext of F8C56fc0wet1Qj9gf6F0brqSdCa1vSXKUvdzMSlq Ob0DfrBVYhWG9c-hsONBbANO9Ded2dBiarNrWw8.</p>
+<p id="rfc.section.A.p.6">The salt and a record size of 4096 produce a 21 octet header of DGv6ra1nlYgDCS1FRnbzlwAAxowA.</p>
+<p id="rfc.section.A.p.7">The push message plaintext is padded to produce AABXaGVuIEkgZ3JvdyB1cCwgSSB3YW50IHRvIGJl IGEgd2F0ZXJtZWxvbg.  The plaintext is then encrypted with AES-GCM, which emits ciphertext of Ig1VvoJvrVBFhclGlx4G2FuProCVzJY04Lg5vUP2 LeswtWoBGHGoYXUzAwuxQGRGxoNbh8BROK3gmJ0.</p>
 <p id="rfc.section.A.p.8">The header and cipher text are concatenated and produce the result shown in the example.</p>
 <h1 id="rfc.authors">
   <a href="#rfc.authors">Author's Address</a>
