@@ -182,11 +182,11 @@ Diffie-Hellman (ECDH) {{ECDH}}.
 When sending a push message, the Application Server also generates a new ECDH
 key pair on the same P-256 curve.
 
-The ECDH public key for the Application Server is included in the `dh` parameter
-of the Crypto-Key header field (see {{iana}}).  The uncompressed point form
-defined in {{X9.62}} (that is, a 65 octet sequence that starts with a 0x04
-octet) is encoded using base64url {{!RFC7515}} to produce the `dh` parameter
-value.
+The ECDH public key for the Application Server is included as the "keyid"
+parameter in the encrypted content coding header (see Section 2.1 of
+{{!I-D.ietf-httpbis-encryption-encoding}}.  The uncompressed point form defined
+in {{X9.62}} (that is, a 65 octet sequence that starts with a 0x04 octet) forms
+the entirety of the "keyid".
 
 An Application combines its ECDH private key with the public key provided by the
 User Agent using the process described in {{ECDH}}; on receipt of the push
@@ -279,32 +279,25 @@ application server MUST set the `rs` parameter in the `aes128gcm` content coding
 header to a size that is greater than the length of the plaintext, plus any
 padding (which is at least 2 octets).
 
-A push message MUST include a zero length `keyid` parameter in the content
-coding header.
+A push message MUST include the application server ECDH public key in the
+`keyid` parameter of the encrypted content coding header.
 
 A push service is not required to support more than 4096 octets of payload body
-(see Section 7.2 of {{!I-D.ietf-webpush-protocol}}), which equates to at most
-4057 octets of plaintext.
+(see Section 7.2 of {{!I-D.ietf-webpush-protocol}}).  Absent header (86 octets),
+padding (minimum 2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this
+equates to at most 3992 octets of plaintext.
 
 An Application Server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
 message contents.  The Content-Encoding header field therefore has exactly one
 value, which is `aes128gcm`.  Multiple `aes128gcm` values are not permitted.
 
-An Application Server MUST include exactly one `aes128gcm` content coding, and
-at most one entry having a `dh` parameter in the Crypto-Key field. This allows
-the `keyid` parameter to be omitted.
-
-An Application Server MUST NOT include an `aes128gcm` parameter in the
-Crypto-Key header field.
-
 A User Agent is not required to support multiple records.  A User Agent MAY
-ignore the `rs` field and assume that the `keyid` field is empty.  If a record
-size is unchecked, decryption will fail with high probability for all valid
-cases.  However, decryption will also succeed if the push message contains a
-single record from a longer truncated message.  Given that an Application Server
-is prohibited from generating such a message, this is not considered a serious
-risk.
+ignore the `rs` field.  If a record size is unchecked, decryption will fail with
+high probability for all valid cases.  However, decryption will succeed if the
+push message contains a single record from a longer truncated message.  Given
+that an Application Server is prohibited from generating such a message, this is
+not considered a serious risk.
 
 
 # Push Message Encryption Example {#example}
@@ -315,23 +308,21 @@ The following example shows a push message being sent to a push service.
 POST /push/JzLQ3raZJfFBR0aqvOMsLrt54w4rJUsV HTTP/1.1
 Host: push.example.net
 TTL: 10
-Content-Length: 33
+Content-Length: 145
 Content-Encoding: aes128gcm
-Crypto-Key: dh=BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
-               Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
-DGv6ra1nlYgDCS1FRnbzlwAAxowAIg1VvoJvrVBFhclGlx4G2FuProCVzJY04Lg5
-vUP2LeswtWoBGHGoYXUzAwuxQGRGxoNbh8BROK3gmJ0
+DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml
+mlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A-l_-xdB7y6XwHb
+oeEO-lBPsSXN9axUBN3F53dcg7-wSrTIXywmEmPfWg78ZJX4LQzTaEaZMuHcWDuK
+6g
 ~~~
 
 This example shows the ASCII encoded string, "When I grow up, I want to be a
 watermelon". The content body is shown here with line wrapping and URL-safe
-base64url encoding to meet presentation constraints.  Similarly, the "dh"
-parameter wrapped to meet line length constraints.
+base64url encoding to meet presentation constraints.
 
-Since there is no ambiguity about which keys are being used, the "keyid"
-parameter is omitted from both the Encryption and Crypto-Key header fields.  The
-keys shown below use uncompressed points {{X9.62}} encoded using base64url.
+The keys used are shown below using the uncompressed form {{X9.62}} encoded
+using base64url.
 
 ~~~ example
    Authentication Secret: BTBZMqHH6r4Tts7J_aSIgg
@@ -349,15 +340,8 @@ Intermediate values for this example are included in {{ex-intermediate}}.
 
 # IANA Considerations {#iana}
 
-This document defines the "dh" parameter for the Crypto-Key header field in the
-"Hypertext Transfer Protocol (HTTP) Crypto-Key Parameters" registry defined in
-{{I-D.ietf-httpbis-encryption-encoding}}.
-
-* Parameter Name: dh
-* Purpose: The "dh" parameter contains a Diffie-Hellman share which is used to
-  derive the input keying material used in `aes128gcm` content coding.
-* Reference: this document.
-
+[[RFC EDITOR: please remote this section before publication.]]
+This document makes no request of IANA.
 
 # Security Considerations
 
@@ -429,27 +413,27 @@ Pseudo-random key for key combining (PRK_key):
 
 Info for key combining (key_info):
 
-: V2ViUHVzaDogaW5mbwAE_jP0qw3qcZFNtVgj9ztUlI9
-  BMG2SBzLbuaWaUyhkgiAOWXp7e8JguhwieZhYCZLpOX
-  MALzASooro8Gu7eOXsDwQlcbK-zf3jYFUarx7Q9M02b
-  BHOvlVfiby3sYalMzkXMWjs4uvgGFl70wR5uG48j47O
-  1XfKWRh-kkaZDbaCAIsO
+: V2ViUHVzaDogaW5mbwAEJXGyvs3942BVGq8e0PTNNmwR
+  zr5VX4m8t7GGpTM5FzFo7OLr4BhZe9MEebhuPI-OztV3
+  ylkYfpJGmQ22ggCLDgT-M_SrDepxkU21WCP3O1SUj0Ew
+  bZIHMtu5pZpTKGSCIA5Zent7wmC6HCJ5mFgJkuk5cwAv
+  MBKiiujwa7t45ewP
 
 Input keying material for content encryption key derivation (IKM):
 
-: dTQXtQpktdp6UQb29SUBcO5igFtC9WsXlhlNr2jRkkY
+: S4lYMb_L0FxCeq0WhDx813KgSYqU26kOyzWUdsXYyrg
 
 PRK for content encryption (PRK):
 
-: BEhmz5JYdOXMsFJf_WDU8fJlOURaExoUoFuaGU86Fuc
+: 09_eUZGrsvxChDCGRCdkLiDXrReGOEVeSCdCcPBSJSc
 
 Info for content encryption key derivation (cek_info):
 
-: Q29udGVudC1FbmNvZGluZzogYWVzZ2NtMTI4AA
+: Q29udGVudC1FbmNvZGluZzogYWVzMTI4Z2NtAA
 
 Content encryption key (CEK):
 
-: wgJKGPLNgnI3CKy09z19Qw
+: oIhVW04MRdy2XN9CiKLxTg
 
 Info for content encryption nonce derivation (nonce_info):
 
@@ -457,16 +441,17 @@ Info for content encryption nonce derivation (nonce_info):
 
 Nonce (NONCE):
 
-: w5SniqvyjVui9OoV
+: 4h_95klXJ5E_qnoN
 
-The salt and a record size of 4096 produce a 21 octet header of
-DGv6ra1nlYgDCS1FRnbzlwAAxowA.
+The salt, record size of 4096, and application server public key produce an 86
+octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGR
+TbVYI_c7VJSPQTBtkgcy27mlmlMoZIIgDll6e3vC YLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8.
 
 The push message plaintext is padded to produce
 AABXaGVuIEkgZ3JvdyB1cCwgSSB3YW50IHRvIGJl IGEgd2F0ZXJtZWxvbg.  The plaintext is
 then encrypted with AES-GCM, which emits ciphertext of
-Ig1VvoJvrVBFhclGlx4G2FuProCVzJY04Lg5vUP2
-LeswtWoBGHGoYXUzAwuxQGRGxoNbh8BROK3gmJ0.
+pf_sXQe8ul8B26HhDvpQT7ElzfWsVATdxed3XIO_
+sEq0yF8sJhJj31oO_GSV-C0M02hGmTLh3Fg7iuo.
 
 The header and cipher text are concatenated and produce the result shown in the
 example.
