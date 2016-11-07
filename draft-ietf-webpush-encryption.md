@@ -184,9 +184,7 @@ key pair on the same P-256 curve.
 
 The ECDH public key for the Application Server is included as the "keyid"
 parameter in the encrypted content coding header (see Section 2.1 of
-{{!I-D.ietf-httpbis-encryption-encoding}}.  The uncompressed point form defined
-in {{X9.62}} (that is, a 65 octet sequence that starts with a 0x04 octet) forms
-the entirety of the "keyid".
+{{!I-D.ietf-httpbis-encryption-encoding}}.
 
 An Application combines its ECDH private key with the public key provided by the
 User Agent using the process described in {{ECDH}}; on receipt of the push
@@ -280,7 +278,9 @@ header to a size that is greater than the length of the plaintext, plus any
 padding (which is at least 2 octets).
 
 A push message MUST include the application server ECDH public key in the
-`keyid` parameter of the encrypted content coding header.
+`keyid` parameter of the encrypted content coding header.  The uncompressed
+point form defined in {{X9.62}} (that is, a 65 octet sequence that starts with
+a 0x04 octet) forms the entirety of the "keyid".
 
 A push service is not required to support more than 4096 octets of payload body
 (see Section 7.2 of {{!I-D.ietf-webpush-protocol}}).  Absent header (86 octets),
