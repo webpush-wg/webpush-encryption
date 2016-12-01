@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                        October 31, 2016
-Expires: May 4, 2017
+Intended status: Standards Track                        December 1, 2016
+Expires: June 4, 2017
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 4, 2017.
+   This Internet-Draft will expire on June 4, 2017.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Thomson                    Expires May 4, 2017                  [Page 1]
+Thomson                   Expires June 4, 2017                  [Page 1]
 
-Internet-Draft             Web Push Encryption              October 2016
+Internet-Draft             Web Push Encryption             December 2016
 
 
 Table of Contents
@@ -68,15 +68,15 @@ Table of Contents
      3.1.  Diffie-Hellman Key Agreement  . . . . . . . . . . . . . .   4
      3.2.  Push Message Authentication . . . . . . . . . . . . . . .   5
      3.3.  Combining Shared and Authentication Secrets . . . . . . .   5
-     3.4.  Encryption Summary  . . . . . . . . . . . . . . . . . . .   6
+     3.4.  Encryption Summary  . . . . . . . . . . . . . . . . . . .   5
    4.  Restrictions on Use of "aes128gcm" Content Coding . . . . . .   6
    5.  Push Message Encryption Example . . . . . . . . . . . . . . .   7
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  10
-   Appendix A.  Intermediate Values for Encryption . . . . . . . . .  10
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+   Appendix A.  Intermediate Values for Encryption . . . . . . . . .   9
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thomson                    Expires May 4, 2017                  [Page 2]
+Thomson                   Expires June 4, 2017                  [Page 2]
 
-Internet-Draft             Web Push Encryption              October 2016
+Internet-Draft             Web Push Encryption             December 2016
 
 
    [I-D.ietf-httpbis-encryption-encoding].  This document describes how
@@ -165,9 +165,9 @@ Internet-Draft             Web Push Encryption              October 2016
 
 
 
-Thomson                    Expires May 4, 2017                  [Page 3]
+Thomson                   Expires June 4, 2017                  [Page 3]
 
-Internet-Draft             Web Push Encryption              October 2016
+Internet-Draft             Web Push Encryption             December 2016
 
 
    that is provided by the User Agent, such as the push subscription
@@ -215,19 +215,16 @@ Internet-Draft             Web Push Encryption              October 2016
    When sending a push message, the Application Server also generates a
    new ECDH key pair on the same P-256 curve.
 
-   The ECDH public key for the Application Server is included in the
-   "dh" parameter of the Crypto-Key header field (see Section 6).  The
-   uncompressed point form defined in [X9.62] (that is, a 65 octet
+   The ECDH public key for the Application Server is included as the
+   "keyid" parameter in the encrypted content coding header (see
+   Section 2.1 of [I-D.ietf-httpbis-encryption-encoding].
 
 
 
-Thomson                    Expires May 4, 2017                  [Page 4]
+Thomson                   Expires June 4, 2017                  [Page 4]
 
-Internet-Draft             Web Push Encryption              October 2016
+Internet-Draft             Web Push Encryption             December 2016
 
-
-   sequence that starts with a 0x04 octet) is encoded using base64url
-   [RFC7515] to produce the "dh" parameter value.
 
    An Application combines its ECDH private key with the public key
    provided by the User Agent using the process described in [ECDH]; on
@@ -272,20 +269,19 @@ Internet-Draft             Web Push Encryption              October 2016
    L: 32 octets (i.e., the output is the length of the underlying
       SHA-256 HMAC function output)
 
-
-
-
-
-
-Thomson                    Expires May 4, 2017                  [Page 5]
-
-Internet-Draft             Web Push Encryption              October 2016
-
-
 3.4.  Encryption Summary
 
    This results in a the final content encryption key and nonce
    generation using the following sequence, which is shown here in
+
+
+
+
+Thomson                   Expires June 4, 2017                  [Page 5]
+
+Internet-Draft             Web Push Encryption             December 2016
+
+
    pseudocode with HKDF expanded into separate discrete steps using HMAC
    with SHA-256:
 
@@ -323,19 +319,23 @@ Internet-Draft             Web Push Encryption              October 2016
    greater than the length of the plaintext, plus any padding (which is
    at least 2 octets).
 
-   A push message MUST include a zero length "keyid" parameter in the
-   content coding header.
+   A push message MUST include the application server ECDH public key in
+   the "keyid" parameter of the encrypted content coding header.  The
+   uncompressed point form defined in [X9.62] (that is, a 65 octet
+   sequence that starts with a 0x04 octet) forms the entirety of the
+   "keyid".
 
    A push service is not required to support more than 4096 octets of
-   payload body (see Section 7.2 of [I-D.ietf-webpush-protocol]), which
-   equates to at most 4057 octets of plaintext.
+   payload body (see Section 7.2 of [I-D.ietf-webpush-protocol]).
+   Absent header (86 octets), padding (minimum 2 octets), and expansion
+   for AEAD_AES_128_GCM (16 octets), this equates to at most 3992 octets
+   of plaintext.
 
 
 
-
-Thomson                    Expires May 4, 2017                  [Page 6]
+Thomson                   Expires June 4, 2017                  [Page 6]
 
-Internet-Draft             Web Push Encryption              October 2016
+Internet-Draft             Web Push Encryption             December 2016
 
 
    An Application Server MUST NOT use other content encodings for push
@@ -344,21 +344,13 @@ Internet-Draft             Web Push Encryption              October 2016
    header field therefore has exactly one value, which is "aes128gcm".
    Multiple "aes128gcm" values are not permitted.
 
-   An Application Server MUST include exactly one "aes128gcm" content
-   coding, and at most one entry having a "dh" parameter in the Crypto-
-   Key field.  This allows the "keyid" parameter to be omitted.
-
-   An Application Server MUST NOT include an "aes128gcm" parameter in
-   the Crypto-Key header field.
-
    A User Agent is not required to support multiple records.  A User
-   Agent MAY ignore the "rs" field and assume that the "keyid" field is
-   empty.  If a record size is unchecked, decryption will fail with high
-   probability for all valid cases.  However, decryption will also
-   succeed if the push message contains a single record from a longer
-   truncated message.  Given that an Application Server is prohibited
-   from generating such a message, this is not considered a serious
-   risk.
+   Agent MAY ignore the "rs" field.  If a record size is unchecked,
+   decryption will fail with high probability for all valid cases.
+   However, decryption will succeed if the push message contains a
+   single record from a longer truncated message.  Given that an
+   Application Server is prohibited from generating such a message, this
+   is not considered a serious risk.
 
 5.  Push Message Encryption Example
 
@@ -368,31 +360,21 @@ Internet-Draft             Web Push Encryption              October 2016
    POST /push/JzLQ3raZJfFBR0aqvOMsLrt54w4rJUsV HTTP/1.1
    Host: push.example.net
    TTL: 10
-   Content-Length: 33
+   Content-Length: 145
    Content-Encoding: aes128gcm
-   Crypto-Key: dh=BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
-                  Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
-   DGv6ra1nlYgDCS1FRnbzlwAAxowAIg1VvoJvrVBFhclGlx4G2FuProCVzJY04Lg5
-   vUP2LeswtWoBGHGoYXUzAwuxQGRGxoNbh8BROK3gmJ0
+   DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml
+   mlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A-l_-xdB7y6XwHb
+   oeEO-lBPsSXN9axUBN3F53dcg7-wSrTIXywmEmPfWg78ZJX4LQzTaEaZMuHcWDuK
+   6g
 
    This example shows the ASCII encoded string, "When I grow up, I want
    to be a watermelon".  The content body is shown here with line
    wrapping and URL-safe base64url encoding to meet presentation
-   constraints.  Similarly, the "dh" parameter wrapped to meet line
-   length constraints.
+   constraints.
 
-   Since there is no ambiguity about which keys are being used, the
-   "keyid" parameter is omitted from both the Encryption and Crypto-Key
-   header fields.  The keys shown below use uncompressed points [X9.62]
+   The keys used are shown below using the uncompressed form [X9.62]
    encoded using base64url.
-
-
-
-Thomson                    Expires May 4, 2017                  [Page 7]
-
-Internet-Draft             Web Push Encryption              October 2016
-
 
       Authentication Secret: BTBZMqHH6r4Tts7J_aSIgg
       Receiver:
@@ -405,20 +387,17 @@ Internet-Draft             Web Push Encryption              October 2016
 
    Intermediate values for this example are included in Appendix A.
 
+
+
+Thomson                   Expires June 4, 2017                  [Page 7]
+
+Internet-Draft             Web Push Encryption             December 2016
+
+
 6.  IANA Considerations
 
-   This document defines the "dh" parameter for the Crypto-Key header
-   field in the "Hypertext Transfer Protocol (HTTP) Crypto-Key
-   Parameters" registry defined in
-   [I-D.ietf-httpbis-encryption-encoding].
-
-   o  Parameter Name: dh
-
-   o  Purpose: The "dh" parameter contains a Diffie-Hellman share which
-      is used to derive the input keying material used in "aes128gcm"
-      content coding.
-
-   o  Reference: this document.
+   [[RFC EDITOR: please remote this section before publication.]] This
+   document makes no request of IANA.
 
 7.  Security Considerations
 
@@ -437,18 +416,6 @@ Internet-Draft             Web Push Encryption              October 2016
    subscription that is used.  Additionally, the length of messages
    could be revealed unless the padding provided by the content encoding
    scheme is used to obscure length.
-
-
-
-
-
-
-
-
-Thomson                    Expires May 4, 2017                  [Page 8]
-
-Internet-Draft             Web Push Encryption              October 2016
-
 
 8.  References
 
@@ -469,8 +436,19 @@ Internet-Draft             Web Push Encryption              October 2016
 
    [I-D.ietf-httpbis-encryption-encoding]
               Thomson, M., "Encrypted Content-Encoding for HTTP", draft-
-              ietf-httpbis-encryption-encoding-03 (work in progress),
+              ietf-httpbis-encryption-encoding-04 (work in progress),
               October 2016.
+
+
+
+
+
+
+
+Thomson                   Expires June 4, 2017                  [Page 8]
+
+Internet-Draft             Web Push Encryption             December 2016
+
 
    [I-D.ietf-webpush-protocol]
               Thomson, M., Damaggio, E., and B. Raymor, "Generic Event
@@ -491,20 +469,6 @@ Internet-Draft             Web Push Encryption              October 2016
               Key Derivation Function (HKDF)", RFC 5869,
               DOI 10.17487/RFC5869, May 2010,
               <http://www.rfc-editor.org/info/rfc5869>.
-
-   [RFC7515]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web
-              Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May
-              2015, <http://www.rfc-editor.org/info/rfc7515>.
-
-
-
-
-
-
-Thomson                    Expires May 4, 2017                  [Page 9]
-
-Internet-Draft             Web Push Encryption              October 2016
-
 
    [X9.62]    ANSI, "Public Key Cryptography For The Financial Services
               Industry: The Elliptic Curve Digital Signature Algorithm
@@ -535,6 +499,13 @@ Appendix A.  Intermediate Values for Encryption
       BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
       Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
+
+
+Thomson                   Expires June 4, 2017                  [Page 9]
+
+Internet-Draft             Web Push Encryption             December 2016
+
+
    Application Server private key (as_private):  yfWPiYE-n46HLnH0KqZOF1f
       JJU3MYrct3AELtAQ-oRw
 
@@ -554,49 +525,52 @@ Appendix A.  Intermediate Values for Encryption
 
    This produces the following intermediate values:
 
-
-
-
-Thomson                    Expires May 4, 2017                 [Page 10]
-
-Internet-Draft             Web Push Encryption              October 2016
-
-
    Shared ECDH secret (ecdh_secret):  kyrL1jIIOHEzg3sM2ZWRHDRB62YACZhhSl
       knJ672kSs
 
    Pseudo-random key for key combining (PRK_key):
       Snr3JMxaHVDXHWJn5wdC52WjpCtd2EIEGBykDcZW32k
 
-   Info for key combining (key_info):  V2ViUHVzaDogaW5mbwAE_jP0qw3qcZFNt
-      Vgj9ztUlI9 BMG2SBzLbuaWaUyhkgiAOWXp7e8JguhwieZhYCZLpOX
-      MALzASooro8Gu7eOXsDwQlcbK-zf3jYFUarx7Q9M02b
-      BHOvlVfiby3sYalMzkXMWjs4uvgGFl70wR5uG48j47O 1XfKWRh-kkaZDbaCAIsO
+   Info for key combining (key_info):  V2ViUHVzaDogaW5mbwAEJXGyvs3942BVG
+      q8e0PTNNmwR zr5VX4m8t7GGpTM5FzFo7OLr4BhZe9MEebhuPI-OztV3
+      ylkYfpJGmQ22ggCLDgT-M_SrDepxkU21WCP3O1SUj0Ew
+      bZIHMtu5pZpTKGSCIA5Zent7wmC6HCJ5mFgJkuk5cwAv MBKiiujwa7t45ewP
 
    Input keying material for content encryption key derivation (IKM):
-      dTQXtQpktdp6UQb29SUBcO5igFtC9WsXlhlNr2jRkkY
+      S4lYMb_L0FxCeq0WhDx813KgSYqU26kOyzWUdsXYyrg
 
-   PRK for content encryption (PRK):  BEhmz5JYdOXMsFJf_WDU8fJlOURaExoUoF
-      uaGU86Fuc
+   PRK for content encryption (PRK):  09_eUZGrsvxChDCGRCdkLiDXrReGOEVeSC
+      dCcPBSJSc
 
    Info for content encryption key derivation (cek_info):
-      Q29udGVudC1FbmNvZGluZzogYWVzZ2NtMTI4AA
+      Q29udGVudC1FbmNvZGluZzogYWVzMTI4Z2NtAA
 
-   Content encryption key (CEK):  wgJKGPLNgnI3CKy09z19Qw
+   Content encryption key (CEK):  oIhVW04MRdy2XN9CiKLxTg
 
    Info for content encryption nonce derivation (nonce_info):
       Q29udGVudC1FbmNvZGluZzogbm9uY2UA
 
-   Nonce (NONCE):  w5SniqvyjVui9OoV
+   Nonce (NONCE):  4h_95klXJ5E_qnoN
 
-   The salt and a record size of 4096 produce a 21 octet header of
-   DGv6ra1nlYgDCS1FRnbzlwAAxowA.
+   The salt, record size of 4096, and application server public key
+   produce an 86 octet header of
+
+
+
+Thomson                   Expires June 4, 2017                 [Page 10]
+
+Internet-Draft             Web Push Encryption             December 2016
+
+
+   DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGR
+   TbVYI_c7VJSPQTBtkgcy27mlmlMoZIIgDll6e3vC
+   YLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8.
 
    The push message plaintext is padded to produce
    AABXaGVuIEkgZ3JvdyB1cCwgSSB3YW50IHRvIGJl IGEgd2F0ZXJtZWxvbg.  The
    plaintext is then encrypted with AES-GCM, which emits ciphertext of
-   Ig1VvoJvrVBFhclGlx4G2FuProCVzJY04Lg5vUP2
-   LeswtWoBGHGoYXUzAwuxQGRGxoNbh8BROK3gmJ0.
+   pf_sXQe8ul8B26HhDvpQT7ElzfWsVATdxed3XIO_ sEq0yF8sJhJj31oO_GSV-
+   C0M02hGmTLh3Fg7iuo.
 
    The header and cipher text are concatenated and produce the result
    shown in the example.
@@ -613,4 +587,30 @@ Author's Address
 
 
 
-Thomson                    Expires May 4, 2017                 [Page 11]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomson                   Expires June 4, 2017                 [Page 11]
