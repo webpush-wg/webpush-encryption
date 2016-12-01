@@ -7,6 +7,7 @@
 /*-[0-9][0-9].xml
 .refcache
 venv/
+.targets.mk
 issues.json
 draft-ietf-webpush-encryption.xml
 lib
