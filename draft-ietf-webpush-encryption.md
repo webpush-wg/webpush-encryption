@@ -2,7 +2,6 @@
 title: Message Encryption for Web Push
 abbrev: Web Push Encryption
 docname: draft-ietf-webpush-encryption-latest
-date: 2016
 category: std
 ipr: trust200902
 
@@ -340,7 +339,7 @@ Intermediate values for this example are included in {{ex-intermediate}}.
 
 # IANA Considerations {#iana}
 
-[[RFC EDITOR: please remote this section before publication.]]
+\[\[RFC EDITOR: please remote this section before publication.]]
 This document makes no request of IANA.
 
 # Security Considerations
