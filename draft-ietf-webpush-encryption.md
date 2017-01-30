@@ -273,8 +273,8 @@ sequence number, since push messages contain only a single record (see
 An Application Server MUST encrypt a push message with a single record.  This
 allows for a minimal receiver implementation that handles a single record.  An
 application server MUST set the `rs` parameter in the `aes128gcm` content coding
-header to a size that is greater than the length of the plaintext, plus any
-padding (which is at least 2 octets).
+header to a size that is at least the length of the plaintext, plus the padding
+delimiter (1 octet) and the AEAD_AES_128_GCM expansion (16 octets).
 
 A push message MUST include the application server ECDH public key in the
 `keyid` parameter of the encrypted content coding header.  The uncompressed
@@ -282,9 +282,9 @@ point form defined in {{X9.62}} (that is, a 65 octet sequence that starts with
 a 0x04 octet) forms the entirety of the "keyid".
 
 A push service is not required to support more than 4096 octets of payload body
-(see Section 7.2 of {{!I-D.ietf-webpush-protocol}}).  Absent header (86 octets),
-padding (minimum 2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this
-equates to at most 3992 octets of plaintext.
+(see Section 7.2 of {{!I-D.ietf-webpush-protocol}}).  Accounting for the header
+(86 octets), padding delimiter (1 octet), and the expansion of AEAD_AES_128_GCM
+(16 octets), this equates to at most 3993 octets of plaintext and padding.
 
 An Application Server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
@@ -292,11 +292,8 @@ message contents.  The Content-Encoding header field therefore has exactly one
 value, which is `aes128gcm`.  Multiple `aes128gcm` values are not permitted.
 
 A User Agent is not required to support multiple records.  A User Agent MAY
-ignore the `rs` field.  If a record size is unchecked, decryption will fail with
-high probability for all valid cases.  However, decryption will succeed if the
-push message contains a single record from a longer truncated message.  Given
-that an Application Server is prohibited from generating such a message, this is
-not considered a serious risk.
+ignore the `rs` field. A User Agent MUST check that the padding delimiter has a
+value of 2, indicating that the record is the last record.
 
 
 # Push Message Encryption Example {#example}
@@ -307,13 +304,12 @@ The following example shows a push message being sent to a push service.
 POST /push/JzLQ3raZJfFBR0aqvOMsLrt54w4rJUsV HTTP/1.1
 Host: push.example.net
 TTL: 10
-Content-Length: 145
+Content-Length: 144
 Content-Encoding: aes128gcm
 
 DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml
-mlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A-l_-xdB7y6XwHb
-oeEO-lBPsSXN9axUBN3F53dcg7-wSrTIXywmEmPfWg78ZJX4LQzTaEaZMuHcWDuK
-6g
+mlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A_yl95bQpu6cVPT
+pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 ~~~
 
 This example shows the ASCII encoded string, "When I grow up, I want to be a
@@ -396,7 +392,7 @@ Authentication secret (auth_secret):
 
 : BTBZMqHH6r4Tts7J_aSIgg
 
-Note that knowledge of just one of the private keys is necessary.  The
+Note that knowledge of just one of the private keys is sufficient.  The
 Application Server randomly generates the salt value, whereas salt is input to
 the receiver.
 
@@ -446,11 +442,11 @@ The salt, record size of 4096, and application server public key produce an 86
 octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGR
 TbVYI_c7VJSPQTBtkgcy27mlmlMoZIIgDll6e3vC YLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8.
 
-The push message plaintext is padded to produce
-AABXaGVuIEkgZ3JvdyB1cCwgSSB3YW50IHRvIGJl IGEgd2F0ZXJtZWxvbg.  The plaintext is
-then encrypted with AES-GCM, which emits ciphertext of
-pf_sXQe8ul8B26HhDvpQT7ElzfWsVATdxed3XIO_
-sEq0yF8sJhJj31oO_GSV-C0M02hGmTLh3Fg7iuo.
+The push message plaintext has a padding delimiter octet added (and no
+additional padding) to produce V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0byBiZSBh
+IHdhdGVybWVsb24C.  The plaintext is then encrypted with AES-GCM, which emits
+ciphertext of 8pfeW0KbunFT06SuDKoJH9Ql87S1QUrdirN6GcG7
+sFz1y1sqLgVi1VhjVkHsUoEsbI_0LpXMuGvnzQ.
 
-The header and cipher text are concatenated and produce the result shown in the
+The header and ciphertext are concatenated and produce the result shown in the
 example.
