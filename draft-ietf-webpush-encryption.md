@@ -273,8 +273,9 @@ sequence number, since push messages contain only a single record (see
 An Application Server MUST encrypt a push message with a single record.  This
 allows for a minimal receiver implementation that handles a single record.  An
 application server MUST set the `rs` parameter in the `aes128gcm` content coding
-header to a size that is greater than the length of the plaintext, plus any
-padding (which is at least 2 octets).
+header to a size that is greater than the some of the length of the plaintext,
+the padding delimiter (1 octet), any padding, and the authentication tag (16
+octets).
 
 A push message MUST include the application server ECDH public key in the
 `keyid` parameter of the encrypted content coding header.  The uncompressed
@@ -293,10 +294,8 @@ value, which is `aes128gcm`.  Multiple `aes128gcm` values are not permitted.
 
 A User Agent is not required to support multiple records.  A User Agent MAY
 ignore the `rs` field.  If a record size is unchecked, decryption will fail with
-high probability for all valid cases.  However, decryption will succeed if the
-push message contains a single record from a longer truncated message.  Given
-that an Application Server is prohibited from generating such a message, this is
-not considered a serious risk.
+high probability for all valid cases.  The padding delimiter octet MUST be
+checked, values other than 0x02 MUST cause the message to be discarded.
 
 
 # Push Message Encryption Example {#example}
@@ -311,9 +310,8 @@ Content-Length: 145
 Content-Encoding: aes128gcm
 
 DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml
-mlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A-l_-xdB7y6XwHb
-oeEO-lBPsSXN9axUBN3F53dcg7-wSrTIXywmEmPfWg78ZJX4LQzTaEaZMuHcWDuK
-6g
+mlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A_yl95bQpu6cVPT
+pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 ~~~
 
 This example shows the ASCII encoded string, "When I grow up, I want to be a
@@ -443,14 +441,15 @@ Nonce (NONCE):
 : 4h_95klXJ5E_qnoN
 
 The salt, record size of 4096, and application server public key produce an 86
-octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGR
-TbVYI_c7VJSPQTBtkgcy27mlmlMoZIIgDll6e3vC YLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8.
+octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z
+9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml mlMoZIIgDll6e3vCYLocInmYWAmS6Tlz
+AC8wEqKK6PBru3jl7A8.
 
-The push message plaintext is padded to produce
-AABXaGVuIEkgZ3JvdyB1cCwgSSB3YW50IHRvIGJl IGEgd2F0ZXJtZWxvbg.  The plaintext is
-then encrypted with AES-GCM, which emits ciphertext of
-pf_sXQe8ul8B26HhDvpQT7ElzfWsVATdxed3XIO_
-sEq0yF8sJhJj31oO_GSV-C0M02hGmTLh3Fg7iuo.
+The push message plaintext has the padding delimiter octet (0x02) appended to
+produce V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0 byBiZSBhIHdhdGVybWVsb24C.  The
+plaintext is then encrypted with AES-GCM, which emits ciphertext of
+8pfeW0KbunFT06SuDKoJH9Ql87S1QUrd irN6GcG7sFz1y1sqLgVi1VhjVkHsUoEs
+bI_0LpXMuGvnzQ.
 
-The header and cipher text are concatenated and produce the result shown in the
-example.
+The header and cipher text are concatenated and produce the result shown in
+{{example}}.
