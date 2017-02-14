@@ -302,7 +302,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-webpush-encryption-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-1-03" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-2-14" />
   <meta name="dct.abstract" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
   <meta name="description" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
 
@@ -323,10 +323,10 @@ address {
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">January 03, 2017</td>
+  <td class="right">February 14, 2017</td>
 </tr>
 <tr>
-  <td class="left">Expires: July 7, 2017</td>
+  <td class="left">Expires: August 18, 2017</td>
   <td class="right"></td>
 </tr>
 
@@ -347,7 +347,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on July 7, 2017.</p>
+<p>This Internet-Draft will expire on August 18, 2017.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -476,11 +476,11 @@ key_info = "WebPush: info" || 0x00 || ua_public || as_public
 </pre>
 <p id="rfc.section.3.4.p.2">Note that this omits the exclusive OR of the final nonce with the record sequence number, since push messages contain only a single record (see <a href="#restrict">Section 4</a>) and the sequence number of the first record is zero.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#restrict" id="restrict">Restrictions on Use of &#8220;aes128gcm&#8221; Content Coding</a></h1>
-<p id="rfc.section.4.p.1">An Application Server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  An application server MUST set the <samp>rs</samp> parameter in the <samp>aes128gcm</samp> content coding header to a size that is greater than the length of the plaintext, plus any padding (which is at least 2 octets).</p>
+<p id="rfc.section.4.p.1">An Application Server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  An application server MUST set the <samp>rs</samp> parameter in the <samp>aes128gcm</samp> content coding header to a size that is greater than the some of the length of the plaintext, the padding delimiter (1 octet), any padding, and the authentication tag (16 octets).</p>
 <p id="rfc.section.4.p.2">A push message MUST include the application server ECDH public key in the <samp>keyid</samp> parameter of the encrypted content coding header.  The uncompressed point form defined in <a href="#X9.62">[X9.62]</a> (that is, a 65 octet sequence that starts with a 0x04 octet) forms the entirety of the &#8220;keyid&#8221;.</p>
 <p id="rfc.section.4.p.3">A push service is not required to support more than 4096 octets of payload body (see Section 7.2 of <a href="#I-D.ietf-webpush-protocol">[I-D.ietf-webpush-protocol]</a>).  Absent header (86 octets), padding (minimum 2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this equates to at most 3992 octets of plaintext.</p>
 <p id="rfc.section.4.p.4">An Application Server MUST NOT use other content encodings for push messages.  In particular, content encodings that compress could result in leaking of push message contents.  The Content-Encoding header field therefore has exactly one value, which is <samp>aes128gcm</samp>.  Multiple <samp>aes128gcm</samp> values are not permitted.</p>
-<p id="rfc.section.4.p.5">A User Agent is not required to support multiple records.  A User Agent MAY ignore the <samp>rs</samp> field.  If a record size is unchecked, decryption will fail with high probability for all valid cases.  However, decryption will succeed if the push message contains a single record from a longer truncated message.  Given that an Application Server is prohibited from generating such a message, this is not considered a serious risk.</p>
+<p id="rfc.section.4.p.5">A User Agent is not required to support multiple records.  A User Agent MAY ignore the <samp>rs</samp> field.  If a record size is unchecked, decryption will fail with high probability for all valid cases.  The padding delimiter octet MUST be checked, values other than 0x02 MUST cause the message to be discarded.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#example" id="example">Push Message Encryption Example</a></h1>
 <p id="rfc.section.5.p.1">The following example shows a push message being sent to a push service.</p>
 <pre>
@@ -491,9 +491,8 @@ Content-Length: 145
 Content-Encoding: aes128gcm
 
 DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml
-mlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A-l_-xdB7y6XwHb
-oeEO-lBPsSXN9axUBN3F53dcg7-wSrTIXywmEmPfWg78ZJX4LQzTaEaZMuHcWDuK
-6g
+mlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A_yl95bQpu6cVPT
+pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 </pre>
 <p id="rfc.section.5.p.2">This example shows the ASCII encoded string, &#8220;When I grow up, I want to be a watermelon&#8221;. The content body is shown here with line wrapping and URL-safe base64url encoding to meet presentation constraints.</p>
 <p id="rfc.section.5.p.3">The keys used are shown below using the uncompressed form <a href="#X9.62">[X9.62]</a> encoded using base64url.</p>
@@ -640,9 +639,9 @@ oeEO-lBPsSXN9axUBN3F53dcg7-wSrTIXywmEmPfWg78ZJX4LQzTaEaZMuHcWDuK
   <dt>Nonce (NONCE):</dt>
   <dd style="margin-left: 8">4h_95klXJ5E_qnoN</dd>
 </dl>
-<p id="rfc.section.A.p.6">The salt, record size of 4096, and application server public key produce an 86 octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGR TbVYI_c7VJSPQTBtkgcy27mlmlMoZIIgDll6e3vC YLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8.</p>
-<p id="rfc.section.A.p.7">The push message plaintext is padded to produce AABXaGVuIEkgZ3JvdyB1cCwgSSB3YW50IHRvIGJl IGEgd2F0ZXJtZWxvbg.  The plaintext is then encrypted with AES-GCM, which emits ciphertext of pf_sXQe8ul8B26HhDvpQT7ElzfWsVATdxed3XIO_ sEq0yF8sJhJj31oO_GSV-C0M02hGmTLh3Fg7iuo.</p>
-<p id="rfc.section.A.p.8">The header and cipher text are concatenated and produce the result shown in the example.</p>
+<p id="rfc.section.A.p.6">The salt, record size of 4096, and application server public key produce an 86 octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z 9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml mlMoZIIgDll6e3vCYLocInmYWAmS6Tlz AC8wEqKK6PBru3jl7A8.</p>
+<p id="rfc.section.A.p.7">The push message plaintext has the padding delimiter octet (0x02) appended to produce V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0 byBiZSBhIHdhdGVybWVsb24C.  The plaintext is then encrypted with AES-GCM, which emits ciphertext of 8pfeW0KbunFT06SuDKoJH9Ql87S1QUrd irN6GcG7sFz1y1sqLgVi1VhjVkHsUoEs bI_0LpXMuGvnzQ.</p>
+<p id="rfc.section.A.p.8">The header and cipher text are concatenated and produce the result shown in <a href="#example">Section 5</a>.</p>
 <h1 id="rfc.authors">
   <a href="#rfc.authors">Author's Address</a>
 </h1>
