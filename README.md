@@ -3,7 +3,7 @@
 This is the working area for the Working Group internet-draft, "Message Encryption for Web Push".
 
 * [Editor's copy](https://webpush-wg.github.io/webpush-encryption/)
-* [Working Group Draft] (https://tools.ietf.org/html/draft-ietf-webpush-encryption)
+* [Working Group Draft](https://tools.ietf.org/html/draft-ietf-webpush-encryption)
 
 
 ## Contributing
