@@ -48,7 +48,7 @@ informative:
   API:
      title: "Web Push API"
      author:
-       - ins: M. van Ouwerkerk
+       - ins: P. Beverloo
        - ins: M. Thomson
      target: "https://w3c.github.io/push-api/"
      date: 2015
@@ -123,9 +123,10 @@ authentication secret are sent to the Application Server with other details of
 the push subscription.
 
 When sending a message, an Application Server generates an ECDH key pair and a
-random salt.  The ECDH public key is encoded into the `dh` parameter of the
-Crypto-Key header field; the salt is encoded into message payload.  The ECDH key
-pair can be discarded after encrypting the message.
+random salt.  The ECDH public key is encoded into the `keyid` parameter of the
+encrypted content coding header, the salt in the `salt` parameter of that same
+header (see Section 2.1 of {{!I-D.ietf-httpbis-encryption-encoding}}).  The
+ECDH key pair can be discarded after encrypting the message.
 
 The content of the push message is encrypted or decrypted using a content
 encryption key and nonce that is derived using all of these inputs and the
@@ -188,8 +189,8 @@ parameter in the encrypted content coding header (see Section 2.1 of
 An Application combines its ECDH private key with the public key provided by the
 User Agent using the process described in {{ECDH}}; on receipt of the push
 message, a User Agent combines its private key with the public key provided by
-the Application Server in the `dh` parameter in the same way.  These operations
-produce the same value for the ECDH shared secret.
+the Application Server in the `keyid` parameter in the same way.  These
+operations produce the same value for the ECDH shared secret.
 
 
 ## Push Message Authentication {#auth}
@@ -223,8 +224,8 @@ IKM:
 info:
 
 : the concatenation of the ASCII-encoded string "WebPush: info", a zero octet,
-  the X9.62 encoding of the User Agent ECDH public key, and X9.62 encoding of the
-  Application Server ECDH public key; that is
+  and the User Agent ECDH public key and the Application Server ECDH public key,
+  both in the uncompressed point form defined in {{X9.62}}; that is
 
   ~~~
   key_info = "WebPush: info" || 0x00 || ua_public || as_public
