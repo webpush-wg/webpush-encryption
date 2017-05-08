@@ -382,7 +382,7 @@ address {
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a></h1>
-<p id="rfc.section.1.p.1">The Web Push protocol <a href="#I-D.ietf-webpush-protocol">[I-D.ietf-webpush-protocol]</a> is an intermediated protocol by necessity.  Messages from an Application Server are delivered to a User Agent via a Push Service.</p>
+<p id="rfc.section.1.p.1">The Web Push protocol <a href="#RFC8030">[RFC8030]</a> is an intermediated protocol by necessity.  Messages from an Application Server are delivered to a User Agent via a Push Service.</p>
 <pre>
  +-------+           +--------------+       +-------------+
  |  UA   |           | Push Service |       | Application |
@@ -412,7 +412,7 @@ address {
 <p id="rfc.section.2.p.4">The content of the push message is encrypted or decrypted using a content encryption key and nonce that is derived using all of these inputs and the process described in <a href="#encryption">Section 3</a>.</p>
 <h2 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#key-and-secret-distribution" id="key-and-secret-distribution">Key and Secret Distribution</a></h2>
 <p id="rfc.section.2.1.p.1">The application using the subscription distributes the subscription public key and authentication secret to an authorized Application Server.  This could be sent along with other subscription information that is provided by the User Agent, such as the push subscription URI.</p>
-<p id="rfc.section.2.1.p.2">An application MUST use an authenticated, confidentiality protected communications medium for this purpose.  In addition to the reasons described in <a href="#I-D.ietf-webpush-protocol">[I-D.ietf-webpush-protocol]</a>, this ensures that the authentication secret is not revealed to unauthorized entities, which can be used to generate push messages that will be accepted by the User Agent.</p>
+<p id="rfc.section.2.1.p.2">An application MUST use an authenticated, confidentiality protected communications medium for this purpose.  In addition to the reasons described in <a href="#RFC8030">[RFC8030]</a>, this ensures that the authentication secret is not revealed to unauthorized entities, which can be used to generate push messages that will be accepted by the User Agent.</p>
 <p id="rfc.section.2.1.p.3">Most applications that use push messaging have a pre-existing relationship with an Application Server.  Any existing communication mechanism that is authenticated and provides confidentiality and integrity, such as HTTPS <a href="#RFC2818">[RFC2818]</a>, is sufficient.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#encryption" id="encryption">Push Message Encryption</a></h1>
 <p id="rfc.section.3.p.1">Push message encryption happens in four phases:</p>
@@ -478,7 +478,7 @@ key_info = "WebPush: info" || 0x00 || ua_public || as_public
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#restrict" id="restrict">Restrictions on Use of &#8220;aes128gcm&#8221; Content Coding</a></h1>
 <p id="rfc.section.4.p.1">An Application Server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  An application server MUST set the <samp>rs</samp> parameter in the <samp>aes128gcm</samp> content coding header to a size that is greater than the some of the length of the plaintext, the padding delimiter (1 octet), any padding, and the authentication tag (16 octets).</p>
 <p id="rfc.section.4.p.2">A push message MUST include the application server ECDH public key in the <samp>keyid</samp> parameter of the encrypted content coding header.  The uncompressed point form defined in <a href="#X9.62">[X9.62]</a> (that is, a 65 octet sequence that starts with a 0x04 octet) forms the entirety of the &#8220;keyid&#8221;.</p>
-<p id="rfc.section.4.p.3">A push service is not required to support more than 4096 octets of payload body (see Section 7.2 of <a href="#I-D.ietf-webpush-protocol">[I-D.ietf-webpush-protocol]</a>).  Absent header (86 octets), padding (minimum 2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this equates to at most 3992 octets of plaintext.</p>
+<p id="rfc.section.4.p.3">A push service is not required to support more than 4096 octets of payload body (see Section 7.2 of <a href="#RFC8030">[RFC8030]</a>).  Absent header (86 octets), padding (minimum 2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this equates to at most 3992 octets of plaintext.</p>
 <p id="rfc.section.4.p.4">An Application Server MUST NOT use other content encodings for push messages.  In particular, content encodings that compress could result in leaking of push message contents.  The Content-Encoding header field therefore has exactly one value, which is <samp>aes128gcm</samp>.  Multiple <samp>aes128gcm</samp> values are not permitted.</p>
 <p id="rfc.section.4.p.5">A User Agent is not required to support multiple records.  A User Agent MAY ignore the <samp>rs</samp> field.  If a record size is unchecked, decryption will fail with high probability for all valid cases.  The padding delimiter octet MUST be checked, values other than 0x02 MUST cause the message to be discarded.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#example" id="example">Push Message Encryption Example</a></h1>
@@ -542,12 +542,6 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
     </tr>
     <tr>
       <td class="reference">
-        <b id="I-D.ietf-webpush-protocol">[I-D.ietf-webpush-protocol]</b>
-      </td>
-      <td class="top"><a>Thomson, M.</a>, <a>Damaggio, E.</a> and <a>B. Raymor</a>, "<a href="http://tools.ietf.org/html/draft-ietf-webpush-protocol-12">Generic Event Delivery Using HTTP Push</a>", Internet-Draft draft-ietf-webpush-protocol-12, October 2016.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="RFC2119">[RFC2119]</b>
       </td>
       <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
@@ -563,6 +557,12 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
         <b id="RFC5869">[RFC5869]</b>
       </td>
       <td class="top"><a>Krawczyk, H.</a> and <a>P. Eronen</a>, "<a href="http://tools.ietf.org/html/rfc5869">HMAC-based Extract-and-Expand Key Derivation Function (HKDF)</a>", RFC 5869, DOI 10.17487/RFC5869, May 2010.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC8030">[RFC8030]</b>
+      </td>
+      <td class="top"><a>Thomson, M.</a>, <a>Damaggio, E.</a> and <a>B. Raymor</a>, "<a href="http://tools.ietf.org/html/rfc8030">Generic Event Delivery Using HTTP Push</a>", RFC 8030, DOI 10.17487/RFC8030, December 2016.</td>
     </tr>
     <tr>
       <td class="reference">
