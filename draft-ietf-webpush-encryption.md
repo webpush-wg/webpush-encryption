@@ -65,9 +65,9 @@ Server to a User Agent.
 
 # Introduction
 
-The Web Push protocol {{!I-D.ietf-webpush-protocol}} is an intermediated
-protocol by necessity.  Messages from an Application Server are delivered to a
-User Agent via a Push Service.
+The Web Push protocol {{!RFC8030}} is an intermediated protocol by necessity.
+Messages from an Application Server are delivered to a User Agent via a Push
+Service.
 
 ~~~
  +-------+           +--------------+       +-------------+
@@ -142,9 +142,9 @@ Agent, such as the push subscription URI.
 
 An application MUST use an authenticated, confidentiality protected
 communications medium for this purpose.  In addition to the reasons described in
-{{!I-D.ietf-webpush-protocol}}, this ensures that the authentication secret is
-not revealed to unauthorized entities, which can be used to generate push
-messages that will be accepted by the User Agent.
+{{!RFC8030}}, this ensures that the authentication secret is not revealed to
+unauthorized entities, which can be used to generate push messages that will be
+accepted by the User Agent.
 
 Most applications that use push messaging have a pre-existing relationship with
 an Application Server.  Any existing communication mechanism that is
@@ -284,9 +284,9 @@ point form defined in {{X9.62}} (that is, a 65 octet sequence that starts with
 a 0x04 octet) forms the entirety of the "keyid".
 
 A push service is not required to support more than 4096 octets of payload body
-(see Section 7.2 of {{!I-D.ietf-webpush-protocol}}).  Absent header (86 octets),
-padding (minimum 2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this
-equates to at most 3992 octets of plaintext.
+(see Section 7.2 of {{!RFC8030}}).  Absent header (86 octets), padding (minimum
+2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this equates to at
+most 3992 octets of plaintext.
 
 An Application Server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
