@@ -302,7 +302,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-webpush-encryption-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-3-17" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-5-08" />
   <meta name="dct.abstract" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
   <meta name="description" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
 
@@ -323,10 +323,10 @@ address {
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">March 17, 2017</td>
+  <td class="right">May 08, 2017</td>
 </tr>
 <tr>
-  <td class="left">Expires: September 18, 2017</td>
+  <td class="left">Expires: November 9, 2017</td>
   <td class="right"></td>
 </tr>
 
@@ -347,7 +347,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on September 18, 2017.</p>
+<p>This Internet-Draft will expire on November 9, 2017.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -408,7 +408,7 @@ address {
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#overview" id="overview">Push Message Encryption Overview</a></h1>
 <p id="rfc.section.2.p.1">Encrypting a push message uses elliptic-curve Diffie-Hellman (ECDH) <a href="#ECDH">[ECDH]</a> on the P-256 curve <a href="#FIPS186">[FIPS186]</a> to establish a shared secret (see <a href="#dh">Section 3.1</a>) and a symmetric secret for authentication (see <a href="#auth">Section 3.2</a>).</p>
 <p id="rfc.section.2.p.2">A User Agent generates an ECDH key pair and authentication secret that it associates with each subscription it creates.  The ECDH public key and the authentication secret are sent to the Application Server with other details of the push subscription.</p>
-<p id="rfc.section.2.p.3">When sending a message, an Application Server generates an ECDH key pair and a random salt.  The ECDH public key is encoded into the <samp>dh</samp> parameter of the Crypto-Key header field; the salt is encoded into message payload.  The ECDH key pair can be discarded after encrypting the message.</p>
+<p id="rfc.section.2.p.3">When sending a message, an Application Server generates an ECDH key pair and a random salt.  The ECDH public key is encoded into the <samp>keyid</samp> parameter of the encrypted content coding header, the salt in the <samp>salt</samp> parameter of that same header (see Section 2.1 of <a href="#I-D.ietf-httpbis-encryption-encoding">[I-D.ietf-httpbis-encryption-encoding]</a>).  The ECDH key pair can be discarded after encrypting the message.</p>
 <p id="rfc.section.2.p.4">The content of the push message is encrypted or decrypted using a content encryption key and nonce that is derived using all of these inputs and the process described in <a href="#encryption">Section 3</a>.</p>
 <h2 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#key-and-secret-distribution" id="key-and-secret-distribution">Key and Secret Distribution</a></h2>
 <p id="rfc.section.2.1.p.1">The application using the subscription distributes the subscription public key and authentication secret to an authorized Application Server.  This could be sent along with other subscription information that is provided by the User Agent, such as the push subscription URI.</p>
@@ -429,7 +429,7 @@ address {
 <p id="rfc.section.3.1.p.1">For each new subscription that the User Agent generates for an Application, it also generates a P-256 <a href="#FIPS186">[FIPS186]</a> key pair for use in elliptic-curve Diffie-Hellman (ECDH) <a href="#ECDH">[ECDH]</a>.</p>
 <p id="rfc.section.3.1.p.2">When sending a push message, the Application Server also generates a new ECDH key pair on the same P-256 curve.</p>
 <p id="rfc.section.3.1.p.3">The ECDH public key for the Application Server is included as the &#8220;keyid&#8221; parameter in the encrypted content coding header (see Section 2.1 of <a href="#I-D.ietf-httpbis-encryption-encoding">[I-D.ietf-httpbis-encryption-encoding]</a>.</p>
-<p id="rfc.section.3.1.p.4">An Application combines its ECDH private key with the public key provided by the User Agent using the process described in <a href="#ECDH">[ECDH]</a>; on receipt of the push message, a User Agent combines its private key with the public key provided by the Application Server in the <samp>dh</samp> parameter in the same way.  These operations produce the same value for the ECDH shared secret.</p>
+<p id="rfc.section.3.1.p.4">An Application combines its ECDH private key with the public key provided by the User Agent using the process described in <a href="#ECDH">[ECDH]</a>; on receipt of the push message, a User Agent combines its private key with the public key provided by the Application Server in the <samp>keyid</samp> parameter in the same way.  These operations produce the same value for the ECDH shared secret.</p>
 <h2 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#auth" id="auth">Push Message Authentication</a></h2>
 <p id="rfc.section.3.2.p.1">To ensure that push messages are correctly authenticated, a symmetric authentication secret is added to the information generated by a User Agent.  The authentication secret is mixed into the key derivation process shown in <a href="#combine">Section 3.3</a>.</p>
 <p id="rfc.section.3.2.p.2">A User Agent MUST generate and provide a hard to guess sequence of 16 octets that is used for authentication of push messages.  This SHOULD be generated by a cryptographically strong random number generator <a href="#RFC4086">[RFC4086]</a>.</p>
@@ -447,7 +447,7 @@ key_info = "WebPush: info" || 0x00 || ua_public || as_public
   <dt>IKM:</dt>
   <dd style="margin-left: 8">the shared secret derived using ECDH</dd>
   <dt>info:</dt>
-  <dd style="margin-left: 8">the concatenation of the ASCII-encoded string &#8220;WebPush: info&#8221;, a zero octet, the X9.62 encoding of the User Agent ECDH public key, and X9.62 encoding of the Application Server ECDH public key; that is </dd>
+  <dd style="margin-left: 8">the concatenation of the ASCII-encoded string &#8220;WebPush: info&#8221;, a zero octet, and the User Agent ECDH public key and the Application Server ECDH public key, both in the uncompressed point form defined in <a href="#X9.62">[X9.62]</a>; that is </dd>
   <dt>L:</dt>
   <dd style="margin-left: 8">32 octets (i.e., the output is the length of the underlying SHA-256 HMAC function output)</dd>
 </dl>
@@ -538,7 +538,7 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
       <td class="reference">
         <b id="I-D.ietf-httpbis-encryption-encoding">[I-D.ietf-httpbis-encryption-encoding]</b>
       </td>
-      <td class="top"><a>Thomson, M.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-httpbis-encryption-encoding-08">Encrypted Content-Encoding for HTTP</a>", Internet-Draft draft-ietf-httpbis-encryption-encoding-08, March 2017.</td>
+      <td class="top"><a>Thomson, M.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-httpbis-encryption-encoding-09">Encrypted Content-Encoding for HTTP</a>", Internet-Draft draft-ietf-httpbis-encryption-encoding-09, April 2017.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -579,7 +579,7 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
       <td class="reference">
         <b id="API">[API]</b>
       </td>
-      <td class="top"><a>van Ouwerkerk, M.</a> and <a>M. Thomson</a>, "<a href="https://w3c.github.io/push-api/">Web Push API</a>", 2015.</td>
+      <td class="top"><a>Beverloo, P.</a> and <a>M. Thomson</a>, "<a href="https://w3c.github.io/push-api/">Web Push API</a>", 2015.</td>
     </tr>
     <tr>
       <td class="reference">
