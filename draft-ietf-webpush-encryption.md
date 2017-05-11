@@ -358,6 +358,11 @@ User Agent, and the subscription that is used.  Additionally, the length of
 messages could be revealed unless the padding provided by the content encoding
 scheme is used to obscure length.
 
+The User Agent and Application MUST verify that the public key they receive is
+on the P-256 curve.  Failure to validate a public key can allow an attacker to
+extract a private key.
+
+
 --- back
 
 # Intermediate Values for Encryption {#ex-intermediate}
