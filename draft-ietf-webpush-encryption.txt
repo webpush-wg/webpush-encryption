@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                            May 08, 2017
-Expires: November 9, 2017
+Intended status: Standards Track                            May 12, 2017
+Expires: November 13, 2017
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 9, 2017.
+   This Internet-Draft will expire on November 13, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson                 Expires November 9, 2017                [Page 1]
+Thomson                 Expires November 13, 2017               [Page 1]
 
 Internet-Draft             Web Push Encryption                  May 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson                 Expires November 9, 2017                [Page 2]
+Thomson                 Expires November 13, 2017               [Page 2]
 
 Internet-Draft             Web Push Encryption                  May 2017
 
@@ -165,7 +165,7 @@ Internet-Draft             Web Push Encryption                  May 2017
 
 
 
-Thomson                 Expires November 9, 2017                [Page 3]
+Thomson                 Expires November 13, 2017               [Page 3]
 
 Internet-Draft             Web Push Encryption                  May 2017
 
@@ -221,7 +221,7 @@ Internet-Draft             Web Push Encryption                  May 2017
 
 
 
-Thomson                 Expires November 9, 2017                [Page 4]
+Thomson                 Expires November 13, 2017               [Page 4]
 
 Internet-Draft             Web Push Encryption                  May 2017
 
@@ -277,7 +277,7 @@ Internet-Draft             Web Push Encryption                  May 2017
 
 
 
-Thomson                 Expires November 9, 2017                [Page 5]
+Thomson                 Expires November 13, 2017               [Page 5]
 
 Internet-Draft             Web Push Encryption                  May 2017
 
@@ -333,7 +333,7 @@ Internet-Draft             Web Push Encryption                  May 2017
 
 
 
-Thomson                 Expires November 9, 2017                [Page 6]
+Thomson                 Expires November 13, 2017               [Page 6]
 
 Internet-Draft             Web Push Encryption                  May 2017
 
@@ -389,7 +389,7 @@ Internet-Draft             Web Push Encryption                  May 2017
 
 
 
-Thomson                 Expires November 9, 2017                [Page 7]
+Thomson                 Expires November 13, 2017               [Page 7]
 
 Internet-Draft             Web Push Encryption                  May 2017
 
@@ -428,6 +428,10 @@ Internet-Draft             Web Push Encryption                  May 2017
    could be revealed unless the padding provided by the content encoding
    scheme is used to obscure length.
 
+   The User Agent and Application MUST verify that the public key they
+   receive is on the P-256 curve.  Failure to validate a public key can
+   allow an attacker to extract a private key.
+
 8.  References
 
 8.1.  Normative References
@@ -435,20 +439,22 @@ Internet-Draft             Web Push Encryption                  May 2017
    [ECDH]     SECG, "Elliptic Curve Cryptography", SEC 1 , 2000,
               <http://www.secg.org/>.
 
+
+
+
+
+
+
+Thomson                 Expires November 13, 2017               [Page 8]
+
+Internet-Draft             Web Push Encryption                  May 2017
+
+
    [FIPS180-4]
               Department of Commerce, National., "NIST FIPS 180-4,
               Secure Hash Standard", March 2012,
               <http://nvlpubs.nist.gov/nistpubs/FIPS/
               NIST.FIPS.180-4.pdf>.
-
-
-
-
-
-Thomson                 Expires November 9, 2017                [Page 8]
-
-Internet-Draft             Web Push Encryption                  May 2017
-
 
    [FIPS186]  National Institute of Standards and Technology (NIST),
               "Digital Signature Standard (DSS)", NIST PUB 186-4 , July
@@ -492,19 +498,18 @@ Internet-Draft             Web Push Encryption                  May 2017
               DOI 10.17487/RFC2818, May 2000,
               <http://www.rfc-editor.org/info/rfc2818>.
 
+
+
+
+Thomson                 Expires November 13, 2017               [Page 9]
+
+Internet-Draft             Web Push Encryption                  May 2017
+
+
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
               <http://www.rfc-editor.org/info/rfc7230>.
-
-
-
-
-
-Thomson                 Expires November 9, 2017                [Page 9]
-
-Internet-Draft             Web Push Encryption                  May 2017
-
 
 Appendix A.  Intermediate Values for Encryption
 
@@ -550,18 +555,17 @@ Appendix A.  Intermediate Values for Encryption
    Input keying material for content encryption key derivation (IKM):
       S4lYMb_L0FxCeq0WhDx813KgSYqU26kOyzWUdsXYyrg
 
-   PRK for content encryption (PRK):  09_eUZGrsvxChDCGRCdkLiDXrReGOEVeSC
-      dCcPBSJSc
-
-   Info for content encryption key derivation (cek_info):
 
 
-
-Thomson                 Expires November 9, 2017               [Page 10]
+Thomson                 Expires November 13, 2017              [Page 10]
 
 Internet-Draft             Web Push Encryption                  May 2017
 
 
+   PRK for content encryption (PRK):  09_eUZGrsvxChDCGRCdkLiDXrReGOEVeSC
+      dCcPBSJSc
+
+   Info for content encryption key derivation (cek_info):
       Q29udGVudC1FbmNvZGluZzogYWVzMTI4Z2NtAA
 
    Content encryption key (CEK):  oIhVW04MRdy2XN9CiKLxTg
@@ -609,8 +613,4 @@ Author's Address
 
 
 
-
-
-
-
-Thomson                 Expires November 9, 2017               [Page 11]
+Thomson                 Expires November 13, 2017              [Page 11]

@@ -302,7 +302,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-webpush-encryption-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-5-08" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-5-12" />
   <meta name="dct.abstract" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
   <meta name="description" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
 
@@ -323,10 +323,10 @@ address {
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">May 08, 2017</td>
+  <td class="right">May 12, 2017</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 9, 2017</td>
+  <td class="left">Expires: November 13, 2017</td>
   <td class="right"></td>
 </tr>
 
@@ -347,7 +347,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 9, 2017.</p>
+<p>This Internet-Draft will expire on November 13, 2017.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -512,6 +512,7 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
 <p id="rfc.section.7.p.1">The security considerations of <a href="#I-D.ietf-httpbis-encryption-encoding">[I-D.ietf-httpbis-encryption-encoding]</a> describe the limitations of the content encoding.  In particular, any HTTP header fields are not protected by the content encoding scheme.  A User Agent MUST consider HTTP header fields to have come from the Push Service.  An application on the User Agent that uses information from header fields to alter their processing of a push message is exposed to a risk of attack by the Push Service.</p>
 <p id="rfc.section.7.p.2">The timing and length of communication cannot be hidden from the Push Service.  While an outside observer might see individual messages intermixed with each other, the Push Service will see what Application Server is talking to which User Agent, and the subscription that is used.  Additionally, the length of messages could be revealed unless the padding provided by the content encoding scheme is used to obscure length.</p>
+<p id="rfc.section.7.p.3">The User Agent and Application MUST verify that the public key they receive is on the P-256 curve.  Failure to validate a public key can allow an attacker to extract a private key.</p>
 <h1 id="rfc.references"><a href="#rfc.references">8.</a> References</h1>
 <h2 id="rfc.references.1"><a href="#rfc.references.1">8.1.</a> Normative References</h2>
 <table>
