@@ -330,7 +330,8 @@ using base64url.
                   aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4
    Sender:
       private key: yfWPiYE-n46HLnH0KqZOF1fJJU3MYrct3AELtAQ-oRw
-      public key: <the value of the "keyid" parameter>
+      public key: BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
+                  Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 ~~~
 
 Intermediate values for this example are included in {{ex-intermediate}}.
