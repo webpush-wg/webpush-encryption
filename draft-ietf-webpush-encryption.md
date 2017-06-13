@@ -274,7 +274,7 @@ sequence number, since push messages contain only a single record (see
 An Application Server MUST encrypt a push message with a single record.  This
 allows for a minimal receiver implementation that handles a single record.  An
 application server MUST set the `rs` parameter in the `aes128gcm` content coding
-header to a size that is greater than the some of the length of the plaintext,
+header to a size that is greater than the sum of the lengths of the plaintext,
 the padding delimiter (1 octet), any padding, and the authentication tag (16
 octets).
 
@@ -330,7 +330,7 @@ using base64url.
                   aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4
    Sender:
       private key: yfWPiYE-n46HLnH0KqZOF1fJJU3MYrct3AELtAQ-oRw
-      public key: <the value of the "dh" parameter>
+      public key: <the value of the "keyid" parameter>
 ~~~
 
 Intermediate values for this example are included in {{ex-intermediate}}.
@@ -338,7 +338,7 @@ Intermediate values for this example are included in {{ex-intermediate}}.
 
 # IANA Considerations {#iana}
 
-\[\[RFC EDITOR: please remote this section before publication.]]
+\[\[RFC EDITOR: please remove this section before publication.]]
 This document makes no request of IANA.
 
 # Security Considerations
@@ -353,7 +353,7 @@ Service.
 
 The timing and length of communication cannot be hidden from the Push Service.
 While an outside observer might see individual messages intermixed with each
-other, the Push Service will see what Application Server is talking to which
+other, the Push Service will see which Application Server is talking to which
 User Agent, and the subscription that is used.  Additionally, the length of
 messages could be revealed unless the padding provided by the content encoding
 scheme is used to obscure length.
