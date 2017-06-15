@@ -235,7 +235,6 @@ L:
 : 32 octets (i.e., the output is the length of the underlying SHA-256 HMAC
   function output)
 
-
 ## Encryption Summary {#summary}
 
 This results in a the final content encryption key and nonce generation using
@@ -252,15 +251,20 @@ into separate discrete steps using HMAC with SHA-256:
    auth_secret = <from User Agent>
 
    -- For both:
+   ---- HKDF Combining shared and authentication secret
    PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
    key_info = "WebPush: info" || 0x00 || ua_public || as_public
-   IKM = HMAC-SHA-256(PRK_cek, key_info || 0x01)
+   key_L = 32
+   IKM = HMAC-SHA-256(PRK_key, key_info || 0x01)
 
+   ---- HKDFs for HTTP Encryption Encoding materials
    salt = random(16)
    PRK = HMAC-SHA-256(salt, IKM)
    cek_info = "Content-Encoding: aes128gcm" || 0x00
+   cek_L = 16
    CEK = HMAC-SHA-256(PRK, cek_info || 0x01)[0..15]
    nonce_info = "Content-Encoding: nonce" || 0x00
+   nonce_L = 12
    NONCE = HMAC-SHA-256(PRK, nonce_info || 0x01)[0..11]
 ~~~
 
