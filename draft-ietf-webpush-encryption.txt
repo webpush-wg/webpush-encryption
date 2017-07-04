@@ -329,7 +329,7 @@ Internet-Draft             Web Push Encryption                 July 2017
    the "keyid" parameter of the encrypted content coding header.  The
    uncompressed point form defined in [X9.62] (that is, a 65 octet
    sequence that starts with a 0x04 octet) forms the entirety of the
-   "keyid".
+
 
 
 
@@ -337,6 +337,9 @@ Thomson                  Expires January 5, 2018                [Page 6]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
+
+   "keyid".  Note that this means that the "keyid" parameter will not be
+   valid UTF-8 as recommended in [RFC8188].
 
    A push service is not required to support more than 4096 octets of
    payload body (see Section 7.2 of [RFC8030]).  Absent header (86
@@ -378,9 +381,6 @@ Internet-Draft             Web Push Encryption                 July 2017
 
    The keys used are shown below using the uncompressed form [X9.62]
    encoded using base64url.
-
-
-
 
 
 
