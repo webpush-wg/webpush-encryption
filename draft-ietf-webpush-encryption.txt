@@ -76,7 +76,7 @@ Table of Contents
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
      8.2.  Informative References  . . . . . . . . . . . . . . . . .   9
-   Appendix A.  Intermediate Values for Encryption . . . . . . . . .   9
+   Appendix A.  Intermediate Values for Encryption . . . . . . . . .  10
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
@@ -291,14 +291,22 @@ Internet-Draft             Web Push Encryption                 July 2017
       auth_secret = <from User Agent>
 
       -- For both:
+
+      ## Use HKDF to combine the ECDH and authentication secrets
+      # HKDF-Extract(salt=auth_secret, IKM=ecdh_secret)
       PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
+      # HKDF-Expand(PRK_key, key_info, L_key=32)
       key_info = "WebPush: info" || 0x00 || ua_public || as_public
       IKM = HMAC-SHA-256(PRK_cek, key_info || 0x01)
 
+      ## HKDF calculations from RFC 8188
+      # HKDF-Extract(salt, IKM)
       salt = random(16)
       PRK = HMAC-SHA-256(salt, IKM)
+      # HKDF-Expand(PRK, cek_info, L_cek=16)
       cek_info = "Content-Encoding: aes128gcm" || 0x00
       CEK = HMAC-SHA-256(PRK, cek_info || 0x01)[0..15]
+      # HKDF-Expand(PRK, nonce_info, L_nonce=12)
       nonce_info = "Content-Encoding: nonce" || 0x00
       NONCE = HMAC-SHA-256(PRK, nonce_info || 0x01)[0..11]
 
@@ -323,20 +331,18 @@ Internet-Draft             Web Push Encryption                 July 2017
    sequence that starts with a 0x04 octet) forms the entirety of the
    "keyid".
 
-   A push service is not required to support more than 4096 octets of
-   payload body (see Section 7.2 of [RFC8030]).  Absent header (86
-   octets), padding (minimum 2 octets), and expansion for
-   AEAD_AES_128_GCM (16 octets), this equates to at most 3992 octets of
-   plaintext.
-
-
-
 
 
 Thomson                  Expires January 5, 2018                [Page 6]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
+
+   A push service is not required to support more than 4096 octets of
+   payload body (see Section 7.2 of [RFC8030]).  Absent header (86
+   octets), padding (minimum 2 octets), and expansion for
+   AEAD_AES_128_GCM (16 octets), this equates to at most 3992 octets of
+   plaintext.
 
    An Application Server MUST NOT use other content encodings for push
    messages.  In particular, content encodings that compress could
@@ -373,6 +379,21 @@ Internet-Draft             Web Push Encryption                 July 2017
    The keys used are shown below using the uncompressed form [X9.62]
    encoded using base64url.
 
+
+
+
+
+
+
+
+
+
+
+Thomson                  Expires January 5, 2018                [Page 7]
+
+Internet-Draft             Web Push Encryption                 July 2017
+
+
       Authentication Secret: BTBZMqHH6r4Tts7J_aSIgg
       Receiver:
          private key: q1dXpw3UpT5VOmu_cf_v6ih07Aems3njxI-JWgLcM94
@@ -384,15 +405,6 @@ Internet-Draft             Web Push Encryption                 July 2017
                      Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
    Intermediate values for this example are included in Appendix A.
-
-
-
-
-
-Thomson                  Expires January 5, 2018                [Page 7]
-
-Internet-Draft             Web Push Encryption                 July 2017
-
 
 6.  IANA Considerations
 
@@ -428,6 +440,16 @@ Internet-Draft             Web Push Encryption                 July 2017
    [ECDH]     SECG, "Elliptic Curve Cryptography", SEC 1 , 2000,
               <http://www.secg.org/>.
 
+
+
+
+
+
+Thomson                  Expires January 5, 2018                [Page 8]
+
+Internet-Draft             Web Push Encryption                 July 2017
+
+
    [FIPS180-4]
               Department of Commerce, National., "NIST FIPS 180-4,
               Secure Hash Standard", March 2012,
@@ -442,13 +464,6 @@ Internet-Draft             Web Push Encryption                 July 2017
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
-
-
-
-Thomson                  Expires January 5, 2018                [Page 8]
-
-Internet-Draft             Web Push Encryption                 July 2017
-
 
    [RFC4086]  Eastlake 3rd, D., Schiller, J., and S. Crocker,
               "Randomness Requirements for Security", BCP 106, RFC 4086,
@@ -482,6 +497,15 @@ Internet-Draft             Web Push Encryption                 July 2017
               DOI 10.17487/RFC2818, May 2000,
               <http://www.rfc-editor.org/info/rfc2818>.
 
+
+
+
+
+Thomson                  Expires January 5, 2018                [Page 9]
+
+Internet-Draft             Web Push Encryption                 July 2017
+
+
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
@@ -497,14 +521,6 @@ Appendix A.  Intermediate Values for Encryption
    Application Server public key (as_public):
       BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
       Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
-
-
-
-
-Thomson                  Expires January 5, 2018                [Page 9]
-
-Internet-Draft             Web Push Encryption                 July 2017
-
 
    Application Server private key (as_private):  yfWPiYE-n46HLnH0KqZOF1f
       JJU3MYrct3AELtAQ-oRw
@@ -539,6 +555,13 @@ Internet-Draft             Web Push Encryption                 July 2017
    Input keying material for content encryption key derivation (IKM):
       S4lYMb_L0FxCeq0WhDx813KgSYqU26kOyzWUdsXYyrg
 
+
+
+Thomson                  Expires January 5, 2018               [Page 10]
+
+Internet-Draft             Web Push Encryption                 July 2017
+
+
    PRK for content encryption (PRK):  09_eUZGrsvxChDCGRCdkLiDXrReGOEVeSC
       dCcPBSJSc
 
@@ -554,14 +577,6 @@ Internet-Draft             Web Push Encryption                 July 2017
 
    The salt, record size of 4096, and application server public key
    produce an 86 octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z
-
-
-
-Thomson                  Expires January 5, 2018               [Page 10]
-
-Internet-Draft             Web Push Encryption                 July 2017
-
-
    9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml mlMoZIIgDll6e3vCYLocInmYWAmS6Tlz
    AC8wEqKK6PBru3jl7A8.
 
@@ -580,21 +595,6 @@ Author's Address
    Mozilla
 
    Email: martin.thomson@gmail.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
