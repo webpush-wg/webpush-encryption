@@ -299,12 +299,14 @@ Internet-Draft             Web Push Encryption                 July 2017
 
       -- For both:
 
+      ## Use HKDF to combine the ECDH and authentication secrets
       # HKDF-Extract(salt=auth_secret, IKM=ecdh_secret)
       PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
       # HKDF-Expand(PRK_key, key_info, L_key=32)
       key_info = "WebPush: info" || 0x00 || ua_public || as_public
       IKM = HMAC-SHA-256(PRK_cek, key_info || 0x01)
 
+      ## HKDF calculations from RFC 8188
       # HKDF-Extract(salt, IKM)
       salt = random(16)
       PRK = HMAC-SHA-256(salt, IKM)
@@ -327,8 +329,6 @@ Internet-Draft             Web Push Encryption                 July 2017
    handles a single record.  An application server MUST set the "rs"
    parameter in the "aes128gcm" content coding header to a size that is
    greater than the some of the length of the plaintext, the padding
-   delimiter (1 octet), any padding, and the authentication tag (16
-   octets).
 
 
 
@@ -337,6 +337,9 @@ Thomson                  Expires January 5, 2018                [Page 6]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
+
+   delimiter (1 octet), any padding, and the authentication tag (16
+   octets).
 
    A push message MUST include the application server ECDH public key in
    the "keyid" parameter of the encrypted content coding header.  The
@@ -382,9 +385,6 @@ Internet-Draft             Web Push Encryption                 July 2017
    wrapping and URL-safe base64url encoding to meet presentation
    constraints.
 
-   The keys used are shown below using the uncompressed form [X9.62]
-   encoded using base64url.
-
 
 
 
@@ -393,6 +393,9 @@ Thomson                  Expires January 5, 2018                [Page 7]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
+
+   The keys used are shown below using the uncompressed form [X9.62]
+   encoded using base64url.
 
       Authentication Secret: BTBZMqHH6r4Tts7J_aSIgg
       Receiver:
@@ -438,9 +441,6 @@ Internet-Draft             Web Push Encryption                 July 2017
 
    [ECDH]     SECG, "Elliptic Curve Cryptography", SEC 1 , 2000,
               <http://www.secg.org/>.
-
-
-
 
 
 
