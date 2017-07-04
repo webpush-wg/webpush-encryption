@@ -412,7 +412,7 @@ address {
      |                      |                      |
 </pre>
 <p id="rfc.section.1.p.2">This document describes how messages sent using this protocol can be secured against inspection, modification and falsification by a Push Service.</p>
-<p id="rfc.section.1.p.3">Web Push messages are the payload of an HTTP message <a href="#RFC7230" class="xref">[RFC7230]</a>.  These messages are encrypted using an encrypted content encoding <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a>.  This document describes how this content encoding is applied and describes a recommended key management scheme.</p>
+<p id="rfc.section.1.p.3">Web Push messages are the payload of an HTTP message <a href="#RFC7230" class="xref">[RFC7230]</a>.  These messages are encrypted using an encrypted content encoding <a href="#RFC8188" class="xref">[RFC8188]</a>.  This document describes how this content encoding is applied and describes a recommended key management scheme.</p>
 <p id="rfc.section.1.p.4">For efficiency reasons, multiple users of Web Push often share a central agent that aggregates push functionality.  This agent can enforce the use of this encryption scheme by applications that use push messaging.  An agent that only delivers messages that are properly encrypted strongly encourages the end-to-end protection of messages.</p>
 <p id="rfc.section.1.p.5">A web browser that implements the Web Push API <a href="#API" class="xref">[API]</a> can enforce the use of encryption by forwarding only those messages that were properly encrypted.</p>
 <h2 id="rfc.section.1.1">
@@ -424,7 +424,7 @@ address {
 </h1>
 <p id="rfc.section.2.p.1">Encrypting a push message uses elliptic-curve Diffie-Hellman (ECDH) <a href="#ECDH" class="xref">[ECDH]</a> on the P-256 curve <a href="#FIPS186" class="xref">[FIPS186]</a> to establish a shared secret (see <a href="#dh" class="xref">Section 3.1</a>) and a symmetric secret for authentication (see <a href="#auth" class="xref">Section 3.2</a>).</p>
 <p id="rfc.section.2.p.2">A User Agent generates an ECDH key pair and authentication secret that it associates with each subscription it creates.  The ECDH public key and the authentication secret are sent to the Application Server with other details of the push subscription.</p>
-<p id="rfc.section.2.p.3">When sending a message, an Application Server generates an ECDH key pair and a random salt.  The ECDH public key is encoded into the <samp>keyid</samp> parameter of the encrypted content coding header, the salt in the <samp>salt</samp> parameter of that same header (see Section 2.1 of <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a>).  The ECDH key pair can be discarded after encrypting the message.</p>
+<p id="rfc.section.2.p.3">When sending a message, an Application Server generates an ECDH key pair and a random salt.  The ECDH public key is encoded into the <samp>keyid</samp> parameter of the encrypted content coding header, the salt in the <samp>salt</samp> parameter of that same header (see Section 2.1 of <a href="#RFC8188" class="xref">[RFC8188]</a>).  The ECDH key pair can be discarded after encrypting the message.</p>
 <p id="rfc.section.2.p.4">The content of the push message is encrypted or decrypted using a content encryption key and nonce that is derived using all of these inputs and the process described in <a href="#encryption" class="xref">Section 3</a>.</p>
 <h2 id="rfc.section.2.1">
 <a href="#rfc.section.2.1">2.1.</a> <a href="#key-and-secret-distribution" id="key-and-secret-distribution">Key and Secret Distribution</a>
@@ -440,9 +440,9 @@ address {
 
 <ul>
 <li>A shared secret is derived using elliptic-curve Diffie-Hellman <a href="#ECDH" class="xref">[ECDH]</a> (<a href="#dh" class="xref">Section 3.1</a>).</li>
-<li>The shared secret is then combined with the application secret to produce the input keying material used in <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a> (<a href="#combine" class="xref">Section 3.3</a>).</li>
-<li>A content encryption key and nonce are derived using the process in <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a>.</li>
-<li>Encryption or decryption follows according to <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a>.</li>
+<li>The shared secret is then combined with the application secret to produce the input keying material used in <a href="#RFC8188" class="xref">[RFC8188]</a> (<a href="#combine" class="xref">Section 3.3</a>).</li>
+<li>A content encryption key and nonce are derived using the process in <a href="#RFC8188" class="xref">[RFC8188]</a>.</li>
+<li>Encryption or decryption follows according to <a href="#RFC8188" class="xref">[RFC8188]</a>.</li>
 </ul>
 <p id="rfc.section.3.p.3">The key derivation process is summarized in <a href="#summary" class="xref">Section 3.4</a>.  Restrictions on the use of the encrypted content coding are described in <a href="#restrict" class="xref">Section 4</a>.</p>
 <h2 id="rfc.section.3.1">
@@ -450,7 +450,7 @@ address {
 </h2>
 <p id="rfc.section.3.1.p.1">For each new subscription that the User Agent generates for an Application, it also generates a P-256 <a href="#FIPS186" class="xref">[FIPS186]</a> key pair for use in elliptic-curve Diffie-Hellman (ECDH) <a href="#ECDH" class="xref">[ECDH]</a>.</p>
 <p id="rfc.section.3.1.p.2">When sending a push message, the Application Server also generates a new ECDH key pair on the same P-256 curve.</p>
-<p id="rfc.section.3.1.p.3">The ECDH public key for the Application Server is included as the &#8220;keyid&#8221; parameter in the encrypted content coding header (see Section 2.1 of <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a>.</p>
+<p id="rfc.section.3.1.p.3">The ECDH public key for the Application Server is included as the &#8220;keyid&#8221; parameter in the encrypted content coding header (see Section 2.1 of <a href="#RFC8188" class="xref">[RFC8188]</a>.</p>
 <p id="rfc.section.3.1.p.4">An Application combines its ECDH private key with the public key provided by the User Agent using the process described in <a href="#ECDH" class="xref">[ECDH]</a>; on receipt of the push message, a User Agent combines its private key with the public key provided by the Application Server in the <samp>keyid</samp> parameter in the same way.  These operations produce the same value for the ECDH shared secret.</p>
 <h2 id="rfc.section.3.2">
 <a href="#rfc.section.3.2">3.2.</a> <a href="#auth" id="auth">Push Message Authentication</a>
@@ -460,7 +460,7 @@ address {
 <h2 id="rfc.section.3.3">
 <a href="#rfc.section.3.3">3.3.</a> <a href="#combine" id="combine">Combining Shared and Authentication Secrets</a>
 </h2>
-<p id="rfc.section.3.3.p.1">The shared secret produced by ECDH is combined with the authentication secret using HMAC-based key derivation function (HKDF) described in <a href="#RFC5869" class="xref">[RFC5869]</a>.  This produces the input keying material used by <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a>.</p>
+<p id="rfc.section.3.3.p.1">The shared secret produced by ECDH is combined with the authentication secret using HMAC-based key derivation function (HKDF) described in <a href="#RFC5869" class="xref">[RFC5869]</a>.  This produces the input keying material used by <a href="#RFC8188" class="xref">[RFC8188]</a>.</p>
 <p id="rfc.section.3.3.p.2">The HKDF function uses SHA-256 hash algorithm <a href="#FIPS180-4" class="xref">[FIPS180-4]</a> with the following inputs:</p>
 <pre>
 key_info = "WebPush: info" || 0x00 || ua_public || as_public
@@ -506,8 +506,8 @@ key_info = "WebPush: info" || 0x00 || ua_public || as_public
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#restrict" id="restrict">Restrictions on Use of &#8220;aes128gcm&#8221; Content Coding</a>
 </h1>
-<p id="rfc.section.4.p.1">An Application Server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  An application server MUST set the <samp>rs</samp> parameter in the <samp>aes128gcm</samp> content coding header to a size that is greater than the some of the length of the plaintext, the padding delimiter (1 octet), any padding, and the authentication tag (16 octets).</p>
-<p id="rfc.section.4.p.2">A push message MUST include the application server ECDH public key in the <samp>keyid</samp> parameter of the encrypted content coding header.  The uncompressed point form defined in <a href="#X9.62" class="xref">[X9.62]</a> (that is, a 65 octet sequence that starts with a 0x04 octet) forms the entirety of the <samp>keyid</samp>.  Note that this means that the <samp>keyid</samp> parameter will not be valid UTF-8 as recommended in <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a>.</p>
+<p id="rfc.section.4.p.1">An Application Server MUST encrypt a push message with a single record.  This allows for a minimal receiver implementation that handles a single record.  An application server MUST set the <samp>rs</samp> parameter in the <samp>aes128gcm</samp> content coding header to a size that is greater than the sum of the lengths of the plaintext, the padding delimiter (1 octet), any padding, and the authentication tag (16 octets).</p>
+<p id="rfc.section.4.p.2">A push message MUST include the application server ECDH public key in the <samp>keyid</samp> parameter of the encrypted content coding header.  The uncompressed point form defined in <a href="#X9.62" class="xref">[X9.62]</a> (that is, a 65 octet sequence that starts with a 0x04 octet) forms the entirety of the <samp>keyid</samp>.  Note that this means that the <samp>keyid</samp> parameter will not be valid UTF-8 as recommended in <a href="#RFC8188" class="xref">[RFC8188]</a>.</p>
 <p id="rfc.section.4.p.3">A push service is not required to support more than 4096 octets of payload body (see Section 7.2 of <a href="#RFC8030" class="xref">[RFC8030]</a>).  Absent header (86 octets), padding (minimum 2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this equates to at most 3992 octets of plaintext.</p>
 <p id="rfc.section.4.p.4">An Application Server MUST NOT use other content encodings for push messages.  In particular, content encodings that compress could result in leaking of push message contents.  The Content-Encoding header field therefore has exactly one value, which is <samp>aes128gcm</samp>.  Multiple <samp>aes128gcm</samp> values are not permitted.</p>
 <p id="rfc.section.4.p.5">A User Agent is not required to support multiple records.  A User Agent MAY ignore the <samp>rs</samp> field.  If a record size is unchecked, decryption will fail with high probability for all valid cases.  The padding delimiter octet MUST be checked, values other than 0x02 MUST cause the message to be discarded.</p>
@@ -536,18 +536,19 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
                   aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4
    Sender:
       private key: yfWPiYE-n46HLnH0KqZOF1fJJU3MYrct3AELtAQ-oRw
-      public key: &lt;the value of the "dh" parameter&gt;
+      public key: BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
+                  Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 </pre>
 <p id="rfc.section.5.p.4">Intermediate values for this example are included in <a href="#ex-intermediate" class="xref">Appendix A</a>.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#iana" id="iana">IANA Considerations</a>
 </h1>
-<p id="rfc.section.6.p.1">[[RFC EDITOR: please remote this section before publication.]] This document makes no request of IANA.</p>
+<p id="rfc.section.6.p.1">[[RFC EDITOR: please remove this section before publication.]] This document makes no request of IANA.</p>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
-<p id="rfc.section.7.p.1">The security considerations of <a href="#I-D.ietf-httpbis-encryption-encoding" class="xref">[I-D.ietf-httpbis-encryption-encoding]</a> describe the limitations of the content encoding.  In particular, any HTTP header fields are not protected by the content encoding scheme.  A User Agent MUST consider HTTP header fields to have come from the Push Service.  An application on the User Agent that uses information from header fields to alter their processing of a push message is exposed to a risk of attack by the Push Service.</p>
-<p id="rfc.section.7.p.2">The timing and length of communication cannot be hidden from the Push Service.  While an outside observer might see individual messages intermixed with each other, the Push Service will see what Application Server is talking to which User Agent, and the subscription that is used.  Additionally, the length of messages could be revealed unless the padding provided by the content encoding scheme is used to obscure length.</p>
+<p id="rfc.section.7.p.1">The security considerations of <a href="#RFC8188" class="xref">[RFC8188]</a> describe the limitations of the content encoding.  In particular, any HTTP header fields are not protected by the content encoding scheme.  A User Agent MUST consider HTTP header fields to have come from the Push Service.  An application on the User Agent that uses information from header fields to alter their processing of a push message is exposed to a risk of attack by the Push Service.</p>
+<p id="rfc.section.7.p.2">The timing and length of communication cannot be hidden from the Push Service.  While an outside observer might see individual messages intermixed with each other, the Push Service will see which Application Server is talking to which User Agent, and the subscription that is used.  Additionally, the length of messages could be revealed unless the padding provided by the content encoding scheme is used to obscure length.</p>
 <p id="rfc.section.7.p.3">The User Agent and Application MUST verify that the public key they receive is on the P-256 curve.  Failure to validate a public key can allow an attacker to extract a private key.</p>
 <h1 id="rfc.references">
 <a href="#rfc.references">8.</a> References</h1>
@@ -570,11 +571,6 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 <a>National Institute of Standards and Technology (NIST)</a>, "<a>Digital Signature Standard (DSS)</a>", NIST PUB 186-4 , July 2013.</td>
 </tr>
 <tr>
-<td class="reference"><b id="I-D.ietf-httpbis-encryption-encoding">[I-D.ietf-httpbis-encryption-encoding]</b></td>
-<td class="top">
-<a>Thomson, M.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-httpbis-encryption-encoding-09">Encrypted Content-Encoding for HTTP</a>", Internet-Draft draft-ietf-httpbis-encryption-encoding-09, April 2017.</td>
-</tr>
-<tr>
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
 <td class="top">
 <a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
@@ -593,6 +589,11 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 <td class="reference"><b id="RFC8030">[RFC8030]</b></td>
 <td class="top">
 <a>Thomson, M.</a>, <a>Damaggio, E.</a> and <a>B. Raymor</a>, "<a href="http://tools.ietf.org/html/rfc8030">Generic Event Delivery Using HTTP Push</a>", RFC 8030, DOI 10.17487/RFC8030, December 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC8188">[RFC8188]</b></td>
+<td class="top">
+<a>Thomson, M.</a>, "<a href="http://tools.ietf.org/html/rfc8188">Encrypted Content-Encoding for HTTP</a>", RFC 8188, DOI 10.17487/RFC8188, June 2017.</td>
 </tr>
 <tr>
 <td class="reference"><b id="X9.62">[X9.62]</b></td>
