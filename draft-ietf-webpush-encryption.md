@@ -277,8 +277,9 @@ octets).
 
 A push message MUST include the application server ECDH public key in the
 `keyid` parameter of the encrypted content coding header.  The uncompressed
-point form defined in {{X9.62}} (that is, a 65 octet sequence that starts with
-a 0x04 octet) forms the entirety of the "keyid".
+point form defined in {{X9.62}} (that is, a 65 octet sequence that starts with a
+0x04 octet) forms the entirety of the `keyid`.  Note that this means that the
+`keyid` parameter will not be valid UTF-8 as recommended in {{!RFC8188}}.
 
 A push service is not required to support more than 4096 octets of payload body
 (see Section 7.2 of {{!RFC8030}}).  Absent header (86 octets), padding (minimum
