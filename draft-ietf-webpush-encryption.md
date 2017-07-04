@@ -252,14 +252,20 @@ into separate discrete steps using HMAC with SHA-256:
    auth_secret = <from User Agent>
 
    -- For both:
+
+   # HKDF-Extract(salt=auth_secret, IKM=ecdh_secret)
    PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
+   # HKDF-Expand(PRK_key, key_info, L_key=32)
    key_info = "WebPush: info" || 0x00 || ua_public || as_public
    IKM = HMAC-SHA-256(PRK_cek, key_info || 0x01)
 
+   # HKDF-Extract(salt, IKM)
    salt = random(16)
    PRK = HMAC-SHA-256(salt, IKM)
+   # HKDF-Expand(PRK, cek_info, L_cek=16)
    cek_info = "Content-Encoding: aes128gcm" || 0x00
    CEK = HMAC-SHA-256(PRK, cek_info || 0x01)[0..15]
+   # HKDF-Expand(PRK, nonce_info, L_nonce=12)
    nonce_info = "Content-Encoding: nonce" || 0x00
    NONCE = HMAC-SHA-256(PRK, nonce_info || 0x01)[0..11]
 ~~~
