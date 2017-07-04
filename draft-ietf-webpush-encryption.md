@@ -90,9 +90,9 @@ This document describes how messages sent using this protocol can be secured
 against inspection, modification and falsification by a Push Service.
 
 Web Push messages are the payload of an HTTP message {{?RFC7230}}.  These
-messages are encrypted using an encrypted content encoding
-{{!I-D.ietf-httpbis-encryption-encoding}}.  This document describes how this
-content encoding is applied and describes a recommended key management scheme.
+messages are encrypted using an encrypted content encoding {{!RFC8188}}.  This
+document describes how this content encoding is applied and describes a
+recommended key management scheme.
 
 For efficiency reasons, multiple users of Web Push often share a central agent
 that aggregates push functionality.  This agent can enforce the use of this
@@ -125,8 +125,8 @@ the push subscription.
 When sending a message, an Application Server generates an ECDH key pair and a
 random salt.  The ECDH public key is encoded into the `keyid` parameter of the
 encrypted content coding header, the salt in the `salt` parameter of that same
-header (see Section 2.1 of {{!I-D.ietf-httpbis-encryption-encoding}}).  The
-ECDH key pair can be discarded after encrypting the message.
+header (see Section 2.1 of {{!RFC8188}}).  The ECDH key pair can be discarded
+after encrypting the message.
 
 The content of the push message is encrypted or decrypted using a content
 encryption key and nonce that is derived using all of these inputs and the
@@ -160,14 +160,12 @@ Push message encryption happens in four phases:
   ({{dh}}).
 
 * The shared secret is then combined with the application secret to produce the
-  input keying material used in {{!I-D.ietf-httpbis-encryption-encoding}}
-  ({{combine}}).
+  input keying material used in {{!RFC8188}} ({{combine}}).
 
 * A content encryption key and nonce are derived using the process in
-  {{!I-D.ietf-httpbis-encryption-encoding}}.
+  {{!RFC8188}}.
 
-* Encryption or decryption follows according to
-  {{!I-D.ietf-httpbis-encryption-encoding}}.
+* Encryption or decryption follows according to {{!RFC8188}}.
 
 The key derivation process is summarized in {{summary}}.  Restrictions on the
 use of the encrypted content coding are described in {{restrict}}.
@@ -184,7 +182,7 @@ key pair on the same P-256 curve.
 
 The ECDH public key for the Application Server is included as the "keyid"
 parameter in the encrypted content coding header (see Section 2.1 of
-{{!I-D.ietf-httpbis-encryption-encoding}}.
+{{!RFC8188}}.
 
 An Application combines its ECDH private key with the public key provided by the
 User Agent using the process described in {{ECDH}}; on receipt of the push
@@ -209,8 +207,7 @@ cryptographically strong random number generator {{!RFC4086}}.
 
 The shared secret produced by ECDH is combined with the authentication secret
 using HMAC-based key derivation function (HKDF) described in {{!RFC5869}}.  This
-produces the input keying material used by
-{{!I-D.ietf-httpbis-encryption-encoding}}.
+produces the input keying material used by {{!RFC8188}}.
 
 The HKDF function uses SHA-256 hash algorithm {{FIPS180-4}} with the following
 inputs:
@@ -344,13 +341,12 @@ This document makes no request of IANA.
 
 # Security Considerations
 
-The security considerations of {{!I-D.ietf-httpbis-encryption-encoding}}
-describe the limitations of the content encoding.  In particular, any HTTP
-header fields are not protected by the content encoding scheme.  A User Agent
-MUST consider HTTP header fields to have come from the Push Service.  An
-application on the User Agent that uses information from header fields to alter
-their processing of a push message is exposed to a risk of attack by the Push
-Service.
+The security considerations of {{!RFC8188}} describe the limitations of the
+content encoding.  In particular, any HTTP header fields are not protected by
+the content encoding scheme.  A User Agent MUST consider HTTP header fields to
+have come from the Push Service.  An application on the User Agent that uses
+information from header fields to alter their processing of a push message is
+exposed to a risk of attack by the Push Service.
 
 The timing and length of communication cannot be hidden from the Push Service.
 While an outside observer might see individual messages intermixed with each
