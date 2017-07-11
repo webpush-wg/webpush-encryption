@@ -375,7 +375,10 @@ extract a private key.
 # Intermediate Values for Encryption {#ex-intermediate}
 
 The intermediate values calculated for the example in {{example}} are shown
-here.  The following are inputs to the calculation:
+here.  The base64url values in these examples include whitespace that can be
+removed.
+
+The following are inputs to the calculation:
 
 Plaintext:
 
