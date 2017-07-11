@@ -243,10 +243,12 @@ into separate discrete steps using HMAC with SHA-256:
    -- For a User Agent:
    ecdh_secret = ECDH(ua_private, as_public)
    auth_secret = random(16)
+   salt = <from content coding header>
 
    -- For an Application Server:
    ecdh_secret = ECDH(as_private, ua_public)
    auth_secret = <from User Agent>
+   salt = random(16)
 
    -- For both:
 
@@ -259,7 +261,6 @@ into separate discrete steps using HMAC with SHA-256:
 
    ## HKDF calculations from RFC 8188
    # HKDF-Extract(salt, IKM)
-   salt = random(16)
    PRK = HMAC-SHA-256(salt, IKM)
    # HKDF-Expand(PRK, cek_info, L_cek=16)
    cek_info = "Content-Encoding: aes128gcm" || 0x00
