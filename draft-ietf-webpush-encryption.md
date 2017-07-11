@@ -324,7 +324,7 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 
 This example shows the ASCII encoded string, "When I grow up, I want to be a
 watermelon". The content body is shown here with line wrapping and URL-safe
-base64url encoding to meet presentation constraints.
+base64url {{?RFC4648}} encoding to meet presentation constraints.
 
 The keys used are shown below using the uncompressed form {{X9.62}} encoded
 using base64url.
