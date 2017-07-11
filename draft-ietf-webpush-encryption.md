@@ -148,8 +148,8 @@ accepted by the User Agent.
 
 Most applications that use push messaging have a pre-existing relationship with
 an Application Server that can be used for distribution of subscription data.
-Any existing communication mechanism that is authenticated and provides
-confidentiality and integrity, such as HTTPS {{?RFC2818}}, is sufficient.
+An authenticated communication mechanism that provides adequate confidentiality
+and integrity protection, such as HTTPS {{?RFC2818}}, is sufficient.
 
 
 # Push Message Encryption {#encryption}
