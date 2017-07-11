@@ -66,8 +66,8 @@ Server to a User Agent.
 # Introduction
 
 The Web Push protocol {{!RFC8030}} is an intermediated protocol by necessity.
-Messages from an Application Server are delivered to a User Agent via a Push
-Service.
+Messages from an Application Server are delivered to a User Agent (UA) via a
+Push Service.
 
 ~~~
  +-------+           +--------------+       +-------------+
@@ -206,8 +206,9 @@ cryptographically strong random number generator {{!RFC4086}}.
 ## Combining Shared and Authentication Secrets {#combine}
 
 The shared secret produced by ECDH is combined with the authentication secret
-using HMAC-based key derivation function (HKDF) described in {{!RFC5869}}.  This
-produces the input keying material used by {{!RFC8188}}.
+using the Hashed Message Authentication Code (HMAC)-based key derivation
+function (HKDF) {{!RFC5869}}.  This produces the input keying material used by
+{{!RFC8188}}.
 
 The HKDF function uses SHA-256 hash algorithm {{FIPS180-4}} with the following
 inputs:
@@ -422,7 +423,7 @@ Shared ECDH secret (ecdh_secret):
 
 : kyrL1jIIOHEzg3sM2ZWRHDRB62YACZhhSlknJ672kSs
 
-Pseudo-random key for key combining (PRK_key):
+Pseudorandom key (PRK) for key combining (PRK_key):
 
 : Snr3JMxaHVDXHWJn5wdC52WjpCtd2EIEGBykDcZW32k
 
