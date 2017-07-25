@@ -147,9 +147,10 @@ unauthorized entities, which can be used to generate push messages that will be
 accepted by the User Agent.
 
 Most applications that use push messaging have a pre-existing relationship with
-an Application Server.  Any existing communication mechanism that is
-authenticated and provides confidentiality and integrity, such as HTTPS
-{{?RFC2818}}, is sufficient.
+an Application Server that can be used to initiate and secure communications for
+key distribution.  Any existing communication mechanism that is authenticated
+and provides confidentiality and integrity, such as HTTPS {{?RFC2818}}, is
+sufficient.
 
 
 # Push Message Encryption {#encryption}
