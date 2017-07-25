@@ -160,8 +160,8 @@ Push message encryption happens in four phases:
 * A shared secret is derived using elliptic-curve Diffie-Hellman {{ECDH}}
   ({{dh}}).
 
-* The shared secret is then combined with the application secret to produce the
-  input keying material used in {{!RFC8188}} ({{combine}}).
+* The shared secret is then combined with the authentication secret to produce
+  the input keying material used in {{!RFC8188}} ({{combine}}).
 
 * A content encryption key and nonce are derived using the process in
   {{!RFC8188}}.
