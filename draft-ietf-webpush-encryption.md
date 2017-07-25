@@ -185,10 +185,10 @@ The ECDH public key for the Application Server is included as the "keyid"
 parameter in the encrypted content coding header (see Section 2.1 of
 {{!RFC8188}}.
 
-An Application combines its ECDH private key with the public key provided by the
-User Agent using the process described in {{ECDH}}; on receipt of the push
-message, a User Agent combines its private key with the public key provided by
-the Application Server in the `keyid` parameter in the same way.  These
+An Application Server combines its ECDH private key with the public key provided
+by the User Agent using the process described in {{ECDH}}; on receipt of the
+push message, a User Agent combines its private key with the public key provided
+by the Application Server in the `keyid` parameter in the same way.  These
 operations produce the same value for the ECDH shared secret.
 
 
