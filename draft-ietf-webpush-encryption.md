@@ -256,7 +256,7 @@ into separate discrete steps using HMAC with SHA-256:
    PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
    # HKDF-Expand(PRK_key, key_info, L_key=32)
    key_info = "WebPush: info" || 0x00 || ua_public || as_public
-   IKM = HMAC-SHA-256(PRK_cek, key_info || 0x01)
+   IKM = HMAC-SHA-256(PRK_key, key_info || 0x01)
 
    ## HKDF calculations from RFC 8188
    # HKDF-Extract(salt, IKM)
