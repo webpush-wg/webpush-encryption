@@ -354,9 +354,11 @@ This document makes no request of IANA.
 The security considerations of {{!RFC8188}} describe the limitations of the
 content encoding.  In particular, any HTTP header fields are not protected by
 the content encoding scheme.  A User Agent MUST consider HTTP header fields to
-have come from the Push Service.  An application on the User Agent that uses
-information from header fields to alter their processing of a push message is
-exposed to a risk of attack by the Push Service.
+have come from the Push Service.  Though header fields might be necessary for
+processing an HTTP response correctly, they are not needed for correct operation
+of the protocol.  An application on the User Agent that uses information from
+header fields to alter their processing of a push message is exposed to a risk
+of attack by the Push Service.
 
 The timing and length of communication cannot be hidden from the Push Service.
 While an outside observer might see individual messages intermixed with each
