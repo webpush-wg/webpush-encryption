@@ -300,7 +300,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-webpush-encryption-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-7-25" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-7-27" />
   <meta name="dct.abstract" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
   <meta name="description" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an Application Server to a User Agent." />
 
@@ -321,10 +321,10 @@ address {
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">July 25, 2017</td>
+<td class="right">July 27, 2017</td>
 </tr>
 <tr>
-<td class="left">Expires: January 26, 2018</td>
+<td class="left">Expires: January 28, 2018</td>
 <td class="right"></td>
 </tr>
 
@@ -341,7 +341,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 26, 2018.</p>
+<p>This Internet-Draft will expire on January 28, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -431,7 +431,7 @@ address {
 </h2>
 <p id="rfc.section.2.1.p.1">The application using the subscription distributes the subscription public key and authentication secret to an authorized Application Server.  This could be sent along with other subscription information that is provided by the User Agent, such as the push subscription URI.</p>
 <p id="rfc.section.2.1.p.2">An application MUST use an authenticated, confidentiality protected communications medium for this purpose.  In addition to the reasons described in <a href="#RFC8030" class="xref">[RFC8030]</a>, this ensures that the authentication secret is not revealed to unauthorized entities, which can be used to generate push messages that will be accepted by the User Agent.</p>
-<p id="rfc.section.2.1.p.3">Most applications that use push messaging have a pre-existing relationship with an Application Server that can be used to initiate and secure communications for key distribution.  Any existing communication mechanism that is authenticated and provides confidentiality and integrity, such as HTTPS <a href="#RFC2818" class="xref">[RFC2818]</a>, is sufficient.</p>
+<p id="rfc.section.2.1.p.3">Most applications that use push messaging have a pre-existing relationship with an Application Server that can be used for distribution of subscription data.  Any existing communication mechanism that is authenticated and provides confidentiality and integrity, such as HTTPS <a href="#RFC2818" class="xref">[RFC2818]</a>, is sufficient.</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#encryption" id="encryption">Push Message Encryption</a>
 </h1>

@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                           July 25, 2017
-Expires: January 26, 2018
+Intended status: Standards Track                           July 27, 2017
+Expires: January 28, 2018
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 26, 2018.
+   This Internet-Draft will expire on January 28, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson                 Expires January 26, 2018                [Page 1]
+Thomson                 Expires January 28, 2018                [Page 1]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson                 Expires January 26, 2018                [Page 2]
+Thomson                 Expires January 28, 2018                [Page 2]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -165,7 +165,7 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                 Expires January 26, 2018                [Page 3]
+Thomson                 Expires January 28, 2018                [Page 3]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -180,11 +180,10 @@ Internet-Draft             Web Push Encryption                 July 2017
    generate push messages that will be accepted by the User Agent.
 
    Most applications that use push messaging have a pre-existing
-   relationship with an Application Server that can be used to initiate
-   and secure communications for key distribution.  Any existing
-   communication mechanism that is authenticated and provides
-   confidentiality and integrity, such as HTTPS [RFC2818], is
-   sufficient.
+   relationship with an Application Server that can be used for
+   distribution of subscription data.  Any existing communication
+   mechanism that is authenticated and provides confidentiality and
+   integrity, such as HTTPS [RFC2818], is sufficient.
 
 3.  Push Message Encryption
 
@@ -221,7 +220,8 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                 Expires January 26, 2018                [Page 4]
+
+Thomson                 Expires January 28, 2018                [Page 4]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -277,7 +277,7 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                 Expires January 26, 2018                [Page 5]
+Thomson                 Expires January 28, 2018                [Page 5]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -333,7 +333,7 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                 Expires January 26, 2018                [Page 6]
+Thomson                 Expires January 28, 2018                [Page 6]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -389,7 +389,7 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                 Expires January 26, 2018                [Page 7]
+Thomson                 Expires January 28, 2018                [Page 7]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -445,7 +445,7 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                 Expires January 26, 2018                [Page 8]
+Thomson                 Expires January 28, 2018                [Page 8]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -501,7 +501,7 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                 Expires January 26, 2018                [Page 9]
+Thomson                 Expires January 28, 2018                [Page 9]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -557,7 +557,7 @@ Appendix A.  Intermediate Values for Encryption
 
 
 
-Thomson                 Expires January 26, 2018               [Page 10]
+Thomson                 Expires January 28, 2018               [Page 10]
 
 Internet-Draft             Web Push Encryption                 July 2017
 
@@ -613,4 +613,4 @@ Author's Address
 
 
 
-Thomson                 Expires January 26, 2018               [Page 11]
+Thomson                 Expires January 28, 2018               [Page 11]
