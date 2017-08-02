@@ -147,9 +147,9 @@ unauthorized entities, which can be used to generate push messages that will be
 accepted by the User Agent.
 
 Most applications that use push messaging have a pre-existing relationship with
-an Application Server.  Any existing communication mechanism that is
-authenticated and provides confidentiality and integrity, such as HTTPS
-{{?RFC2818}}, is sufficient.
+an Application Server that can be used for distribution of subscription data.
+Any existing communication mechanism that is authenticated and provides
+confidentiality and integrity, such as HTTPS {{?RFC2818}}, is sufficient.
 
 
 # Push Message Encryption {#encryption}
@@ -159,8 +159,8 @@ Push message encryption happens in four phases:
 * A shared secret is derived using elliptic-curve Diffie-Hellman {{ECDH}}
   ({{dh}}).
 
-* The shared secret is then combined with the application secret to produce the
-  input keying material used in {{!RFC8188}} ({{combine}}).
+* The shared secret is then combined with the authentication secret to produce
+  the input keying material used in {{!RFC8188}} ({{combine}}).
 
 * A content encryption key and nonce are derived using the process in
   {{!RFC8188}}.
@@ -184,10 +184,10 @@ The ECDH public key for the Application Server is included as the "keyid"
 parameter in the encrypted content coding header (see Section 2.1 of
 {{!RFC8188}}.
 
-An Application combines its ECDH private key with the public key provided by the
-User Agent using the process described in {{ECDH}}; on receipt of the push
-message, a User Agent combines its private key with the public key provided by
-the Application Server in the `keyid` parameter in the same way.  These
+An Application Server combines its ECDH private key with the public key provided
+by the User Agent using the process described in {{ECDH}}; on receipt of the
+push message, a User Agent combines its private key with the public key provided
+by the Application Server in the `keyid` parameter in the same way.  These
 operations produce the same value for the ECDH shared secret.
 
 
@@ -255,7 +255,7 @@ into separate discrete steps using HMAC with SHA-256:
    PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
    # HKDF-Expand(PRK_key, key_info, L_key=32)
    key_info = "WebPush: info" || 0x00 || ua_public || as_public
-   IKM = HMAC-SHA-256(PRK_cek, key_info || 0x01)
+   IKM = HMAC-SHA-256(PRK_key, key_info || 0x01)
 
    ## HKDF calculations from RFC 8188
    # HKDF-Extract(salt, IKM)
@@ -353,9 +353,11 @@ This document makes no request of IANA.
 The security considerations of {{!RFC8188}} describe the limitations of the
 content encoding.  In particular, any HTTP header fields are not protected by
 the content encoding scheme.  A User Agent MUST consider HTTP header fields to
-have come from the Push Service.  An application on the User Agent that uses
-information from header fields to alter their processing of a push message is
-exposed to a risk of attack by the Push Service.
+have come from the Push Service.  Though header fields might be necessary for
+processing an HTTP response correctly, they are not needed for correct operation
+of the protocol.  An application on the User Agent that uses information from
+header fields to alter their processing of a push message is exposed to a risk
+of attack by the Push Service.
 
 The timing and length of communication cannot be hidden from the Push Service.
 While an outside observer might see individual messages intermixed with each
