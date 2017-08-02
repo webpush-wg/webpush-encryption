@@ -110,6 +110,9 @@ The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this document.
 It's not shouting, when they are capitalized, they have the special meaning
 described in {{!RFC2119}}.
 
+This document uses the terminology from {{RFC8030}}, primarily User Agent, Push
+Service, and Application Server.
+
 
 # Push Message Encryption Overview {#overview}
 
@@ -351,6 +354,9 @@ Intermediate values for this example are included in {{ex-intermediate}}.
 This document makes no request of IANA.
 
 # Security Considerations
+
+The privacy and security considerations of {{!RFC8030}} all apply to the use of
+this mechanism.
 
 The security considerations of {{!RFC8188}} describe the limitations of the
 content encoding.  In particular, any HTTP header fields are not protected by
