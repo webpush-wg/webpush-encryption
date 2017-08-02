@@ -63,19 +63,19 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.1.  Notational Conventions  . . . . . . . . . . . . . . . . .   3
    2.  Push Message Encryption Overview  . . . . . . . . . . . . . .   3
-     2.1.  Key and Secret Distribution . . . . . . . . . . . . . . .   3
+     2.1.  Key and Secret Distribution . . . . . . . . . . . . . . .   4
    3.  Push Message Encryption . . . . . . . . . . . . . . . . . . .   4
      3.1.  Diffie-Hellman Key Agreement  . . . . . . . . . . . . . .   4
      3.2.  Push Message Authentication . . . . . . . . . . . . . . .   5
      3.3.  Combining Shared and Authentication Secrets . . . . . . .   5
-     3.4.  Encryption Summary  . . . . . . . . . . . . . . . . . . .   5
+     3.4.  Encryption Summary  . . . . . . . . . . . . . . . . . . .   6
    4.  Restrictions on Use of "aes128gcm" Content Coding . . . . . .   6
    5.  Push Message Encryption Example . . . . . . . . . . . . . . .   7
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .  10
    Appendix A.  Intermediate Values for Encryption . . . . . . . . .  10
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  11
 
@@ -134,6 +134,9 @@ Internet-Draft             Web Push Encryption               August 2017
    document.  It's not shouting, when they are capitalized, they have
    the special meaning described in [RFC2119].
 
+   This document uses the terminology from [RFC8030], primarily User
+   Agent, Push Service, and Application Server.
+
 2.  Push Message Encryption Overview
 
    Encrypting a push message uses elliptic-curve Diffie-Hellman (ECDH)
@@ -157,11 +160,8 @@ Internet-Draft             Web Push Encryption               August 2017
    content encryption key and nonce that is derived using all of these
    inputs and the process described in Section 3.
 
-2.1.  Key and Secret Distribution
 
-   The application using the subscription distributes the subscription
-   public key and authentication secret to an authorized Application
-   Server.  This could be sent along with other subscription information
+
 
 
 
@@ -170,6 +170,11 @@ Thomson                 Expires February 3, 2018                [Page 3]
 Internet-Draft             Web Push Encryption               August 2017
 
 
+2.1.  Key and Secret Distribution
+
+   The application using the subscription distributes the subscription
+   public key and authentication secret to an authorized Application
+   Server.  This could be sent along with other subscription information
    that is provided by the User Agent, such as the push subscription
    URI.
 
@@ -214,17 +219,16 @@ Internet-Draft             Web Push Encryption               August 2017
    When sending a push message, the Application Server also generates a
    new ECDH key pair on the same P-256 curve.
 
-   The ECDH public key for the Application Server is included as the
-   "keyid" parameter in the encrypted content coding header (see
-   Section 2.1 of [RFC8188].
-
-
 
 
 Thomson                 Expires February 3, 2018                [Page 4]
 
 Internet-Draft             Web Push Encryption               August 2017
 
+
+   The ECDH public key for the Application Server is included as the
+   "keyid" parameter in the encrypted content coding header (see
+   Section 2.1 of [RFC8188].
 
    An Application Server combines its ECDH private key with the public
    key provided by the User Agent using the process described in [ECDH];
@@ -269,10 +273,6 @@ Internet-Draft             Web Push Encryption               August 2017
    L: 32 octets (i.e., the output is the length of the underlying
       SHA-256 HMAC function output)
 
-3.4.  Encryption Summary
-
-   This results in a the final content encryption key and nonce
-   generation using the following sequence, which is shown here in
 
 
 
@@ -282,6 +282,10 @@ Thomson                 Expires February 3, 2018                [Page 5]
 Internet-Draft             Web Push Encryption               August 2017
 
 
+3.4.  Encryption Summary
+
+   This results in a the final content encryption key and nonce
+   generation using the following sequence, which is shown here in
    pseudocode with HKDF expanded into separate discrete steps using HMAC
    with SHA-256:
 
@@ -326,10 +330,6 @@ Internet-Draft             Web Push Encryption               August 2017
    handles a single record.  An application server MUST set the "rs"
    parameter in the "aes128gcm" content coding header to a size that is
    greater than the sum of the lengths of the plaintext, the padding
-   delimiter (1 octet), any padding, and the authentication tag (16
-   octets).
-
-
 
 
 
@@ -337,6 +337,9 @@ Thomson                 Expires February 3, 2018                [Page 6]
 
 Internet-Draft             Web Push Encryption               August 2017
 
+
+   delimiter (1 octet), any padding, and the authentication tag (16
+   octets).
 
    A push message MUST include the application server ECDH public key in
    the "keyid" parameter of the encrypted content coding header.  The
@@ -383,9 +386,6 @@ Internet-Draft             Web Push Encryption               August 2017
    wrapping and URL-safe base64url [RFC4648] encoding to meet
    presentation constraints.
 
-   The keys used are shown below using the uncompressed form [X9.62]
-   encoded using base64url.
-
 
 
 
@@ -393,6 +393,9 @@ Thomson                 Expires February 3, 2018                [Page 7]
 
 Internet-Draft             Web Push Encryption               August 2017
 
+
+   The keys used are shown below using the uncompressed form [X9.62]
+   encoded using base64url.
 
       Authentication Secret: BTBZMqHH6r4Tts7J_aSIgg
       Receiver:
@@ -412,6 +415,9 @@ Internet-Draft             Web Push Encryption               August 2017
    document makes no request of IANA.
 
 7.  Security Considerations
+
+   The privacy and security considerations of [RFC8030] all apply to the
+   use of this mechanism.
 
    The security considerations of [RFC8188] describe the limitations of
    the content encoding.  In particular, any HTTP header fields are not
@@ -435,12 +441,6 @@ Internet-Draft             Web Push Encryption               August 2017
    receive is on the P-256 curve.  Failure to validate a public key can
    allow an attacker to extract a private key.
 
-8.  References
-
-8.1.  Normative References
-
-   [ECDH]     SECG, "Elliptic Curve Cryptography", SEC 1 , 2000,
-              <http://www.secg.org/>.
 
 
 
@@ -449,6 +449,13 @@ Thomson                 Expires February 3, 2018                [Page 8]
 
 Internet-Draft             Web Push Encryption               August 2017
 
+
+8.  References
+
+8.1.  Normative References
+
+   [ECDH]     SECG, "Elliptic Curve Cryptography", SEC 1 , 2000,
+              <http://www.secg.org/>.
 
    [FIPS180-4]
               Department of Commerce, National., "NIST FIPS 180-4,
@@ -488,14 +495,7 @@ Internet-Draft             Web Push Encryption               August 2017
               Industry: The Elliptic Curve Digital Signature Algorithm
               (ECDSA)", ANSI X9.62 , 1998.
 
-8.2.  Informative References
 
-   [API]      Beverloo, P. and M. Thomson, "Web Push API", 2015,
-              <https://w3c.github.io/push-api/>.
-
-   [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
-              DOI 10.17487/RFC2818, May 2000,
-              <http://www.rfc-editor.org/info/rfc2818>.
 
 
 
@@ -505,6 +505,15 @@ Thomson                 Expires February 3, 2018                [Page 9]
 
 Internet-Draft             Web Push Encryption               August 2017
 
+
+8.2.  Informative References
+
+   [API]      Beverloo, P. and M. Thomson, "Web Push API", 2015,
+              <https://w3c.github.io/push-api/>.
+
+   [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
+              DOI 10.17487/RFC2818, May 2000,
+              <http://www.rfc-editor.org/info/rfc2818>.
 
    [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
@@ -546,6 +555,13 @@ Appendix A.  Intermediate Values for Encryption
    The Application Server randomly generates the salt value, whereas
    salt is input to the receiver.
 
+
+
+Thomson                 Expires February 3, 2018               [Page 10]
+
+Internet-Draft             Web Push Encryption               August 2017
+
+
    This produces the following intermediate values:
 
    Shared ECDH secret (ecdh_secret):  kyrL1jIIOHEzg3sM2ZWRHDRB62YACZhhSl
@@ -553,14 +569,6 @@ Appendix A.  Intermediate Values for Encryption
 
    Pseudorandom key (PRK) for key combining (PRK_key):
       Snr3JMxaHVDXHWJn5wdC52WjpCtd2EIEGBykDcZW32k
-
-
-
-
-Thomson                 Expires February 3, 2018               [Page 10]
-
-Internet-Draft             Web Push Encryption               August 2017
-
 
    Info for key combining (key_info):  V2ViUHVzaDogaW5mbwAEJXGyvs3942BVG
       q8e0PTNNmwR zr5VX4m8t7GGpTM5FzFo7OLr4BhZe9MEebhuPI-OztV3
@@ -599,6 +607,17 @@ Internet-Draft             Web Push Encryption               August 2017
 
 Author's Address
 
+
+
+
+
+
+
+Thomson                 Expires February 3, 2018               [Page 11]
+
+Internet-Draft             Web Push Encryption               August 2017
+
+
    Martin Thomson
    Mozilla
 
@@ -613,4 +632,41 @@ Author's Address
 
 
 
-Thomson                 Expires February 3, 2018               [Page 11]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thomson                 Expires February 3, 2018               [Page 12]

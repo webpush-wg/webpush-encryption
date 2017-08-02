@@ -419,6 +419,7 @@ address {
 <a href="#rfc.section.1.1">1.1.</a> <a href="#notational-conventions" id="notational-conventions">Notational Conventions</a>
 </h2>
 <p id="rfc.section.1.1.p.1">The words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;SHOULD&#8221;, and &#8220;MAY&#8221; are used in this document.  It&#8217;s not shouting, when they are capitalized, they have the special meaning described in <a href="#RFC2119" class="xref">[RFC2119]</a>.</p>
+<p id="rfc.section.1.1.p.2">This document uses the terminology from <a href="#RFC8030" class="xref">[RFC8030]</a>, primarily User Agent, Push Service, and Application Server.</p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#overview" id="overview">Push Message Encryption Overview</a>
 </h1>
@@ -556,9 +557,10 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
-<p id="rfc.section.7.p.1">The security considerations of <a href="#RFC8188" class="xref">[RFC8188]</a> describe the limitations of the content encoding.  In particular, any HTTP header fields are not protected by the content encoding scheme.  A User Agent MUST consider HTTP header fields to have come from the Push Service.  Though header fields might be necessary for processing an HTTP response correctly, they are not needed for correct operation of the protocol.  An application on the User Agent that uses information from header fields to alter their processing of a push message is exposed to a risk of attack by the Push Service.</p>
-<p id="rfc.section.7.p.2">The timing and length of communication cannot be hidden from the Push Service.  While an outside observer might see individual messages intermixed with each other, the Push Service will see which Application Server is talking to which User Agent, and the subscription that is used.  Additionally, the length of messages could be revealed unless the padding provided by the content encoding scheme is used to obscure length.</p>
-<p id="rfc.section.7.p.3">The User Agent and Application MUST verify that the public key they receive is on the P-256 curve.  Failure to validate a public key can allow an attacker to extract a private key.</p>
+<p id="rfc.section.7.p.1">The privacy and security considerations of <a href="#RFC8030" class="xref">[RFC8030]</a> all apply to the use of this mechanism.</p>
+<p id="rfc.section.7.p.2">The security considerations of <a href="#RFC8188" class="xref">[RFC8188]</a> describe the limitations of the content encoding.  In particular, any HTTP header fields are not protected by the content encoding scheme.  A User Agent MUST consider HTTP header fields to have come from the Push Service.  Though header fields might be necessary for processing an HTTP response correctly, they are not needed for correct operation of the protocol.  An application on the User Agent that uses information from header fields to alter their processing of a push message is exposed to a risk of attack by the Push Service.</p>
+<p id="rfc.section.7.p.3">The timing and length of communication cannot be hidden from the Push Service.  While an outside observer might see individual messages intermixed with each other, the Push Service will see which Application Server is talking to which User Agent, and the subscription that is used.  Additionally, the length of messages could be revealed unless the padding provided by the content encoding scheme is used to obscure length.</p>
+<p id="rfc.section.7.p.4">The User Agent and Application MUST verify that the public key they receive is on the P-256 curve.  Failure to validate a public key can allow an attacker to extract a private key.</p>
 <h1 id="rfc.references">
 <a href="#rfc.references">8.</a> References</h1>
 <h2 id="rfc.references.1">
