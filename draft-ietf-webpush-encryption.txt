@@ -180,8 +180,7 @@ Internet-Draft             Web Push Encryption               August 2017
    generate push messages that will be accepted by the User Agent.
 
    Most applications that use push messaging have a pre-existing
-   relationship with an Application Server that can be used for
-   distribution of subscription data.  Any existing communication
+   relationship with an Application Server.  Any existing communication
    mechanism that is authenticated and provides confidentiality and
    integrity, such as HTTPS [RFC2818], is sufficient.
 
@@ -192,9 +191,8 @@ Internet-Draft             Web Push Encryption               August 2017
    o  A shared secret is derived using elliptic-curve Diffie-Hellman
       [ECDH] (Section 3.1).
 
-   o  The shared secret is then combined with the authentication secret
-      to produce the input keying material used in [RFC8188]
-      (Section 3.3).
+   o  The shared secret is then combined with the application secret to
+      produce the input keying material used in [RFC8188] (Section 3.3).
 
    o  A content encryption key and nonce are derived using the process
       in [RFC8188].
@@ -218,6 +216,8 @@ Internet-Draft             Web Push Encryption               August 2017
    "keyid" parameter in the encrypted content coding header (see
    Section 2.1 of [RFC8188].
 
+   An Application combines its ECDH private key with the public key
+   provided by the User Agent using the process described in [ECDH]; on
 
 
 
@@ -226,9 +226,7 @@ Thomson                 Expires February 3, 2018                [Page 4]
 Internet-Draft             Web Push Encryption               August 2017
 
 
-   An Application Server combines its ECDH private key with the public
-   key provided by the User Agent using the process described in [ECDH];
-   on receipt of the push message, a User Agent combines its private key
+   receipt of the push message, a User Agent combines its private key
    with the public key provided by the Application Server in the "keyid"
    parameter in the same way.  These operations produce the same value
    for the ECDH shared secret.
@@ -273,6 +271,8 @@ Internet-Draft             Web Push Encryption               August 2017
 
    This results in a the final content encryption key and nonce
    generation using the following sequence, which is shown here in
+   pseudocode with HKDF expanded into separate discrete steps using HMAC
+   with SHA-256:
 
 
 
@@ -281,9 +281,6 @@ Thomson                 Expires February 3, 2018                [Page 5]
 
 Internet-Draft             Web Push Encryption               August 2017
 
-
-   pseudocode with HKDF expanded into separate discrete steps using HMAC
-   with SHA-256:
 
       -- For a User Agent:
       ecdh_secret = ECDH(ua_private, as_public)
@@ -300,7 +297,7 @@ Internet-Draft             Web Push Encryption               August 2017
       PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
       # HKDF-Expand(PRK_key, key_info, L_key=32)
       key_info = "WebPush: info" || 0x00 || ua_public || as_public
-      IKM = HMAC-SHA-256(PRK_key, key_info || 0x01)
+      IKM = HMAC-SHA-256(PRK_cek, key_info || 0x01)
 
       ## HKDF calculations from RFC 8188
       # HKDF-Extract(salt, IKM)
@@ -330,6 +327,9 @@ Internet-Draft             Web Push Encryption               August 2017
 
    A push message MUST include the application server ECDH public key in
    the "keyid" parameter of the encrypted content coding header.  The
+   uncompressed point form defined in [X9.62] (that is, a 65 octet
+   sequence that starts with a 0x04 octet) forms the entirety of the
+
 
 
 
@@ -338,8 +338,6 @@ Thomson                 Expires February 3, 2018                [Page 6]
 Internet-Draft             Web Push Encryption               August 2017
 
 
-   uncompressed point form defined in [X9.62] (that is, a 65 octet
-   sequence that starts with a 0x04 octet) forms the entirety of the
    "keyid".  Note that this means that the "keyid" parameter will not be
    valid UTF-8 as recommended in [RFC8188].
 
@@ -389,6 +387,8 @@ Internet-Draft             Web Push Encryption               August 2017
 
 
 
+
+
 Thomson                 Expires February 3, 2018                [Page 7]
 
 Internet-Draft             Web Push Encryption               August 2017
@@ -416,9 +416,7 @@ Internet-Draft             Web Push Encryption               August 2017
    The security considerations of [RFC8188] describe the limitations of
    the content encoding.  In particular, any HTTP header fields are not
    protected by the content encoding scheme.  A User Agent MUST consider
-   HTTP header fields to have come from the Push Service.  Though header
-   fields might be necessary for processing an HTTP response correctly,
-   they are not needed for correct operation of the protocol.  An
+   HTTP header fields to have come from the Push Service.  An
    application on the User Agent that uses information from header
    fields to alter their processing of a push message is exposed to a
    risk of attack by the Push Service.
@@ -441,6 +439,8 @@ Internet-Draft             Web Push Encryption               August 2017
 
    [ECDH]     SECG, "Elliptic Curve Cryptography", SEC 1 , 2000,
               <http://www.secg.org/>.
+
+
 
 
 
