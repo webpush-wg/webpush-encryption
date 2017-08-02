@@ -66,8 +66,8 @@ Server to a User Agent.
 # Introduction
 
 The Web Push protocol {{!RFC8030}} is an intermediated protocol by necessity.
-Messages from an Application Server are delivered to a User Agent via a Push
-Service.
+Messages from an Application Server are delivered to a User Agent (UA) via a
+Push Service.
 
 ~~~
  +-------+           +--------------+       +-------------+
@@ -147,9 +147,9 @@ unauthorized entities, which can be used to generate push messages that will be
 accepted by the User Agent.
 
 Most applications that use push messaging have a pre-existing relationship with
-an Application Server.  Any existing communication mechanism that is
-authenticated and provides confidentiality and integrity, such as HTTPS
-{{?RFC2818}}, is sufficient.
+an Application Server.  An authenticated communication mechanism that provides
+adequate confidentiality and integrity protection, such as HTTPS {{?RFC2818}},
+is sufficient.
 
 
 # Push Message Encryption {#encryption}
@@ -206,8 +206,9 @@ cryptographically strong random number generator {{!RFC4086}}.
 ## Combining Shared and Authentication Secrets {#combine}
 
 The shared secret produced by ECDH is combined with the authentication secret
-using HMAC-based key derivation function (HKDF) described in {{!RFC5869}}.  This
-produces the input keying material used by {{!RFC8188}}.
+using the Hashed Message Authentication Code (HMAC)-based key derivation
+function (HKDF) {{!RFC5869}}.  This produces the input keying material used by
+{{!RFC8188}}.
 
 The HKDF function uses SHA-256 hash algorithm {{FIPS180-4}} with the following
 inputs:
@@ -243,10 +244,12 @@ into separate discrete steps using HMAC with SHA-256:
    -- For a User Agent:
    ecdh_secret = ECDH(ua_private, as_public)
    auth_secret = random(16)
+   salt = <from content coding header>
 
    -- For an Application Server:
    ecdh_secret = ECDH(as_private, ua_public)
    auth_secret = <from User Agent>
+   salt = random(16)
 
    -- For both:
 
@@ -259,7 +262,6 @@ into separate discrete steps using HMAC with SHA-256:
 
    ## HKDF calculations from RFC 8188
    # HKDF-Extract(salt, IKM)
-   salt = random(16)
    PRK = HMAC-SHA-256(salt, IKM)
    # HKDF-Expand(PRK, cek_info, L_cek=16)
    cek_info = "Content-Encoding: aes128gcm" || 0x00
@@ -323,7 +325,7 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 
 This example shows the ASCII encoded string, "When I grow up, I want to be a
 watermelon". The content body is shown here with line wrapping and URL-safe
-base64url encoding to meet presentation constraints.
+base64url {{?RFC4648}} encoding to meet presentation constraints.
 
 The keys used are shown below using the uncompressed form {{X9.62}} encoded
 using base64url.
@@ -374,7 +376,10 @@ extract a private key.
 # Intermediate Values for Encryption {#ex-intermediate}
 
 The intermediate values calculated for the example in {{example}} are shown
-here.  The following are inputs to the calculation:
+here.  The base64url values in these examples include whitespace that can be
+removed.
+
+The following are inputs to the calculation:
 
 Plaintext:
 
@@ -416,7 +421,7 @@ Shared ECDH secret (ecdh_secret):
 
 : kyrL1jIIOHEzg3sM2ZWRHDRB62YACZhhSlknJ672kSs
 
-Pseudo-random key for key combining (PRK_key):
+Pseudorandom key (PRK) for key combining (PRK_key):
 
 : Snr3JMxaHVDXHWJn5wdC52WjpCtd2EIEGBykDcZW32k
 
