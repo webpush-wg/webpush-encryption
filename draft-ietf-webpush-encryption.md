@@ -291,8 +291,8 @@ point form defined in {{X9.62}} (that is, a 65 octet sequence that starts with a
 
 A push service is not required to support more than 4096 octets of payload body
 (see Section 7.2 of {{!RFC8030}}).  Absent header (86 octets), padding (minimum
-2 octets), and expansion for AEAD_AES_128_GCM (16 octets), this equates to at
-most 3992 octets of plaintext.
+1 octet), and expansion for AEAD_AES_128_GCM (16 octets), this equates to at
+most 3993 octets of plaintext.
 
 An Application Server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
