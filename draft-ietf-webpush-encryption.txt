@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                           July 04, 2017
-Expires: January 5, 2018
+Intended status: Standards Track                         August 02, 2017
+Expires: February 3, 2018
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 5, 2018.
+   This Internet-Draft will expire on February 3, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Thomson                  Expires January 5, 2018                [Page 1]
+Thomson                 Expires February 3, 2018                [Page 1]
 
-Internet-Draft             Web Push Encryption                 July 2017
+Internet-Draft             Web Push Encryption               August 2017
 
 
 Table of Contents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thomson                  Expires January 5, 2018                [Page 2]
+Thomson                 Expires February 3, 2018                [Page 2]
 
-Internet-Draft             Web Push Encryption                 July 2017
+Internet-Draft             Web Push Encryption               August 2017
 
 
    [RFC8188].  This document describes how this content encoding is
@@ -165,9 +165,9 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                  Expires January 5, 2018                [Page 3]
+Thomson                 Expires February 3, 2018                [Page 3]
 
-Internet-Draft             Web Push Encryption                 July 2017
+Internet-Draft             Web Push Encryption               August 2017
 
 
    that is provided by the User Agent, such as the push subscription
@@ -180,7 +180,8 @@ Internet-Draft             Web Push Encryption                 July 2017
    generate push messages that will be accepted by the User Agent.
 
    Most applications that use push messaging have a pre-existing
-   relationship with an Application Server.  Any existing communication
+   relationship with an Application Server that can be used for
+   distribution of subscription data.  Any existing communication
    mechanism that is authenticated and provides confidentiality and
    integrity, such as HTTPS [RFC2818], is sufficient.
 
@@ -191,8 +192,9 @@ Internet-Draft             Web Push Encryption                 July 2017
    o  A shared secret is derived using elliptic-curve Diffie-Hellman
       [ECDH] (Section 3.1).
 
-   o  The shared secret is then combined with the application secret to
-      produce the input keying material used in [RFC8188] (Section 3.3).
+   o  The shared secret is then combined with the authentication secret
+      to produce the input keying material used in [RFC8188]
+      (Section 3.3).
 
    o  A content encryption key and nonce are derived using the process
       in [RFC8188].
@@ -216,17 +218,17 @@ Internet-Draft             Web Push Encryption                 July 2017
    "keyid" parameter in the encrypted content coding header (see
    Section 2.1 of [RFC8188].
 
-   An Application combines its ECDH private key with the public key
-   provided by the User Agent using the process described in [ECDH]; on
 
 
 
-Thomson                  Expires January 5, 2018                [Page 4]
+Thomson                 Expires February 3, 2018                [Page 4]
 
-Internet-Draft             Web Push Encryption                 July 2017
+Internet-Draft             Web Push Encryption               August 2017
 
 
-   receipt of the push message, a User Agent combines its private key
+   An Application Server combines its ECDH private key with the public
+   key provided by the User Agent using the process described in [ECDH];
+   on receipt of the push message, a User Agent combines its private key
    with the public key provided by the Application Server in the "keyid"
    parameter in the same way.  These operations produce the same value
    for the ECDH shared secret.
@@ -271,16 +273,17 @@ Internet-Draft             Web Push Encryption                 July 2017
 
    This results in a the final content encryption key and nonce
    generation using the following sequence, which is shown here in
+
+
+
+
+Thomson                 Expires February 3, 2018                [Page 5]
+
+Internet-Draft             Web Push Encryption               August 2017
+
+
    pseudocode with HKDF expanded into separate discrete steps using HMAC
    with SHA-256:
-
-
-
-
-Thomson                  Expires January 5, 2018                [Page 5]
-
-Internet-Draft             Web Push Encryption                 July 2017
-
 
       -- For a User Agent:
       ecdh_secret = ECDH(ua_private, as_public)
@@ -297,7 +300,7 @@ Internet-Draft             Web Push Encryption                 July 2017
       PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
       # HKDF-Expand(PRK_key, key_info, L_key=32)
       key_info = "WebPush: info" || 0x00 || ua_public || as_public
-      IKM = HMAC-SHA-256(PRK_cek, key_info || 0x01)
+      IKM = HMAC-SHA-256(PRK_key, key_info || 0x01)
 
       ## HKDF calculations from RFC 8188
       # HKDF-Extract(salt, IKM)
@@ -327,24 +330,23 @@ Internet-Draft             Web Push Encryption                 July 2017
 
    A push message MUST include the application server ECDH public key in
    the "keyid" parameter of the encrypted content coding header.  The
+
+
+
+Thomson                 Expires February 3, 2018                [Page 6]
+
+Internet-Draft             Web Push Encryption               August 2017
+
+
    uncompressed point form defined in [X9.62] (that is, a 65 octet
    sequence that starts with a 0x04 octet) forms the entirety of the
-
-
-
-
-Thomson                  Expires January 5, 2018                [Page 6]
-
-Internet-Draft             Web Push Encryption                 July 2017
-
-
    "keyid".  Note that this means that the "keyid" parameter will not be
    valid UTF-8 as recommended in [RFC8188].
 
    A push service is not required to support more than 4096 octets of
    payload body (see Section 7.2 of [RFC8030]).  Absent header (86
-   octets), padding (minimum 2 octets), and expansion for
-   AEAD_AES_128_GCM (16 octets), this equates to at most 3992 octets of
+   octets), padding (minimum 1 octet), and expansion for
+   AEAD_AES_128_GCM (16 octets), this equates to at most 3993 octets of
    plaintext.
 
    An Application Server MUST NOT use other content encodings for push
@@ -387,11 +389,9 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-
-
-Thomson                  Expires January 5, 2018                [Page 7]
+Thomson                 Expires February 3, 2018                [Page 7]
 
-Internet-Draft             Web Push Encryption                 July 2017
+Internet-Draft             Web Push Encryption               August 2017
 
 
       Authentication Secret: BTBZMqHH6r4Tts7J_aSIgg
@@ -416,7 +416,9 @@ Internet-Draft             Web Push Encryption                 July 2017
    The security considerations of [RFC8188] describe the limitations of
    the content encoding.  In particular, any HTTP header fields are not
    protected by the content encoding scheme.  A User Agent MUST consider
-   HTTP header fields to have come from the Push Service.  An
+   HTTP header fields to have come from the Push Service.  Though header
+   fields might be necessary for processing an HTTP response correctly,
+   they are not needed for correct operation of the protocol.  An
    application on the User Agent that uses information from header
    fields to alter their processing of a push message is exposed to a
    risk of attack by the Push Service.
@@ -443,11 +445,9 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-
-
-Thomson                  Expires January 5, 2018                [Page 8]
+Thomson                 Expires February 3, 2018                [Page 8]
 
-Internet-Draft             Web Push Encryption                 July 2017
+Internet-Draft             Web Push Encryption               August 2017
 
 
    [FIPS180-4]
@@ -501,9 +501,9 @@ Internet-Draft             Web Push Encryption                 July 2017
 
 
 
-Thomson                  Expires January 5, 2018                [Page 9]
+Thomson                 Expires February 3, 2018                [Page 9]
 
-Internet-Draft             Web Push Encryption                 July 2017
+Internet-Draft             Web Push Encryption               August 2017
 
 
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
@@ -557,9 +557,9 @@ Appendix A.  Intermediate Values for Encryption
 
 
 
-Thomson                  Expires January 5, 2018               [Page 10]
+Thomson                 Expires February 3, 2018               [Page 10]
 
-Internet-Draft             Web Push Encryption                 July 2017
+Internet-Draft             Web Push Encryption               August 2017
 
 
    PRK for content encryption (PRK):  09_eUZGrsvxChDCGRCdkLiDXrReGOEVeSC
@@ -613,4 +613,4 @@ Author's Address
 
 
 
-Thomson                  Expires January 5, 2018               [Page 11]
+Thomson                 Expires February 3, 2018               [Page 11]
