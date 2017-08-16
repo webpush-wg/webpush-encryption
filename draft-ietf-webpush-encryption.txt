@@ -129,9 +129,11 @@ Internet-Draft             Web Push Encryption               August 2017
 
 1.1.  Notational Conventions
 
-   The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this
-   document.  It's not shouting, when they are capitalized, they have
-   the special meaning described in [RFC2119].
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
 
    This document uses the terminology from [RFC8030], primarily user
    agent, push service, and application server.
@@ -158,8 +160,6 @@ Internet-Draft             Web Push Encryption               August 2017
    The content of the push message is encrypted or decrypted using a
    content encryption key and nonce that is derived using all of these
    inputs and the process described in Section 3.
-
-
 
 
 
@@ -516,6 +516,10 @@ Internet-Draft             Web Push Encryption               August 2017
               DOI 10.17487/RFC8030, December 2016,
               <http://www.rfc-editor.org/info/rfc8030>.
 
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <http://www.rfc-editor.org/info/rfc8174>.
+
    [RFC8188]  Thomson, M., "Encrypted Content-Encoding for HTTP",
               RFC 8188, DOI 10.17487/RFC8188, June 2017,
               <http://www.rfc-editor.org/info/rfc8188>.
@@ -550,10 +554,6 @@ Appendix A.  Intermediate Values for Encryption
 
    The following are inputs to the calculation:
 
-   Plaintext:  V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0byBiZSBhIHdhdGVybWVsb24
-
-   Application server public key (as_public):
-
 
 
 
@@ -562,6 +562,9 @@ Thomson                 Expires February 17, 2018              [Page 10]
 Internet-Draft             Web Push Encryption               August 2017
 
 
+   Plaintext:  V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0byBiZSBhIHdhdGVybWVsb24
+
+   Application server public key (as_public):
       BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
       Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
@@ -607,9 +610,6 @@ Internet-Draft             Web Push Encryption               August 2017
    Content encryption key (CEK):  oIhVW04MRdy2XN9CiKLxTg
 
    Info for content encryption nonce derivation (nonce_info):
-      Q29udGVudC1FbmNvZGluZzogbm9uY2UA
-
-   Nonce (NONCE):  4h_95klXJ5E_qnoN
 
 
 
@@ -617,6 +617,10 @@ Thomson                 Expires February 17, 2018              [Page 11]
 
 Internet-Draft             Web Push Encryption               August 2017
 
+
+      Q29udGVudC1FbmNvZGluZzogbm9uY2UA
+
+   Nonce (NONCE):  4h_95klXJ5E_qnoN
 
    The salt, record size of 4096, and application server public key
    produce an 86 octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z
@@ -638,10 +642,6 @@ Author's Address
    Mozilla
 
    Email: martin.thomson@gmail.com
-
-
-
-
 
 
 
