@@ -57,8 +57,8 @@ informative:
 --- abstract
 
 A message encryption scheme is described for the Web Push protocol.  This scheme
-provides confidentiality and integrity for messages sent from an Application
-Server to a User Agent.
+provides confidentiality and integrity for messages sent from an application
+server to a user agent.
 
 
 --- middle
@@ -66,8 +66,8 @@ Server to a User Agent.
 # Introduction
 
 The Web Push protocol {{!RFC8030}} is an intermediated protocol by necessity.
-Messages from an Application Server are delivered to a User Agent (UA) via a
-Push Service.
+Messages from an application server are delivered to a user agent (UA) via a
+push service.
 
 ~~~
  +-------+           +--------------+       +-------------+
@@ -87,7 +87,7 @@ Push Service.
 ~~~
 
 This document describes how messages sent using this protocol can be secured
-against inspection, modification and falsification by a Push Service.
+against inspection, modification and falsification by a push service.
 
 Web Push messages are the payload of an HTTP message {{?RFC7230}}.  These
 messages are encrypted using an encrypted content encoding {{!RFC8188}}.  This
@@ -110,8 +110,8 @@ The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this document.
 It's not shouting, when they are capitalized, they have the special meaning
 described in {{!RFC2119}}.
 
-This document uses the terminology from {{RFC8030}}, primarily User Agent, Push
-Service, and Application Server.
+This document uses the terminology from {{RFC8030}}, primarily user agent, push
+service, and application server.
 
 
 # Push Message Encryption Overview {#overview}
@@ -120,12 +120,12 @@ Encrypting a push message uses elliptic-curve Diffie-Hellman (ECDH) {{ECDH}} on
 the P-256 curve {{FIPS186}} to establish a shared secret (see {{dh}}) and a
 symmetric secret for authentication (see {{auth}}).
 
-A User Agent generates an ECDH key pair and authentication secret that it
+A user agent generates an ECDH key pair and authentication secret that it
 associates with each subscription it creates.  The ECDH public key and the
-authentication secret are sent to the Application Server with other details of
+authentication secret are sent to the application server with other details of
 the push subscription.
 
-When sending a message, an Application Server generates an ECDH key pair and a
+When sending a message, an application server generates an ECDH key pair and a
 random salt.  The ECDH public key is encoded into the `keyid` parameter of the
 encrypted content coding header, the salt in the `salt` parameter of that same
 header (see Section 2.1 of {{!RFC8188}}).  The ECDH key pair can be discarded
@@ -139,18 +139,18 @@ process described in {{encryption}}.
 ## Key and Secret Distribution
 
 The application using the subscription distributes the subscription public key
-and authentication secret to an authorized Application Server.  This could be
-sent along with other subscription information that is provided by the User
-Agent, such as the push subscription URI.
+and authentication secret to an authorized application server.  This could be
+sent along with other subscription information that is provided by the user
+agent, such as the push subscription URI.
 
 An application MUST use an authenticated, confidentiality protected
 communications medium for this purpose.  In addition to the reasons described in
 {{!RFC8030}}, this ensures that the authentication secret is not revealed to
 unauthorized entities, which can be used to generate push messages that will be
-accepted by the User Agent.
+accepted by the user agent.
 
 Most applications that use push messaging have a pre-existing relationship with
-an Application Server that can be used for distribution of subscription data.
+an application server that can be used for distribution of subscription data.
 An authenticated communication mechanism that provides adequate confidentiality
 and integrity protection, such as HTTPS {{?RFC2818}}, is sufficient.
 
@@ -176,32 +176,32 @@ use of the encrypted content coding are described in {{restrict}}.
 
 ## Diffie-Hellman Key Agreement {#dh}
 
-For each new subscription that the User Agent generates for an Application, it
+For each new subscription that the user agent generates for an application, it
 also generates a P-256 {{FIPS186}} key pair for use in elliptic-curve
 Diffie-Hellman (ECDH) {{ECDH}}.
 
-When sending a push message, the Application Server also generates a new ECDH
+When sending a push message, the application server also generates a new ECDH
 key pair on the same P-256 curve.
 
-The ECDH public key for the Application Server is included as the "keyid"
+The ECDH public key for the application server is included as the "keyid"
 parameter in the encrypted content coding header (see Section 2.1 of
 {{!RFC8188}}.
 
-An Application Server combines its ECDH private key with the public key provided
-by the User Agent using the process described in {{ECDH}}; on receipt of the
-push message, a User Agent combines its private key with the public key provided
-by the Application Server in the `keyid` parameter in the same way.  These
+An application server combines its ECDH private key with the public key provided
+by the user agent using the process described in {{ECDH}}; on receipt of the
+push message, a user agent combines its private key with the public key provided
+by the application server in the `keyid` parameter in the same way.  These
 operations produce the same value for the ECDH shared secret.
 
 
 ## Push Message Authentication {#auth}
 
 To ensure that push messages are correctly authenticated, a symmetric
-authentication secret is added to the information generated by a User Agent.
+authentication secret is added to the information generated by a user agent.
 The authentication secret is mixed into the key derivation process shown in
 {{combine}}.
 
-A User Agent MUST generate and provide a hard to guess sequence of 16 octets that
+A user agent MUST generate and provide a hard to guess sequence of 16 octets that
 is used for authentication of push messages.  This SHOULD be generated by a
 cryptographically strong random number generator {{!RFC4086}}.
 
@@ -225,7 +225,7 @@ IKM:
 info:
 
 : the concatenation of the ASCII-encoded string "WebPush: info", a zero octet,
-  and the User Agent ECDH public key and the Application Server ECDH public key,
+  and the user agent ECDH public key and the application server ECDH public key,
   both in the uncompressed point form defined in {{X9.62}}; that is
 
   ~~~
@@ -244,14 +244,14 @@ the following sequence, which is shown here in pseudocode with HKDF expanded
 into separate discrete steps using HMAC with SHA-256:
 
 ~~~ inline
-   -- For a User Agent:
+   -- For a user agent:
    ecdh_secret = ECDH(ua_private, as_public)
    auth_secret = random(16)
    salt = <from content coding header>
 
-   -- For an Application Server:
+   -- For an application server:
    ecdh_secret = ECDH(as_private, ua_public)
-   auth_secret = <from User Agent>
+   auth_secret = <from user agent>
    salt = random(16)
 
    -- For both:
@@ -281,7 +281,7 @@ sequence number, since push messages contain only a single record (see
 
 # Restrictions on Use of "aes128gcm" Content Coding {#restrict}
 
-An Application Server MUST encrypt a push message with a single record.  This
+An application server MUST encrypt a push message with a single record.  This
 allows for a minimal receiver implementation that handles a single record.  An
 application server MUST set the `rs` parameter in the `aes128gcm` content coding
 header to a size that is greater than the sum of the lengths of the plaintext,
@@ -299,12 +299,12 @@ A push service is not required to support more than 4096 octets of payload body
 1 octet), and expansion for AEAD_AES_128_GCM (16 octets), this equates to at
 most 3993 octets of plaintext.
 
-An Application Server MUST NOT use other content encodings for push messages.
+An application server MUST NOT use other content encodings for push messages.
 In particular, content encodings that compress could result in leaking of push
 message contents.  The Content-Encoding header field therefore has exactly one
 value, which is `aes128gcm`.  Multiple `aes128gcm` values are not permitted.
 
-A User Agent is not required to support multiple records.  A User Agent MAY
+A user agent is not required to support multiple records.  A user agent MAY
 ignore the `rs` field.  If a record size is unchecked, decryption will fail with
 high probability for all valid cases.  The padding delimiter octet MUST be
 checked, values other than 0x02 MUST cause the message to be discarded.
@@ -360,21 +360,21 @@ this mechanism.
 
 The security considerations of {{!RFC8188}} describe the limitations of the
 content encoding.  In particular, any HTTP header fields are not protected by
-the content encoding scheme.  A User Agent MUST consider HTTP header fields to
-have come from the Push Service.  Though header fields might be necessary for
+the content encoding scheme.  A user agent MUST consider HTTP header fields to
+have come from the push service.  Though header fields might be necessary for
 processing an HTTP response correctly, they are not needed for correct operation
-of the protocol.  An application on the User Agent that uses information from
+of the protocol.  An application on the user agent that uses information from
 header fields to alter their processing of a push message is exposed to a risk
-of attack by the Push Service.
+of attack by the push service.
 
-The timing and length of communication cannot be hidden from the Push Service.
+The timing and length of communication cannot be hidden from the push service.
 While an outside observer might see individual messages intermixed with each
-other, the Push Service will see which Application Server is talking to which
-User Agent, and the subscription that is used.  Additionally, the length of
+other, the push service will see which application server is talking to which
+user agent, and the subscription that is used.  Additionally, the length of
 messages could be revealed unless the padding provided by the content encoding
 scheme is used to obscure length.
 
-The User Agent and Application MUST verify that the public key they receive is
+The user agent and application MUST verify that the public key they receive is
 on the P-256 curve.  Failure to validate a public key can allow an attacker to
 extract a private key.
 
@@ -393,21 +393,21 @@ Plaintext:
 
 : V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0byBiZSBhIHdhdGVybWVsb24
 
-Application Server public key (as_public):
+Application server public key (as_public):
 
 : BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
   Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
 
-Application Server private key (as_private):
+Application server private key (as_private):
 
 : yfWPiYE-n46HLnH0KqZOF1fJJU3MYrct3AELtAQ-oRw
 
-User Agent public key (ua_public):
+User agent public key (ua_public):
 
 : BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx
   aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4
 
-User Agent private key (ua_private):
+User agent private key (ua_private):
 
 : q1dXpw3UpT5VOmu_cf_v6ih07Aems3njxI-JWgLcM94
 
@@ -420,7 +420,7 @@ Authentication secret (auth_secret):
 : BTBZMqHH6r4Tts7J_aSIgg
 
 Note that knowledge of just one of the private keys is necessary.  The
-Application Server randomly generates the salt value, whereas salt is input to
+application server randomly generates the salt value, whereas salt is input to
 the receiver.
 
 This produces the following intermediate values:
