@@ -107,8 +107,8 @@ encryption by forwarding only those messages that were properly encrypted.
 ## Notational Conventions
 
 The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this document.
-It's not shouting, when they are capitalized, they have the special meaning
-described in {{!RFC2119}}.
+When they are capitalized, they have the special meaning described in
+{{!RFC8174}}.
 
 This document uses the terminology from {{RFC8030}}, primarily user agent, push
 service, and application server.
