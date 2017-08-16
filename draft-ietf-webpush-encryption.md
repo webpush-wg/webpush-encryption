@@ -87,7 +87,7 @@ push service.
 ~~~
 
 This document describes how messages sent using this protocol can be secured
-against inspection, modification and falsification by a push service.
+against inspection, modification and forgery by a push service.
 
 Web Push messages are the payload of an HTTP message {{?RFC7230}}.  These
 messages are encrypted using an encrypted content encoding {{!RFC8188}}.  This
