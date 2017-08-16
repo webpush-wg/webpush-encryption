@@ -117,11 +117,12 @@ Internet-Draft             Web Push Encryption               August 2017
    [RFC8188].  This document describes how this content encoding is
    applied and describes a recommended key management scheme.
 
-   Multiple users of Web Push often share a central agent that
-   aggregates push functionality.  This agent can enforce the use of
-   this encryption scheme by applications that use push messaging.  An
-   agent that only delivers messages that are properly encrypted
-   strongly encourages the end-to-end protection of messages.
+   For efficiency reasons, multiple users of Web Push often share a
+   central agent that aggregates push functionality.  This agent can
+   enforce the use of this encryption scheme by applications that use
+   push messaging.  An agent that only delivers messages that are
+   properly encrypted strongly encourages the end-to-end protection of
+   messages.
 
    A web browser that implements the Web Push API [API] can enforce the
    use of encryption by forwarding only those messages that were
@@ -158,7 +159,6 @@ Internet-Draft             Web Push Encryption               August 2017
    The content of the push message is encrypted or decrypted using a
    content encryption key and nonce that is derived using all of these
    inputs and the process described in Section 3.
-
 
 
 
@@ -465,13 +465,6 @@ Internet-Draft             Web Push Encryption               August 2017
    receive is on the P-256 curve.  Failure to validate a public key can
    allow an attacker to extract a private key.
 
-   In the event that this encryption scheme would need to be replaced, a
-   new content coding scheme could be defined.  In order to manage
-   progressive deployment of the new scheme, the user agent can expose
-   information on the content coding schemes that it supports.  The
-   supportedContentEncodings parameter of the Push API [API] is an
-   example of how this might be done.
-
 8.  References
 
 8.1.  Normative References
@@ -499,17 +492,19 @@ Internet-Draft             Web Push Encryption               August 2017
               DOI 10.17487/RFC4086, June 2005,
               <http://www.rfc-editor.org/info/rfc4086>.
 
+   [RFC5869]  Krawczyk, H. and P. Eronen, "HMAC-based Extract-and-Expand
+              Key Derivation Function (HKDF)", RFC 5869,
+              DOI 10.17487/RFC5869, May 2010,
+              <http://www.rfc-editor.org/info/rfc5869>.
+
+
+
 
 
 Thomson                 Expires February 17, 2018               [Page 9]
 
 Internet-Draft             Web Push Encryption               August 2017
 
-
-   [RFC5869]  Krawczyk, H. and P. Eronen, "HMAC-based Extract-and-Expand
-              Key Derivation Function (HKDF)", RFC 5869,
-              DOI 10.17487/RFC5869, May 2010,
-              <http://www.rfc-editor.org/info/rfc5869>.
 
    [RFC8030]  Thomson, M., Damaggio, E., and B. Raymor, Ed., "Generic
               Event Delivery Using HTTP Push", RFC 8030,
@@ -553,6 +548,11 @@ Appendix A.  Intermediate Values for Encryption
    Plaintext:  V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0byBiZSBhIHdhdGVybWVsb24
 
    Application server public key (as_public):
+      BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
+      Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
+
+   Application server private key (as_private):  yfWPiYE-n46HLnH0KqZOF1f
+      JJU3MYrct3AELtAQ-oRw
 
 
 
@@ -561,12 +561,6 @@ Thomson                 Expires February 17, 2018              [Page 10]
 
 Internet-Draft             Web Push Encryption               August 2017
 
-
-      BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIg
-      Dll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8
-
-   Application server private key (as_private):  yfWPiYE-n46HLnH0KqZOF1f
-      JJU3MYrct3AELtAQ-oRw
 
    User agent public key (ua_public):  BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-
       JvLexhqUzORcx aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4
@@ -611,17 +605,18 @@ Internet-Draft             Web Push Encryption               August 2017
 
    Nonce (NONCE):  4h_95klXJ5E_qnoN
 
+   The salt, record size of 4096, and application server public key
+   produce an 86 octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z
+   9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml mlMoZIIgDll6e3vCYLocInmYWAmS6Tlz
+   AC8wEqKK6PBru3jl7A8.
+
+
 
 
 Thomson                 Expires February 17, 2018              [Page 11]
 
 Internet-Draft             Web Push Encryption               August 2017
 
-
-   The salt, record size of 4096, and application server public key
-   produce an 86 octet header of DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z
-   9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml mlMoZIIgDll6e3vCYLocInmYWAmS6Tlz
-   AC8wEqKK6PBru3jl7A8.
 
    The push message plaintext has the padding delimiter octet (0x02)
    appended to produce V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0
@@ -638,6 +633,11 @@ Author's Address
    Mozilla
 
    Email: martin.thomson@gmail.com
+
+
+
+
+
 
 
 
