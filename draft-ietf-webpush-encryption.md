@@ -106,9 +106,10 @@ encryption by forwarding only those messages that were properly encrypted.
 
 ## Notational Conventions
 
-The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this document.
-When they are capitalized, they have the special meaning described in
-{{!RFC8174}}.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}}
+when, and only when, they appear in all capitals, as shown here.
 
 This document uses the terminology from {{RFC8030}}, primarily user agent, push
 service, and application server.
