@@ -359,13 +359,13 @@ The privacy and security considerations of {{!RFC8030}} all apply to the use of
 this mechanism.
 
 The security considerations of {{!RFC8188}} describe the limitations of the
-content encoding.  In particular, any HTTP header fields are not protected by
-the content encoding scheme.  A user agent MUST consider HTTP header fields to
-have come from the push service.  Though header fields might be necessary for
-processing an HTTP response correctly, they are not needed for correct operation
-of the protocol.  An application on the user agent that uses information from
-header fields to alter their processing of a push message is exposed to a risk
-of attack by the push service.
+content encoding.  In particular, no HTTP header fields are protected by the
+content encoding scheme.  A user agent MUST consider HTTP header fields to have
+come from the push service.  Though header fields might be necessary for
+processing an HTTP response correctly, they are not needed for correct
+operation of the protocol.  An application on the user agent that uses
+information from header fields to alter their processing of a push message is
+exposed to a risk of attack by the push service.
 
 The timing and length of communication cannot be hidden from the push service.
 While an outside observer might see individual messages intermixed with each
