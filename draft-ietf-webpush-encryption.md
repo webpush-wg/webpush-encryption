@@ -52,6 +52,20 @@ informative:
        - ins: M. Thomson
      target: "https://w3c.github.io/push-api/"
      date: 2015
+  KEYAGREEMENT:
+       title: "Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography"
+       author:
+         -
+           ins: E. Barker
+         -
+           ins: Lily Chen
+         -
+           ins: A. Roginsky
+         -
+           ins: M. Smid
+       date: 2013-05
+       seriesinfo:
+         NIST: Special Publication 800-38D
 
 
 --- abstract
@@ -87,7 +101,7 @@ Push Service.
 ~~~
 
 This document describes how messages sent using this protocol can be secured
-against inspection, modification and falsification by a Push Service.
+against inspection, modification and forgery by a Push Service.
 
 Web Push messages are the payload of an HTTP message {{?RFC7230}}.  These
 messages are encrypted using an encrypted content encoding {{!RFC8188}}.  This
@@ -224,9 +238,10 @@ IKM:
 
 info:
 
-: the concatenation of the ASCII-encoded string "WebPush: info", a zero octet,
-  and the User Agent ECDH public key and the Application Server ECDH public key,
-  both in the uncompressed point form defined in {{X9.62}}; that is
+: the concatenation of the ASCII-encoded string "WebPush: info" (this string is
+  not NUL-terminated), a zero octet, and the User Agent ECDH public key and the
+  Application Server ECDH public key, both in the uncompressed point form
+  defined in {{X9.62}}; that is
 
   ~~~
   key_info = "WebPush: info" || 0x00 || ua_public || as_public
@@ -376,7 +391,16 @@ scheme is used to obscure length.
 
 The User Agent and Application MUST verify that the public key they receive is
 on the P-256 curve.  Failure to validate a public key can allow an attacker to
-extract a private key.
+extract a private key.   The appropriate validation procedures are defined in
+Section 4.3.7 of {{X9.62}} and alternatively in Section 5.6.2.6 of
+{{KEYAGREEMENT}}.  This process consists of three steps:
+
+1. Verify that Y is not the point at infinity (O),
+2. Verify that for Y = (x, y) both integers are in the correct interval,
+3. Ensure that (x, y) is a correct solution to the elliptic curve equation.
+
+For these curves, implementers do not need to verify membership in
+the correct subgroup.
 
 In the event that this encryption scheme would need to be replaced, a new
 content coding scheme could be defined.  In order to manage progressive
