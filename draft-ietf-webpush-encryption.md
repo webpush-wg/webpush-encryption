@@ -94,11 +94,11 @@ messages are encrypted using an encrypted content encoding {{!RFC8188}}.  This
 document describes how this content encoding is applied and describes a
 recommended key management scheme.
 
-Multiple users of Web Push often share a central agent that aggregates push
-functionality.  This agent can enforce the use of this encryption scheme by
-applications that use push messaging.  An agent that only delivers messages
-that are properly encrypted strongly encourages the end-to-end protection of
-messages.
+Multiple users of Web Push at the same user agent often share a central agent
+that aggregates push functionality.  This agent can enforce the use of this
+encryption scheme by applications that use push messaging.  An agent that only
+delivers messages that are properly encrypted strongly encourages the end-to-end
+protection of messages.
 
 A web browser that implements the Web Push API {{API}} can enforce the use of
 encryption by forwarding only those messages that were properly encrypted.
