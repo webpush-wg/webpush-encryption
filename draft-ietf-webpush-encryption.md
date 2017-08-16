@@ -380,7 +380,7 @@ extract a private key.
 
 In the event that this encryption scheme would need to be replaced, a new
 content coding scheme could be defined.  In order to manage progressive
-deployment of the new scheme, the User Agent can expose information on the
+deployment of the new scheme, the user agent can expose information on the
 content coding schemes that it supports.  The supportedContentEncodings
 parameter of the Push API {{API}} is an example of how this might be done.
 
