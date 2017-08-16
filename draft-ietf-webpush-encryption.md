@@ -94,11 +94,11 @@ messages are encrypted using an encrypted content encoding {{!RFC8188}}.  This
 document describes how this content encoding is applied and describes a
 recommended key management scheme.
 
-For efficiency reasons, multiple users of Web Push often share a central agent
-that aggregates push functionality.  This agent can enforce the use of this
-encryption scheme by applications that use push messaging.  An agent that only
-delivers messages that are properly encrypted strongly encourages the end-to-end
-protection of messages.
+Multiple users of Web Push often share a central agent that aggregates push
+functionality.  This agent can enforce the use of this encryption scheme by
+applications that use push messaging.  An agent that only delivers messages
+that are properly encrypted strongly encourages the end-to-end protection of
+messages.
 
 A web browser that implements the Web Push API {{API}} can enforce the use of
 encryption by forwarding only those messages that were properly encrypted.
@@ -377,6 +377,12 @@ scheme is used to obscure length.
 The User Agent and Application MUST verify that the public key they receive is
 on the P-256 curve.  Failure to validate a public key can allow an attacker to
 extract a private key.
+
+In the event that this encryption scheme would need to be replaced, a new
+content coding scheme could be defined.  In order to manage progressive
+deployment of the new scheme, the User Agent can expose information on the
+content coding schemes that it supports.  The supportedContentEncodings
+parameter of the Push API {{API}} is an example of how this might be done.
 
 
 --- back
