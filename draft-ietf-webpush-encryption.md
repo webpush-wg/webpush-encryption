@@ -225,9 +225,10 @@ IKM:
 
 info:
 
-: the concatenation of the ASCII-encoded string "WebPush: info", a zero octet,
-  and the user agent ECDH public key and the application server ECDH public key,
-  both in the uncompressed point form defined in {{X9.62}}; that is
+: the concatenation of the ASCII-encoded string "WebPush: info" (this string is
+  not NUL-terminated), a zero octet, and the user agent ECDH public key and the
+  application server ECDH public key, both in the uncompressed point form
+  defined in {{X9.62}}; that is:
 
   ~~~
   key_info = "WebPush: info" || 0x00 || ua_public || as_public
