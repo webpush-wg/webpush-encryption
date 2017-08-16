@@ -146,8 +146,8 @@ agent, such as the push subscription URI.
 An application MUST use an authenticated, confidentiality protected
 communications medium for this purpose.  In addition to the reasons described in
 {{!RFC8030}}, this ensures that the authentication secret is not revealed to
-unauthorized entities, which can be used to generate push messages that will be
-accepted by the user agent.
+unauthorized entities, which would allow those entities to generate push
+messages that will be accepted by the user agent.
 
 Most applications that use push messaging have a pre-existing relationship with
 an application server that can be used for distribution of subscription data.
