@@ -4,8 +4,8 @@
 
 Network Working Group                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Standards Track                         August 16, 2017
-Expires: February 17, 2018
+Intended status: Standards Track                         August 30, 2017
+Expires: March 3, 2018
 
 
                     Message Encryption for Web Push
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 17, 2018.
+   This Internet-Draft will expire on March 3, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thomson                 Expires February 17, 2018               [Page 1]
+Thomson                   Expires March 3, 2018                 [Page 1]
 
 Internet-Draft             Web Push Encryption               August 2017
 
@@ -76,7 +76,7 @@ Table of Contents
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
      8.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
      8.2.  Informative References  . . . . . . . . . . . . . . . . .  10
-   Appendix A.  Intermediate Values for Encryption . . . . . . . . .  10
+   Appendix A.  Intermediate Values for Encryption . . . . . . . . .  11
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  12
 
 1.  Introduction
@@ -101,7 +101,7 @@ Table of Contents
         |                      |                      |
 
    This document describes how messages sent using this protocol can be
-   secured against inspection, modification and falsification by a push
+   secured against inspection, modification and forgery by a push
    service.
 
    Web Push messages are the payload of an HTTP message [RFC7230].
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thomson                 Expires February 17, 2018               [Page 2]
+Thomson                   Expires March 3, 2018                 [Page 2]
 
 Internet-Draft             Web Push Encryption               August 2017
 
@@ -117,11 +117,12 @@ Internet-Draft             Web Push Encryption               August 2017
    [RFC8188].  This document describes how this content encoding is
    applied and describes a recommended key management scheme.
 
-   Multiple users of Web Push often share a central agent that
-   aggregates push functionality.  This agent can enforce the use of
-   this encryption scheme by applications that use push messaging.  An
-   agent that only delivers messages that are properly encrypted
-   strongly encourages the end-to-end protection of messages.
+   Multiple users of Web Push at the same user agent often share a
+   central agent that aggregates push functionality.  This agent can
+   enforce the use of this encryption scheme by applications that use
+   push messaging.  An agent that only delivers messages that are
+   properly encrypted strongly encourages the end-to-end protection of
+   messages.
 
    A web browser that implements the Web Push API [API] can enforce the
    use of encryption by forwarding only those messages that were
@@ -164,8 +165,7 @@ Internet-Draft             Web Push Encryption               August 2017
 
 
 
-
-Thomson                 Expires February 17, 2018               [Page 3]
+Thomson                   Expires March 3, 2018                 [Page 3]
 
 Internet-Draft             Web Push Encryption               August 2017
 
@@ -221,7 +221,7 @@ Internet-Draft             Web Push Encryption               August 2017
 
 
 
-Thomson                 Expires February 17, 2018               [Page 4]
+Thomson                   Expires March 3, 2018                 [Page 4]
 
 Internet-Draft             Web Push Encryption               August 2017
 
@@ -266,10 +266,10 @@ Internet-Draft             Web Push Encryption               August 2017
 
    IKM:  the shared secret derived using ECDH
 
-   info:  the concatenation of the ASCII-encoded string "WebPush: info",
-      a zero octet, and the user agent ECDH public key and the
-      application server ECDH public key, both in the uncompressed point
-      form defined in [X9.62]; that is
+   info:  the concatenation of the ASCII-encoded string "WebPush: info"
+      (this string is not NUL-terminated), a zero octet, and the user
+      agent ECDH public key and the application server ECDH public key,
+      both in the uncompressed point form defined in [X9.62]; that is:
 
    key_info = "WebPush: info" || 0x00 || ua_public || as_public
 
@@ -277,7 +277,7 @@ Internet-Draft             Web Push Encryption               August 2017
 
 
 
-Thomson                 Expires February 17, 2018               [Page 5]
+Thomson                   Expires March 3, 2018                 [Page 5]
 
 Internet-Draft             Web Push Encryption               August 2017
 
@@ -333,7 +333,7 @@ Internet-Draft             Web Push Encryption               August 2017
 
 
 
-Thomson                 Expires February 17, 2018               [Page 6]
+Thomson                   Expires March 3, 2018                 [Page 6]
 
 Internet-Draft             Web Push Encryption               August 2017
 
@@ -389,7 +389,7 @@ Internet-Draft             Web Push Encryption               August 2017
 
 
 
-Thomson                 Expires February 17, 2018               [Page 7]
+Thomson                   Expires March 3, 2018                 [Page 7]
 
 Internet-Draft             Web Push Encryption               August 2017
 
@@ -445,7 +445,7 @@ Internet-Draft             Web Push Encryption               August 2017
 
 
 
-Thomson                 Expires February 17, 2018               [Page 8]
+Thomson                   Expires March 3, 2018                 [Page 8]
 
 Internet-Draft             Web Push Encryption               August 2017
 
@@ -463,7 +463,21 @@ Internet-Draft             Web Push Encryption               August 2017
 
    The user agent and application MUST verify that the public key they
    receive is on the P-256 curve.  Failure to validate a public key can
-   allow an attacker to extract a private key.
+   allow an attacker to extract a private key.  The appropriate
+   validation procedures are defined in Section 4.3.7 of [X9.62] and
+   alternatively in Section 5.6.2.6 of [KEYAGREEMENT].  This process
+   consists of three steps:
+
+   1.  Verify that Y is not the point at infinity (O),
+
+   2.  Verify that for Y = (x, y) both integers are in the correct
+       interval,
+
+   3.  Ensure that (x, y) is a correct solution to the elliptic curve
+       equation.
+
+   For these curves, implementers do not need to verify membership in
+   the correct subgroup.
 
    In the event that this encryption scheme would need to be replaced, a
    new content coding scheme could be defined.  In order to manage
@@ -485,44 +499,44 @@ Internet-Draft             Web Push Encryption               August 2017
               <http://nvlpubs.nist.gov/nistpubs/FIPS/
               NIST.FIPS.180-4.pdf>.
 
+
+
+Thomson                   Expires March 3, 2018                 [Page 9]
+
+Internet-Draft             Web Push Encryption               August 2017
+
+
    [FIPS186]  National Institute of Standards and Technology (NIST),
               "Digital Signature Standard (DSS)", NIST PUB 186-4 , July
               2013.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
+              editor.org/info/rfc2119>.
 
    [RFC4086]  Eastlake 3rd, D., Schiller, J., and S. Crocker,
               "Randomness Requirements for Security", BCP 106, RFC 4086,
-              DOI 10.17487/RFC4086, June 2005,
-              <http://www.rfc-editor.org/info/rfc4086>.
-
-
-
-Thomson                 Expires February 17, 2018               [Page 9]
-
-Internet-Draft             Web Push Encryption               August 2017
-
+              DOI 10.17487/RFC4086, June 2005, <https://www.rfc-
+              editor.org/info/rfc4086>.
 
    [RFC5869]  Krawczyk, H. and P. Eronen, "HMAC-based Extract-and-Expand
               Key Derivation Function (HKDF)", RFC 5869,
-              DOI 10.17487/RFC5869, May 2010,
-              <http://www.rfc-editor.org/info/rfc5869>.
+              DOI 10.17487/RFC5869, May 2010, <https://www.rfc-
+              editor.org/info/rfc5869>.
 
    [RFC8030]  Thomson, M., Damaggio, E., and B. Raymor, Ed., "Generic
               Event Delivery Using HTTP Push", RFC 8030,
-              DOI 10.17487/RFC8030, December 2016,
-              <http://www.rfc-editor.org/info/rfc8030>.
+              DOI 10.17487/RFC8030, December 2016, <https://www.rfc-
+              editor.org/info/rfc8030>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <http://www.rfc-editor.org/info/rfc8174>.
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
    [RFC8188]  Thomson, M., "Encrypted Content-Encoding for HTTP",
               RFC 8188, DOI 10.17487/RFC8188, June 2017,
-              <http://www.rfc-editor.org/info/rfc8188>.
+              <https://www.rfc-editor.org/info/rfc8188>.
 
    [X9.62]    ANSI, "Public Key Cryptography For The Financial Services
               Industry: The Elliptic Curve Digital Signature Algorithm
@@ -533,18 +547,33 @@ Internet-Draft             Web Push Encryption               August 2017
    [API]      Beverloo, P. and M. Thomson, "Web Push API", 2015,
               <https://w3c.github.io/push-api/>.
 
+   [KEYAGREEMENT]
+              Barker, E., Chen, L., Roginsky, A., and M. Smid,
+              "Recommendation for Pair-Wise Key Establishment Schemes
+              Using Discrete Logarithm Cryptography", NIST Special
+              Publication 800-38D, May 2013.
+
+
+
+
+
+Thomson                   Expires March 3, 2018                [Page 10]
+
+Internet-Draft             Web Push Encryption               August 2017
+
+
    [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
-              DOI 10.17487/RFC2818, May 2000,
-              <http://www.rfc-editor.org/info/rfc2818>.
+              DOI 10.17487/RFC2818, May 2000, <https://www.rfc-
+              editor.org/info/rfc2818>.
 
    [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
-              <http://www.rfc-editor.org/info/rfc4648>.
+              <https://www.rfc-editor.org/info/rfc4648>.
 
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
-              <http://www.rfc-editor.org/info/rfc7230>.
+              <https://www.rfc-editor.org/info/rfc7230>.
 
 Appendix A.  Intermediate Values for Encryption
 
@@ -553,14 +582,6 @@ Appendix A.  Intermediate Values for Encryption
    whitespace that can be removed.
 
    The following are inputs to the calculation:
-
-
-
-
-Thomson                 Expires February 17, 2018              [Page 10]
-
-Internet-Draft             Web Push Encryption               August 2017
-
 
    Plaintext:  V2hlbiBJIGdyb3cgdXAsIEkgd2FudCB0byBiZSBhIHdhdGVybWVsb24
 
@@ -590,6 +611,13 @@ Internet-Draft             Web Push Encryption               August 2017
    Shared ECDH secret (ecdh_secret):  kyrL1jIIOHEzg3sM2ZWRHDRB62YACZhhSl
       knJ672kSs
 
+
+
+Thomson                   Expires March 3, 2018                [Page 11]
+
+Internet-Draft             Web Push Encryption               August 2017
+
+
    Pseudorandom key (PRK) for key combining (PRK_key):
       Snr3JMxaHVDXHWJn5wdC52WjpCtd2EIEGBykDcZW32k
 
@@ -610,14 +638,6 @@ Internet-Draft             Web Push Encryption               August 2017
    Content encryption key (CEK):  oIhVW04MRdy2XN9CiKLxTg
 
    Info for content encryption nonce derivation (nonce_info):
-
-
-
-Thomson                 Expires February 17, 2018              [Page 11]
-
-Internet-Draft             Web Push Encryption               August 2017
-
-
       Q29udGVudC1FbmNvZGluZzogbm9uY2UA
 
    Nonce (NONCE):  4h_95klXJ5E_qnoN
@@ -649,24 +669,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Thomson                 Expires February 17, 2018              [Page 12]
+Thomson                   Expires March 3, 2018                [Page 12]

@@ -300,7 +300,7 @@ address {
 
   <meta name="dct.creator" content="Thomson, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-webpush-encryption-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-8-16" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-8-30" />
   <meta name="dct.abstract" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an application server to a user agent." />
   <meta name="description" content="A message encryption scheme is described for the Web Push protocol.  This scheme provides confidentiality and integrity for messages sent from an application server to a user agent." />
 
@@ -321,10 +321,10 @@ address {
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">August 16, 2017</td>
+<td class="right">August 30, 2017</td>
 </tr>
 <tr>
-<td class="left">Expires: February 17, 2018</td>
+<td class="left">Expires: March 3, 2018</td>
 <td class="right"></td>
 </tr>
 
@@ -341,7 +341,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on February 17, 2018.</p>
+<p>This Internet-Draft will expire on March 3, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -411,9 +411,9 @@ address {
      |&lt;---------------------|                      |
      |                      |                      |
 </pre>
-<p id="rfc.section.1.p.2">This document describes how messages sent using this protocol can be secured against inspection, modification and falsification by a push service.</p>
+<p id="rfc.section.1.p.2">This document describes how messages sent using this protocol can be secured against inspection, modification and forgery by a push service.</p>
 <p id="rfc.section.1.p.3">Web Push messages are the payload of an HTTP message <a href="#RFC7230" class="xref">[RFC7230]</a>.  These messages are encrypted using an encrypted content encoding <a href="#RFC8188" class="xref">[RFC8188]</a>.  This document describes how this content encoding is applied and describes a recommended key management scheme.</p>
-<p id="rfc.section.1.p.4">Multiple users of Web Push often share a central agent that aggregates push functionality.  This agent can enforce the use of this encryption scheme by applications that use push messaging.  An agent that only delivers messages that are properly encrypted strongly encourages the end-to-end protection of messages.</p>
+<p id="rfc.section.1.p.4">Multiple users of Web Push at the same user agent often share a central agent that aggregates push functionality.  This agent can enforce the use of this encryption scheme by applications that use push messaging.  An agent that only delivers messages that are properly encrypted strongly encourages the end-to-end protection of messages.</p>
 <p id="rfc.section.1.p.5">A web browser that implements the Web Push API <a href="#API" class="xref">[API]</a> can enforce the use of encryption by forwarding only those messages that were properly encrypted.</p>
 <h2 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#notational-conventions" id="notational-conventions">Notational Conventions</a>
@@ -474,7 +474,7 @@ key_info = "WebPush: info" || 0x00 || ua_public || as_public
 <dt>IKM:</dt>
 <dd style="margin-left: 8">the shared secret derived using ECDH</dd>
 <dt>info:</dt>
-<dd style="margin-left: 8">the concatenation of the ASCII-encoded string &#8220;WebPush: info&#8221;, a zero octet, and the user agent ECDH public key and the application server ECDH public key, both in the uncompressed point form defined in <a href="#X9.62" class="xref">[X9.62]</a>; that is </dd>
+<dd style="margin-left: 8">the concatenation of the ASCII-encoded string &#8220;WebPush: info&#8221; (this string is not NUL-terminated), a zero octet, and the user agent ECDH public key and the application server ECDH public key, both in the uncompressed point form defined in <a href="#X9.62" class="xref">[X9.62]</a>; that is: </dd>
 <dt>L:</dt>
 <dd style="margin-left: 8">32 octets (i.e., the output is the length of the underlying SHA-256 HMAC function output)</dd>
 </dl>
@@ -560,8 +560,16 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 <p id="rfc.section.7.p.1">The privacy and security considerations of <a href="#RFC8030" class="xref">[RFC8030]</a> all apply to the use of this mechanism.</p>
 <p id="rfc.section.7.p.2">The security considerations of <a href="#RFC8188" class="xref">[RFC8188]</a> describe the limitations of the content encoding.  In particular, no HTTP header fields are protected by the content encoding scheme.  A user agent MUST consider HTTP header fields to have come from the push service.  Though header fields might be necessary for processing an HTTP response correctly, they are not needed for correct operation of the protocol.  An application on the user agent that uses information from header fields to alter their processing of a push message is exposed to a risk of attack by the push service.</p>
 <p id="rfc.section.7.p.3">The timing and length of communication cannot be hidden from the push service.  While an outside observer might see individual messages intermixed with each other, the push service will see which application server is talking to which user agent, and the subscription that is used.  Additionally, the length of messages could be revealed unless the padding provided by the content encoding scheme is used to obscure length.</p>
-<p id="rfc.section.7.p.4">The user agent and application MUST verify that the public key they receive is on the P-256 curve.  Failure to validate a public key can allow an attacker to extract a private key.</p>
-<p id="rfc.section.7.p.5">In the event that this encryption scheme would need to be replaced, a new content coding scheme could be defined.  In order to manage progressive deployment of the new scheme, the user agent can expose information on the content coding schemes that it supports.  The supportedContentEncodings parameter of the Push API <a href="#API" class="xref">[API]</a> is an example of how this might be done.</p>
+<p id="rfc.section.7.p.4">The user agent and application MUST verify that the public key they receive is on the P-256 curve.  Failure to validate a public key can allow an attacker to extract a private key.   The appropriate validation procedures are defined in Section 4.3.7 of <a href="#X9.62" class="xref">[X9.62]</a> and alternatively in Section 5.6.2.6 of <a href="#KEYAGREEMENT" class="xref">[KEYAGREEMENT]</a>.  This process consists of three steps:</p>
+<p></p>
+
+<ol>
+<li>Verify that Y is not the point at infinity (O),</li>
+<li>Verify that for Y = (x, y) both integers are in the correct interval,</li>
+<li>Ensure that (x, y) is a correct solution to the elliptic curve equation.</li>
+</ol>
+<p id="rfc.section.7.p.6">For these curves, implementers do not need to verify membership in the correct subgroup.</p>
+<p id="rfc.section.7.p.7">In the event that this encryption scheme would need to be replaced, a new content coding scheme could be defined.  In order to manage progressive deployment of the new scheme, the user agent can expose information on the content coding schemes that it supports.  The supportedContentEncodings parameter of the Push API <a href="#API" class="xref">[API]</a> is an example of how this might be done.</p>
 <h1 id="rfc.references">
 <a href="#rfc.references">8.</a> References</h1>
 <h2 id="rfc.references.1">
@@ -625,6 +633,11 @@ pK4Mqgkf1CXztLVBSt2Ks3oZwbuwXPXLWyouBWLVWGNWQexSgSxsj_Qulcy4a-fN
 <td class="reference"><b id="API">[API]</b></td>
 <td class="top">
 <a>Beverloo, P.</a> and <a>M. Thomson</a>, "<a href="https://w3c.github.io/push-api/">Web Push API</a>", 2015.</td>
+</tr>
+<tr>
+<td class="reference"><b id="KEYAGREEMENT">[KEYAGREEMENT]</b></td>
+<td class="top">
+<a>Barker, E.</a>, <a>Chen, L.</a>, <a>Roginsky, A.</a> and <a>M. Smid</a>, "<a>Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography</a>", NIST Special Publication 800-38D, May 2013.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC2818">[RFC2818]</b></td>
