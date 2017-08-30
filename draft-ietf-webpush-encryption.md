@@ -55,14 +55,10 @@ informative:
   KEYAGREEMENT:
        title: "Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography"
        author:
-         -
-           ins: E. Barker
-         -
-           ins: Lily Chen
-         -
-           ins: A. Roginsky
-         -
-           ins: M. Smid
+         - ins: E. Barker
+         - ins: L. Chen
+         - ins: A. Roginsky
+         - ins: M. Smid
        date: 2013-05
        seriesinfo:
          NIST: Special Publication 800-38D
