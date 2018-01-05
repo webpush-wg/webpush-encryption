@@ -330,7 +330,7 @@ The following example shows a push message being sent to a push service.
 POST /push/JzLQ3raZJfFBR0aqvOMsLrt54w4rJUsV HTTP/1.1
 Host: push.example.net
 TTL: 10
-Content-Length: 145
+Content-Length: 144
 Content-Encoding: aes128gcm
 
 DGv6ra1nlYgDCS1FRnbzlwAAEABBBP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27ml
